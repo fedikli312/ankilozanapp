@@ -51,6 +51,8 @@
 | 2026-08-25 | 4-tab navigation approved as final (Today, Track, Appointments, Insights); Profile/Settings accessible via a persistent top-right control, not a fifth tab | Resolves UX open decision — Profile access | Furkan |
 | 2026-08-25 | Insights never renders a chart from insufficient history; uses calm progressive copy instead (e.g. "Keep checking in to see how your symptoms change over time.") | Resolves UX open decision — Insights empty state | Furkan |
 | 2026-08-25 | `docs/UX_SPECIFICATION.md` committed and pushed to origin/main; Product OS Visual Design phase begun | Approved by Furkan | Furkan |
+| 2026-08-25 | `docs/VISUAL_DESIGN_SPECIFICATION.md` approved as the V1 visual system (warm-neutral palette with single muted teal accent, no color-coded symptom severity, SF Symbols/system typography, restrained component language, "continuity thread" motif, no logo/app icon/product name finalized) | Visual Design phase complete | Furkan |
+| 2026-08-25 | Visual Design Specification committed and pushed to origin/main; Product OS Technical Architecture (Engineering Mode) phase begun | Approved by Furkan | Furkan |
 
 ## Rejected decisions
 | Date | Decision | Why rejected | Revisit condition |
@@ -77,11 +79,11 @@ None yet — greenfield project, no existing users, entitlements, or shipped flo
 Once defined, protect: medication/injection reminder accuracy, laboratory data integrity, appointment reminder delivery, and any future account/data-deletion flow.
 
 ## Session handoff
-- Completed: Product OS initialization, Product Definition (`docs/PRD.md`), and UX Design (`docs/UX_SPECIFICATION.md`) phases all approved and committed to origin/main. All UX-architecture-level open decisions resolved (local-first/no onboarding auth, body-area chip list, fatigue scale, free-text medication entry, reminder defaults, pending-health-tasks derivation, Today priority order, onboarding scope, 4-tab navigation, Insights empty state). Visual Design phase begun next.
-- Files changed: `docs/UX_SPECIFICATION.md`, `docs/PRD.md`, `PROJECT_CONTEXT.md`, `PROJECT_MEMORY.md`.
+- Completed: Product OS initialization, Product Definition, UX Design, and Visual Design phases all approved and committed to origin/main. Technical Architecture (Engineering Mode) phase begun next.
+- Files changed: none pending at handoff time (all four phase documents committed).
 - Tests run: None (no application code exists).
-- Open questions: None remaining at the UX-architecture level. Remaining deferred items: missed-state visual treatment (Visual Design phase) and local-first storage engineering architecture (Engineering phase).
-- Next safe step: Produce the Visual Design Specification under Design Mode; stop for approval before Expo scaffolding or engineering.
+- Open questions: See `docs/VISUAL_DESIGN_SPECIFICATION.md` "Remaining visual decisions" (deferred to implementation, non-blocking).
+- Next safe step: Produce the Technical Architecture Specification under Engineering Mode; stop for approval before Expo scaffolding.
 
 ## Rules
 - Record durable decisions, not chat history.
