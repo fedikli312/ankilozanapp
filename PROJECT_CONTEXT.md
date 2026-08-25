@@ -60,10 +60,10 @@ Today (daily command center) → daily symptom check-in → medication/injection
 Define and validate V1 scope above at the product/UX level before any implementation. Exercise system explicitly deferred beyond V1.
 
 ### Primary metric
-**Unresolved.** Candidate directions (not yet chosen): daily check-in completion rate, activation (first meaningful Today-screen use), or appointment-preparation usage. Needs explicit decision before instrumentation.
+**Approved** — Activation: % of new users who add at least one medication, injection, or appointment and see Today correctly reflect it during their first session. See `docs/PRD.md` §15.
 
 ### Guardrail metrics
-**Unresolved.** Should be defined alongside the primary metric — likely candidates include reminder reliability (missed/late notifications) and data-entry abandonment, given the "calm, not alarming" principle.
+**Approved** — 7-day check-in engagement, check-in abandonment rate, notification permission denial/opt-out rate. Product metrics only; no analytics SDK selected or installed. See `docs/PRD.md` §15.
 
 ## Technology
 
@@ -85,7 +85,7 @@ Define and validate V1 scope above at the product/UX level before any implementa
 - Premium value: **Unresolved** — business model undecided; do not design V1 around a paywall.
 - Existing subscriber behavior that must be preserved: N/A — no subscribers exist.
 - Data and privacy constraints: Treat as sensitive — symptoms, medication usage, injection history, laboratory values, medical appointments, personal health notes. Avoid unnecessary data collection. No advertising SDKs or unnecessary third-party tracking.
-- Localization requirements: **Unresolved** — not specified in product brief.
+- Localization requirements: **Approved** — V1 target languages are English and Turkish. Architecture and UX must be localization-ready from the start; layouts must not depend on fixed English string lengths.
 - Accessibility requirements: High priority from the start — plain language, readability, and standard accessibility support (Dynamic Type, VoiceOver, contrast) per `02_DESIGN/ACCESSIBILITY_CHECKLIST.md`.
 
 ## Design direction
