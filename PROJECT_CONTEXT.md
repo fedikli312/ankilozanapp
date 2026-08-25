@@ -72,7 +72,7 @@ Define and validate V1 scope above at the product/UX level before any implementa
 - TypeScript version: Strict mode required; exact version TBD at scaffolding
 - Package manager: Not yet decided
 - Backend: Supabase (planned)
-- Authentication: Not yet decided (Supabase Auth presumed; exact method — email/password, magic link, Sign in with Apple — unresolved)
+- Authentication: **Approved (UX level)** — V1 is local-first; no account or authentication in onboarding or for any core V1 feature (medication, injection, appointment, check-in, labs, reminders, history). Account creation is introduced later from Profile only when cloud backup/sync becomes available. Exact auth method (if/when introduced) remains an engineering decision for a later phase.
 - Subscription provider: RevenueCat — architecture must remain compatible; not implemented, no paywall in V1
 - Analytics: **Unresolved** — no provider selected; must be chosen under the minimal-stack and data-minimization rules given sensitive health data
 - Error monitoring: Not yet decided

@@ -39,6 +39,18 @@
 | 2026-08-25 | V1 target languages: English and Turkish; architecture and UX must be localization-ready from the start; layouts must not depend on fixed English string lengths | Resolves open decision from PRD §14 | Furkan |
 | 2026-08-25 | Approved primary metric (Activation) and guardrail metrics (7-day check-in engagement, check-in abandonment rate, notification denial/opt-out rate) as product metrics only — no analytics SDK installed | Resolves open decision from PRD §14 | Furkan |
 | 2026-08-25 | Product Definition documents committed and pushed to origin/main; Product OS Design Mode phase begun | Approved by Furkan | Furkan |
+| 2026-08-25 | `docs/UX_SPECIFICATION.md` approved as the V1 UX architecture (final IA, screen inventory, onboarding, Today hierarchy, all feature flows, states, notification UX, accessibility, trust/safety copy strategy) | UX Design phase complete | Furkan |
+| 2026-08-25 | V1 is local-first: onboarding and all core V1 features (medication, injection, appointment, check-in, labs, reminders, history) work without an account; account creation deferred to Profile for future cloud backup/sync; core tracking must not depend on an active internet connection | Resolves UX open decision — auth/backend timing | Furkan |
+| 2026-08-25 | Body area uses a selectable chip list (Neck, Upper back, Lower back, Hips, Shoulders, Chest/ribs, Other), not an anatomical diagram; stays optional behind "+ Add more"; never used for diagnosis/interpretation | Resolves UX open decision — body area | Furkan |
+| 2026-08-25 | Fatigue uses a 0–10 stepped, accessible-adjustable scale consistent with pain | Resolves UX open decision — fatigue scale | Furkan |
+| 2026-08-25 | Medication/injection name entry is free-text only in V1, no external medication database dependency, no medication recommendations or suggested dosing; autocomplete may be added later | Resolves UX open decision — medication entry | Furkan |
+| 2026-08-25 | Reminder defaults approved (all user-editable): medication at scheduled time; injection one day before + day-of; appointment one day before. No aggressive/repeated reminders; missed-reminder copy is never guilt-inducing | Resolves UX open decision — reminder defaults | Furkan |
+| 2026-08-25 | Today's "pending health tasks" strictly derives from existing objects only (medication due, injection due, upcoming appointment, user-configured lab reminder) — no generic to-do system | Resolves UX open decision — pending health tasks | Furkan |
+| 2026-08-25 | Today priority order approved: (1) daily check-in if incomplete, (2) something requiring action today, (3) next injection, (4) upcoming appointment, (5) relevant future reminder; empty sections never shown; check-in collapses to a quiet state once completed | Resolves UX open decision — Today priority | Furkan |
+| 2026-08-25 | Onboarding finalized: Welcome → Privacy/data trust (states data is stored on-device) → "What would you like help remembering?" → optional first treatment setup → optional appointment setup → Today; every step after trust/purpose framing is skippable; never asks diagnosis history, disease duration, BASDAI, demographics, or account creation; notification permission requested only after the user's first reminder is explicitly enabled | Resolves UX open decision — onboarding scope | Furkan |
+| 2026-08-25 | 4-tab navigation approved as final (Today, Track, Appointments, Insights); Profile/Settings accessible via a persistent top-right control, not a fifth tab | Resolves UX open decision — Profile access | Furkan |
+| 2026-08-25 | Insights never renders a chart from insufficient history; uses calm progressive copy instead (e.g. "Keep checking in to see how your symptoms change over time.") | Resolves UX open decision — Insights empty state | Furkan |
+| 2026-08-25 | `docs/UX_SPECIFICATION.md` committed and pushed to origin/main; Product OS Visual Design phase begun | Approved by Furkan | Furkan |
 
 ## Rejected decisions
 | Date | Decision | Why rejected | Revisit condition |
@@ -65,11 +77,11 @@ None yet — greenfield project, no existing users, entitlements, or shipped flo
 Once defined, protect: medication/injection reminder accuracy, laboratory data integrity, appointment reminder delivery, and any future account/data-deletion flow.
 
 ## Session handoff
-- Completed: Product OS initialization committed/pushed. Product Discovery/Definition phase completed and approved: `docs/PRD.md` finalized with all eight follow-up decisions resolved (appointment-prep lookback, lab markers, historical-accuracy rule, notification privacy, export direction, BASDAI hold, localization, approved metrics). Design Mode (UX architecture) begun next.
-- Files changed: `docs/PRD.md`, `PROJECT_CONTEXT.md`, `PROJECT_MEMORY.md`.
+- Completed: Product OS initialization, Product Definition (`docs/PRD.md`), and UX Design (`docs/UX_SPECIFICATION.md`) phases all approved and committed to origin/main. All UX-architecture-level open decisions resolved (local-first/no onboarding auth, body-area chip list, fatigue scale, free-text medication entry, reminder defaults, pending-health-tasks derivation, Today priority order, onboarding scope, 4-tab navigation, Insights empty state). Visual Design phase begun next.
+- Files changed: `docs/UX_SPECIFICATION.md`, `docs/PRD.md`, `PROJECT_CONTEXT.md`, `PROJECT_MEMORY.md`.
 - Tests run: None (no application code exists).
-- Open questions: See `docs/PRD.md` §14 ("Remaining open decisions") and "Known risks" above.
-- Next safe step: Produce `docs/UX_SPECIFICATION.md` under Design Mode; stop for approval before visual design or engineering.
+- Open questions: None remaining at the UX-architecture level. Remaining deferred items: missed-state visual treatment (Visual Design phase) and local-first storage engineering architecture (Engineering phase).
+- Next safe step: Produce the Visual Design Specification under Design Mode; stop for approval before Expo scaffolding or engineering.
 
 ## Rules
 - Record durable decisions, not chat history.

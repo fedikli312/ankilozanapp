@@ -88,7 +88,9 @@ Tentative top-level navigation — **not final until UX phase validates it**:
 - **Insights** — trend views: pain, morning stiffness, fatigue, medication adherence, injection history, CRP/ESR history, BASDAI history (once implemented).
 - **Profile** — account, data export/delete, reminder settings, language, non-diagnostic disclaimer / about.
 
-This structure keeps recording (Track) separate from reflection (Insights) and preparation (Appointments), so the daily-use surface (Today) stays uncluttered. Final validation happens in the UX phase (see `docs/UX_SPECIFICATION.md`).
+This structure keeps recording (Track) separate from reflection (Insights) and preparation (Appointments), so the daily-use surface (Today) stays uncluttered.
+
+**Superseded by the UX phase (approved)**: `docs/UX_SPECIFICATION.md` drops Profile from the tab bar in favor of a persistent icon, yielding a 4-tab structure (Today, Track, Appointments, Insights). See that document for the approved navigation.
 
 ## 9. Monetization
 
