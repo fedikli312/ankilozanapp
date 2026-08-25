@@ -7,12 +7,15 @@
 - Business model: Undecided (see PROJECT_CONTEXT.md)
 
 ## Current architecture
-- Expo SDK: Not yet installed
+- Expo SDK: Not yet installed (Expo Router + TypeScript strict + EAS approved direction; exact versions confirmed at scaffold time — see `docs/TECHNICAL_ARCHITECTURE.md`)
 - React Native: Not yet installed
-- Navigation: Not yet decided (tentative Expo Router)
-- Backend: Supabase (planned, not yet configured)
+- Navigation: Expo Router approved
+- Local database: expo-sqlite approved as V1 source of truth (local-first); drizzle-orm used if compatibility confirmed at scaffold time, else raw-expo-sqlite fallback — not yet installed
+- Data access: strict layering approved — UI → feature/application services → domain logic → repositories → SQLite; UI/screens never query SQLite directly
+- Backend: Supabase explicitly deferred — no auth, sync engine, cloud schema, remote repositories, or account UI in V1
+- Localization: expo-localization + i18n-js + native Intl, locales en/tr, approved — not yet installed
 - Subscriptions: None in V1; architecture to remain RevenueCat-compatible
-- Analytics: Not yet selected
+- Analytics: None in V1 — no analytics or crash-reporting SDK
 
 ## Approved decisions
 | Date | Decision | Reason | Owner |
@@ -53,6 +56,20 @@
 | 2026-08-25 | `docs/UX_SPECIFICATION.md` committed and pushed to origin/main; Product OS Visual Design phase begun | Approved by Furkan | Furkan |
 | 2026-08-25 | `docs/VISUAL_DESIGN_SPECIFICATION.md` approved as the V1 visual system (warm-neutral palette with single muted teal accent, no color-coded symptom severity, SF Symbols/system typography, restrained component language, "continuity thread" motif, no logo/app icon/product name finalized) | Visual Design phase complete | Furkan |
 | 2026-08-25 | Visual Design Specification committed and pushed to origin/main; Product OS Technical Architecture (Engineering Mode) phase begun | Approved by Furkan | Furkan |
+| 2026-08-25 | `docs/TECHNICAL_ARCHITECTURE.md` approved as the V1 technical architecture | Technical Architecture phase complete | Furkan |
+| 2026-08-25 | Local-first architecture confirmed: expo-sqlite is the V1 source of truth; UI/screens never query SQLite directly — a strict layered boundary (UI → feature/application services → domain logic → repositories → SQLite) is required, with repositories as the sole data-access layer, so a future sync layer can be added without rewriting feature UI | Resolves Technical Architecture decision — repository boundary | Furkan |
+| 2026-08-25 | drizzle-orm (expo-sqlite driver) used only if current official Expo/Drizzle compatibility is confirmed at scaffold time; otherwise fall back to a small typed repository layer over raw expo-sqlite. Drizzle is never forced if it introduces instability | Resolves Technical Architecture decision — database access | Furkan |
+| 2026-08-25 | Local application database participates in standard iOS device/iCloud backups by default; no custom backup service built in V1; this must be documented in the product's privacy/data disclosure copy | Resolves Technical Architecture decision — device backup | Furkan |
+| 2026-08-25 | Localization uses expo-localization + i18n-js + native Intl APIs only, no hand-written localization framework; initial locales en/tr; every user-facing string must go through localization from the beginning | Resolves Technical Architecture decision — localization | Furkan |
+| 2026-08-25 | No custom field-level database encryption in V1 — accepted risk. Revisit if: cloud sync is added, regulatory requirements change, highly sensitive free-text data expands, or an external security review requires it | Resolves Technical Architecture decision — field-level encryption | Furkan |
+| 2026-08-25 | Irregular (custom-interval) medication reminders use a rolling window of exactly 8 future occurrences, replenished on launch/foreground reconciliation, stored as a named domain constant (`CUSTOM_INTERVAL_REMINDER_WINDOW_SIZE`), never a magic number | Resolves Technical Architecture decision — irregular reminder window | Furkan |
+| 2026-08-25 | "Upcoming appointment" on Today uses a 14-day window, stored as a named domain constant (`UPCOMING_APPOINTMENT_WINDOW_DAYS`), not hardcoded per screen | Resolves Technical Architecture decision — appointment window | Furkan |
+| 2026-08-25 | Reminder architecture confirmed: regular medication schedules use recurring local calendar notifications; injections use one-off notifications recalculated after each logged administration; appointments and lab reminders use one-off notifications; irregular custom medication schedules use the rolling 8-occurrence window. Reconciliation runs on launch, on foreground, after reminder-configuration changes, after detectable timezone changes, and after medication/injection schedule edits | Resolves Technical Architecture decision — reminder architecture | Furkan |
+| 2026-08-25 | Versioned schedule architecture approved: MedicationSchedule/InjectionSchedule changes create new schedule versions; administration records are never rewritten and preserve their original scheduledFor and taken/missed state when a future schedule changes | Resolves Technical Architecture decision — historical correctness | Furkan |
+| 2026-08-25 | Automated-testing priority order approved: schedule generation, schedule versioning, historical administration integrity, injection next-date calculation, DST/timezone behavior (where unit-testable), appointment lookback calculation, Insights aggregation thresholds, notification reconciliation logic. Real-device QA remains mandatory for notification delivery, timezone/DST, accessibility, and reduced motion | Resolves Technical Architecture decision — testing priorities | Furkan |
+| 2026-08-25 | Project engineering standard: no analytics SDK, no crash-reporting SDK, no backend in V1, no health data transmission, generic notification content by default, and sensitive health values must never be written to console logs in production builds | Resolves Technical Architecture decision — privacy | Furkan |
+| 2026-08-25 | Supabase remains explicitly future scope; V1 scaffolding/implementation must not create authentication, a sync engine, a cloud schema, remote repositories, or account UI — the repository/data architecture only avoids blocking that future direction | Resolves Technical Architecture decision — future sync | Furkan |
+| 2026-08-25 | `docs/TECHNICAL_ARCHITECTURE.md` committed and pushed to origin/main | Approved by Furkan | Furkan |
 
 ## Rejected decisions
 | Date | Decision | Why rejected | Revisit condition |
@@ -79,11 +96,11 @@ None yet — greenfield project, no existing users, entitlements, or shipped flo
 Once defined, protect: medication/injection reminder accuracy, laboratory data integrity, appointment reminder delivery, and any future account/data-deletion flow.
 
 ## Session handoff
-- Completed: Product OS initialization, Product Definition, UX Design, and Visual Design phases all approved and committed to origin/main. Technical Architecture (Engineering Mode) phase begun next.
-- Files changed: none pending at handoff time (all four phase documents committed).
+- Completed: Product OS initialization, Product Definition, UX Design, Visual Design, and Technical Architecture phases all approved and committed to origin/main. All architecture-level decisions resolved: repository boundary layering, drizzle/raw-SQL fallback, device backups included, localization stack, encryption deferred with named revisit triggers, named domain constants for the reminder window (8) and appointment window (14 days), reminder architecture and reconciliation triggers, versioned-schedule historical correctness, testing priority order, and the no-Supabase-in-V1 boundary.
+- Files changed: none pending at handoff time (all five phase documents committed).
 - Tests run: None (no application code exists).
-- Open questions: See `docs/VISUAL_DESIGN_SPECIFICATION.md` "Remaining visual decisions" (deferred to implementation, non-blocking).
-- Next safe step: Produce the Technical Architecture Specification under Engineering Mode; stop for approval before Expo scaffolding.
+- Open questions: None remaining at the architecture-decision level. Only remaining item is a scaffold-time verification step (confirm drizzle-orm/Expo SDK compatibility against official docs), not an open design decision.
+- Next safe step: Recommend a scaffolding-readiness/kickoff step (confirming current Expo/RN/TypeScript versions and the drizzle compatibility check) before Expo scaffolding itself begins — still requires explicit approval to start.
 
 ## Rules
 - Record durable decisions, not chat history.
