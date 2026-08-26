@@ -70,6 +70,7 @@
 | 2026-08-25 | Project engineering standard: no analytics SDK, no crash-reporting SDK, no backend in V1, no health data transmission, generic notification content by default, and sensitive health values must never be written to console logs in production builds | Resolves Technical Architecture decision — privacy | Furkan |
 | 2026-08-25 | Supabase remains explicitly future scope; V1 scaffolding/implementation must not create authentication, a sync engine, a cloud schema, remote repositories, or account UI — the repository/data architecture only avoids blocking that future direction | Resolves Technical Architecture decision — future sync | Furkan |
 | 2026-08-25 | `docs/TECHNICAL_ARCHITECTURE.md` committed and pushed to origin/main | Approved by Furkan | Furkan |
+| 2026-08-26 | `docs/IMPLEMENTATION_PLAN.md` approved as the V1 engineering execution plan (folder structure, scaffold strategy, dependency plan, DB/migration sequence, domain/repository/notification/localization order, feature order, testing order, device QA checkpoints, branch/commit strategy, risks) | Engineering plan phase complete; authorizes Phases 0–7 (foundation) only — Phase 8+ (product features) requires separate approval | Furkan |
 
 ## Rejected decisions
 | Date | Decision | Why rejected | Revisit condition |
