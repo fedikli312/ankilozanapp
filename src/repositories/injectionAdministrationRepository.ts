@@ -53,3 +53,20 @@ export function getLatestAdministration(db: AppDatabase, injectionTreatmentId: s
     .limit(1)
     .get();
 }
+
+/**
+ * Moves a single not-yet-occurred due date (UX spec §G "Reschedule") — the
+ * old pending row is deleted and a new one inserted with the updated date,
+ * rather than updating `scheduledFor` in place, so the write-once rule
+ * (Tech Arch §F invariant 1) is never bent even for a row that hasn't
+ * become "history" yet. This is never treated as a missed dose and never
+ * touches the recurring interval.
+ */
+export function rescheduleInjectionAdministration(
+  db: AppDatabase,
+  input: CreatePendingInjectionAdministrationInput,
+  previousId: string,
+): void {
+  db.delete(injectionAdministration).where(eq(injectionAdministration.id, previousId)).run();
+  db.insert(injectionAdministration).values(input).run();
+}
