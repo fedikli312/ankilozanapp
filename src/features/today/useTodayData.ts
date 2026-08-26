@@ -1,0 +1,102 @@
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "expo-router";
+
+import { db } from "../../db";
+import { generateDueAdministrations } from "../medications/medicationAdministrations";
+import {
+  getActiveInjectionTreatments,
+  getActiveMedications,
+  getAdministrationsForMedication,
+  getAdministrationsForTreatment,
+  getCurrentSchedule,
+  getScheduleDays,
+  getScheduleTimes,
+  markAdministration,
+} from "../../repositories";
+import { todayDateOnly } from "../../shared/today";
+
+export type DueMedicationRow = {
+  administrationId: string;
+  medicationName: string;
+  scheduledFor: string;
+};
+
+export type NextInjectionRow = {
+  treatmentId: string;
+  treatmentName: string;
+  scheduledFor: string;
+};
+
+export function useTodayData() {
+  const [, setRefreshCount] = useState(0);
+  const refresh = useCallback(() => setRefreshCount((count) => count + 1), []);
+
+  // Reconciliation on Today load (Implementation Plan Phase 6/17's
+  // narrower scope for this batch): tops up pending doses for every active
+  // medication so the list below is never stale just because the app
+  // wasn't opened on the exact day a dose was due.
+  useFocusEffect(
+    useCallback(() => {
+      for (const medication of getActiveMedications(db)) {
+        const schedule = getCurrentSchedule(db, medication.id);
+        if (!schedule) continue;
+        const days = getScheduleDays(db, schedule.id).map((d) => d.dayOfWeek);
+        const times = getScheduleTimes(db, schedule.id).map((t) => t.timeOfDay);
+        generateDueAdministrations(db, medication.id, schedule, days, times);
+      }
+      refresh();
+    }, [refresh]),
+  );
+
+  const medications = getActiveMedications(db);
+  const injections = getActiveInjectionTreatments(db);
+  const today = todayDateOnly();
+
+  const allMedicationAdministrations = medications.flatMap((medication) =>
+    getAdministrationsForMedication(db, medication.id)
+      .filter((a) => a.status === "pending")
+      .map((a) => ({ ...a, medicationName: medication.name })),
+  );
+
+  const dueToday: DueMedicationRow[] = allMedicationAdministrations
+    .filter((a) => a.scheduledFor.startsWith(today))
+    .sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor))
+    .map((a) => ({ administrationId: a.id, medicationName: a.medicationName, scheduledFor: a.scheduledFor }));
+
+  const nextMedicationSorted = allMedicationAdministrations
+    .slice()
+    .sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor));
+  const nextMedication: DueMedicationRow | null = nextMedicationSorted[0]
+    ? {
+        administrationId: nextMedicationSorted[0].id,
+        medicationName: nextMedicationSorted[0].medicationName,
+        scheduledFor: nextMedicationSorted[0].scheduledFor,
+      }
+    : null;
+
+  const nextInjectionRows: NextInjectionRow[] = injections
+    .map((treatment) => {
+      const pending = getAdministrationsForTreatment(db, treatment.id).find((a) => a.status === "pending");
+      return pending
+        ? { treatmentId: treatment.id, treatmentName: treatment.name, scheduledFor: pending.scheduledFor }
+        : null;
+    })
+    .filter((row): row is NextInjectionRow => row !== null)
+    .sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor));
+
+  const markTaken = useCallback(
+    (administrationId: string) => {
+      markAdministration(db, administrationId, "taken", new Date().toISOString());
+      refresh();
+    },
+    [refresh],
+  );
+
+  return {
+    hasAnyTreatment: medications.length > 0 || injections.length > 0,
+    dueToday,
+    nextMedication,
+    nextInjection: nextInjectionRows[0] ?? null,
+    markTaken,
+  };
+}

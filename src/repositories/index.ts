@@ -10,3 +10,4 @@ export * from "./labResultRepository";
 export * from "./labReminderRepository";
 export * from "./checkInRepository";
 export * from "./scheduledNotificationRepository";
+export * from "./onboardingStateRepository";
