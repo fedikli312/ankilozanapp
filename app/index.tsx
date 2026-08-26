@@ -1,30 +1,39 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
+
+import { spacing, typography, useTheme } from "@/design-system";
 
 export default function FoundationPlaceholder() {
+  const { colors } = useTheme();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Ankilozanapp</Text>
-      <Text style={styles.subtitle}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: spacing.lg,
+        backgroundColor: colors.background,
+      }}
+    >
+      <Text
+        style={{
+          fontSize: typography.title.fontSize,
+          fontWeight: typography.title.fontWeight,
+          color: colors.textPrimary,
+        }}
+      >
+        Ankilozanapp
+      </Text>
+      <Text
+        style={{
+          marginTop: spacing.xs,
+          fontSize: typography.caption.fontSize,
+          color: colors.textSecondary,
+          textAlign: "center",
+        }}
+      >
         Foundation build in progress. No product screens yet.
       </Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "600",
-  },
-  subtitle: {
-    marginTop: 8,
-    fontSize: 14,
-    textAlign: "center",
-  },
-});
