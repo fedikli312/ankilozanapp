@@ -1,9 +1,11 @@
 import { Text, View } from "react-native";
 
 import { spacing, typography, useTheme } from "@/design-system";
+import { useTranslation } from "@/localization";
 
 export default function FoundationPlaceholder() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <View
@@ -22,7 +24,7 @@ export default function FoundationPlaceholder() {
           color: colors.textPrimary,
         }}
       >
-        Ankilozanapp
+        {t("foundation.placeholderTitle")}
       </Text>
       <Text
         style={{
@@ -32,7 +34,7 @@ export default function FoundationPlaceholder() {
           textAlign: "center",
         }}
       >
-        Foundation build in progress. No product screens yet.
+        {t("foundation.placeholderSubtitle")}
       </Text>
     </View>
   );

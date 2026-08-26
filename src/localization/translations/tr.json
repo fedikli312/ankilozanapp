@@ -1,0 +1,19 @@
+{
+  "common": {
+    "appName": "Ankilozanapp",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "retry": "Tekrar Dene"
+  },
+  "foundation": {
+    "placeholderTitle": "Ankilozanapp",
+    "placeholderSubtitle": "Temel yapı geliştiriliyor. Henüz ürün ekranı yok."
+  },
+  "database": {
+    "migrationError": "Verileriniz hazırlanamadı. Lütfen uygulamayı yeniden başlatın."
+  },
+  "notifications": {
+    "defaultTitle": "Ankilozanapp",
+    "defaultBody": "Bir sağlık hatırlatıcınız var."
+  }
+}

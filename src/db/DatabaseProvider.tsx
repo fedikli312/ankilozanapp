@@ -2,6 +2,7 @@ import type { PropsWithChildren } from "react";
 import { Text, View } from "react-native";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 
+import { useTranslation } from "../localization";
 import { db } from "./client";
 import migrations from "./migrations/migrations";
 
@@ -14,11 +15,12 @@ import migrations from "./migrations/migrations";
  */
 export function DatabaseProvider({ children }: PropsWithChildren) {
   const { success, error } = useMigrations(db, migrations);
+  const { t } = useTranslation();
 
   if (error) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 24 }}>
-        <Text>Couldn&apos;t prepare your data. Please restart the app.</Text>
+        <Text>{t("database.migrationError")}</Text>
       </View>
     );
   }

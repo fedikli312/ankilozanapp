@@ -1,14 +1,15 @@
+import { translate } from "../localization/i18n";
+import type { SupportedLocale } from "../localization/resolveLocale";
+
 /**
  * Notification copy — UX spec / Tech Arch §G, §M: default content is
  * generic and privacy-preserving; detailed content (e.g. a medication name)
  * is an explicit, user-controlled opt-in, off by default. Symptom values,
  * lab values, and personal notes are never included under any
  * configuration — there is deliberately no parameter for them anywhere in
- * this module.
+ * this module. Localized via src/localization (Tech Arch §O) — never a
+ * hardcoded English string.
  */
-
-export const DEFAULT_NOTIFICATION_TITLE = "Ankilozanapp";
-export const DEFAULT_NOTIFICATION_BODY = "You have a health reminder.";
 
 export type NotificationContent = {
   title: string;
@@ -16,6 +17,7 @@ export type NotificationContent = {
 };
 
 export type BuildNotificationContentOptions = {
+  locale: SupportedLocale;
   /** `UserPreferences.notificationDetailOptIn` — false by default. */
   detailOptIn: boolean;
   /** Only used when `detailOptIn` is true; e.g. a medication or injection name. */
@@ -30,8 +32,10 @@ export type BuildNotificationContentOptions = {
 export function buildNotificationContent(
   options: BuildNotificationContentOptions,
 ): NotificationContent {
+  const title = translate(options.locale, "notifications.defaultTitle");
+
   if (options.detailOptIn && options.detailedBody) {
-    return { title: DEFAULT_NOTIFICATION_TITLE, body: options.detailedBody };
+    return { title, body: options.detailedBody };
   }
-  return { title: DEFAULT_NOTIFICATION_TITLE, body: DEFAULT_NOTIFICATION_BODY };
+  return { title, body: translate(options.locale, "notifications.defaultBody") };
 }

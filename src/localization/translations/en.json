@@ -1,0 +1,19 @@
+{
+  "common": {
+    "appName": "Ankilozanapp",
+    "cancel": "Cancel",
+    "save": "Save",
+    "retry": "Retry"
+  },
+  "foundation": {
+    "placeholderTitle": "Ankilozanapp",
+    "placeholderSubtitle": "Foundation build in progress. No product screens yet."
+  },
+  "database": {
+    "migrationError": "Couldn't prepare your data. Please restart the app."
+  },
+  "notifications": {
+    "defaultTitle": "Ankilozanapp",
+    "defaultBody": "You have a health reminder."
+  }
+}
