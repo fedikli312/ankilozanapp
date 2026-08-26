@@ -3,17 +3,125 @@
     "appName": "Ankilozanapp",
     "cancel": "Cancel",
     "save": "Save",
-    "retry": "Retry"
-  },
-  "foundation": {
-    "placeholderTitle": "Ankilozanapp",
-    "placeholderSubtitle": "Foundation build in progress. No product screens yet."
+    "retry": "Retry",
+    "skip": "Skip for now",
+    "continue": "Continue",
+    "add": "Add",
+    "back": "Back",
+    "saveError": "Couldn't save. Please try again.",
+    "weekday": {
+      "0": "Sun",
+      "1": "Mon",
+      "2": "Tue",
+      "3": "Wed",
+      "4": "Thu",
+      "5": "Fri",
+      "6": "Sat"
+    }
   },
   "database": {
     "migrationError": "Couldn't prepare your data. Please restart the app."
   },
   "notifications": {
     "defaultTitle": "Ankilozanapp",
-    "defaultBody": "You have a health reminder."
+    "defaultBody": "You have a health reminder.",
+    "remindersOff": "Reminders are off — enable them in Settings to get notified."
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Ankilozanapp remembers what happens between your rheumatology appointments."
+    },
+    "privacy": {
+      "body": "Your health information is stored on this device. It's yours — you can export or delete it anytime."
+    },
+    "whatToRemember": {
+      "title": "What do you want help remembering?",
+      "medications": "Medications",
+      "injections": "Injections",
+      "appointments": "Appointments",
+      "symptoms": "Symptoms"
+    },
+    "addMedication": {
+      "title": "Add your first medication"
+    },
+    "addInjection": {
+      "title": "Add your first injection"
+    },
+    "reminderPrompt": "We'll remind you when it's time"
+  },
+  "medications": {
+    "listTitle": "Medications",
+    "emptyTitle": "Nothing added yet",
+    "addAction": "Add medication",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "e.g. Sulfasalazine",
+      "doseAmount": "Amount",
+      "doseUnit": "Unit",
+      "doseUnitPlaceholder": "e.g. mg",
+      "frequency": "Frequency",
+      "frequencyDaily": "Daily",
+      "frequencySpecificDays": "Specific days",
+      "frequencyCustomInterval": "Custom interval",
+      "daysOfWeek": "Days",
+      "intervalDays": "Every how many days",
+      "time": "Time",
+      "notes": "Notes",
+      "notesPlaceholder": "Optional",
+      "reminderToggle": "Remind me",
+      "save": "Save medication"
+    },
+    "detail": {
+      "markTaken": "Mark taken",
+      "markMissed": "Mark missed",
+      "history": "History",
+      "editSchedule": "Edit schedule",
+      "archive": "Archive",
+      "archived": "Archived"
+    },
+    "status": {
+      "pending": "Due",
+      "taken": "Taken",
+      "missed": "Missed",
+      "skipped": "Skipped"
+    }
+  },
+  "injections": {
+    "listTitle": "Injections",
+    "emptyTitle": "Nothing added yet",
+    "addAction": "Add injection",
+    "form": {
+      "name": "Treatment name",
+      "namePlaceholder": "e.g. Adalimumab",
+      "doseAmount": "Amount",
+      "doseUnit": "Unit",
+      "doseUnitPlaceholder": "e.g. mg",
+      "intervalDays": "Interval (days)",
+      "lastInjectionDate": "Last injection date",
+      "reminderToggle": "Remind me",
+      "save": "Save injection"
+    },
+    "detail": {
+      "logCompleted": "Log completed",
+      "logMissed": "Log missed",
+      "nextInjection": "Next injection",
+      "history": "History",
+      "archive": "Archive",
+      "archived": "Archived"
+    },
+    "status": {
+      "pending": "Due",
+      "completed": "Completed",
+      "missed": "Missed"
+    }
+  },
+  "today": {
+    "title": "Today",
+    "emptyPrompt": "Add your first medication or injection to see it here.",
+    "emptyAction": "Get started",
+    "dueToday": "Due today",
+    "nextMedication": "Next medication",
+    "nextInjection": "Next injection",
+    "logNow": "Log now"
   }
 }

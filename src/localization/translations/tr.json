@@ -3,17 +3,125 @@
     "appName": "Ankilozanapp",
     "cancel": "İptal",
     "save": "Kaydet",
-    "retry": "Tekrar Dene"
-  },
-  "foundation": {
-    "placeholderTitle": "Ankilozanapp",
-    "placeholderSubtitle": "Temel yapı geliştiriliyor. Henüz ürün ekranı yok."
+    "retry": "Tekrar Dene",
+    "skip": "Şimdilik Geç",
+    "continue": "Devam Et",
+    "add": "Ekle",
+    "back": "Geri",
+    "saveError": "Kaydedilemedi. Lütfen tekrar deneyin.",
+    "weekday": {
+      "0": "Paz",
+      "1": "Pzt",
+      "2": "Sal",
+      "3": "Çar",
+      "4": "Per",
+      "5": "Cum",
+      "6": "Cmt"
+    }
   },
   "database": {
     "migrationError": "Verileriniz hazırlanamadı. Lütfen uygulamayı yeniden başlatın."
   },
   "notifications": {
     "defaultTitle": "Ankilozanapp",
-    "defaultBody": "Bir sağlık hatırlatıcınız var."
+    "defaultBody": "Bir sağlık hatırlatıcınız var.",
+    "remindersOff": "Hatırlatıcılar kapalı — bildirim almak için Ayarlar'dan etkinleştirin."
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Ankilozanapp, romatoloji randevularınız arasında yaşananları hatırlar."
+    },
+    "privacy": {
+      "body": "Sağlık bilgileriniz bu cihazda saklanır. Bunlar size aittir — istediğiniz zaman dışa aktarabilir veya silebilirsiniz."
+    },
+    "whatToRemember": {
+      "title": "Neyi hatırlamanızda yardımcı olalım?",
+      "medications": "İlaçlar",
+      "injections": "İğneler",
+      "appointments": "Randevular",
+      "symptoms": "Belirtiler"
+    },
+    "addMedication": {
+      "title": "İlk ilacınızı ekleyin"
+    },
+    "addInjection": {
+      "title": "İlk iğnenizi ekleyin"
+    },
+    "reminderPrompt": "Zamanı geldiğinde size hatırlatacağız"
+  },
+  "medications": {
+    "listTitle": "İlaçlar",
+    "emptyTitle": "Henüz bir şey eklenmedi",
+    "addAction": "İlaç ekle",
+    "form": {
+      "name": "Ad",
+      "namePlaceholder": "örn. Sulfasalazin",
+      "doseAmount": "Miktar",
+      "doseUnit": "Birim",
+      "doseUnitPlaceholder": "örn. mg",
+      "frequency": "Sıklık",
+      "frequencyDaily": "Her gün",
+      "frequencySpecificDays": "Belirli günler",
+      "frequencyCustomInterval": "Özel aralık",
+      "daysOfWeek": "Günler",
+      "intervalDays": "Kaç günde bir",
+      "time": "Saat",
+      "notes": "Notlar",
+      "notesPlaceholder": "İsteğe bağlı",
+      "reminderToggle": "Bana hatırlat",
+      "save": "İlacı kaydet"
+    },
+    "detail": {
+      "markTaken": "Alındı olarak işaretle",
+      "markMissed": "Kaçırıldı olarak işaretle",
+      "history": "Geçmiş",
+      "editSchedule": "Programı düzenle",
+      "archive": "Arşivle",
+      "archived": "Arşivlendi"
+    },
+    "status": {
+      "pending": "Bekliyor",
+      "taken": "Alındı",
+      "missed": "Kaçırıldı",
+      "skipped": "Atlandı"
+    }
+  },
+  "injections": {
+    "listTitle": "İğneler",
+    "emptyTitle": "Henüz bir şey eklenmedi",
+    "addAction": "İğne ekle",
+    "form": {
+      "name": "Tedavi adı",
+      "namePlaceholder": "örn. Adalimumab",
+      "doseAmount": "Miktar",
+      "doseUnit": "Birim",
+      "doseUnitPlaceholder": "örn. mg",
+      "intervalDays": "Aralık (gün)",
+      "lastInjectionDate": "Son iğne tarihi",
+      "reminderToggle": "Bana hatırlat",
+      "save": "İğneyi kaydet"
+    },
+    "detail": {
+      "logCompleted": "Yapıldı olarak kaydet",
+      "logMissed": "Kaçırıldı olarak kaydet",
+      "nextInjection": "Sonraki iğne",
+      "history": "Geçmiş",
+      "archive": "Arşivle",
+      "archived": "Arşivlendi"
+    },
+    "status": {
+      "pending": "Bekliyor",
+      "completed": "Yapıldı",
+      "missed": "Kaçırıldı"
+    }
+  },
+  "today": {
+    "title": "Bugün",
+    "emptyPrompt": "Burada görmek için ilk ilacınızı veya iğnenizi ekleyin.",
+    "emptyAction": "Başlayın",
+    "dueToday": "Bugün yapılacaklar",
+    "nextMedication": "Sonraki ilaç",
+    "nextInjection": "Sonraki iğne",
+    "logNow": "Şimdi kaydet"
   }
 }

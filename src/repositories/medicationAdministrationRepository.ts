@@ -7,7 +7,7 @@ export type CreatePendingAdministrationInput = {
   id: string;
   medicationId: string;
   medicationScheduleId: string | null;
-  /** True timestamp (ISO 8601 UTC). Write-once (Tech Arch §F). */
+  /** Local wall-clock `YYYY-MM-DDTHH:mm`. Write-once (Tech Arch §F). */
   scheduledFor: string;
 };
 
@@ -42,6 +42,30 @@ export function markAdministration(
   db.update(medicationAdministration)
     .set({ status, actualTime, updatedAt: new Date().toISOString() })
     .where(eq(medicationAdministration.id, id))
+    .run();
+}
+
+/**
+ * Removes still-`pending` (never occurred, so not yet "history") rows that
+ * were generated under a schedule version that has just been superseded —
+ * without this, editing a schedule would leave stale doses from the old
+ * cadence sitting alongside the new ones. Never touches a row whose
+ * outcome has already been recorded (Tech Arch §F invariant 1 only
+ * protects *recorded* history, not an untouched future placeholder).
+ */
+export function deleteFutureUnrecordedAdministrations(
+  db: AppDatabase,
+  medicationScheduleId: string,
+  fromDateInclusive: string,
+): void {
+  db.delete(medicationAdministration)
+    .where(
+      and(
+        eq(medicationAdministration.medicationScheduleId, medicationScheduleId),
+        eq(medicationAdministration.status, "pending"),
+        gte(medicationAdministration.scheduledFor, fromDateInclusive),
+      ),
+    )
     .run();
 }
 

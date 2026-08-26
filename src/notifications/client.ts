@@ -70,6 +70,24 @@ export async function scheduleWeeklyReminder(input: ScheduleWeeklyReminderInput)
   });
 }
 
+export type ScheduleDailyReminderInput = {
+  content: NotificationContent;
+  hour: number;
+  minute: number;
+};
+
+/** `daily`-frequency medication schedules — fires every day at the same wall-clock time (Tech Arch §G). */
+export async function scheduleDailyReminder(input: ScheduleDailyReminderInput): Promise<string> {
+  return Notifications.scheduleNotificationAsync({
+    content: input.content,
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      hour: input.hour,
+      minute: input.minute,
+    },
+  });
+}
+
 export type ScheduleOneOffReminderInput = {
   content: NotificationContent;
   /** The exact instant the reminder should fire. */

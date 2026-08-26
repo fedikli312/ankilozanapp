@@ -82,7 +82,12 @@ export const medicationAdministration = sqliteTable("medication_administration",
   medicationScheduleId: text("medication_schedule_id").references(
     () => medicationSchedule.id,
   ),
-  /** True timestamp (ISO 8601 UTC). Write-once. */
+  /**
+   * Local wall-clock datetime, `YYYY-MM-DDTHH:mm` — a scheduling
+   * *commitment* ("8am"), not a UTC instant (Tech Arch §H's wall-clock
+   * reasoning applied here, refined during Phase 9 implementation).
+   * Write-once (Tech Arch §F).
+   */
   scheduledFor: text("scheduled_for").notNull(),
   status: text("status", {
     enum: ["pending", "taken", "missed", "skipped"],

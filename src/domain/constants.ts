@@ -13,6 +13,16 @@ export const UPCOMING_APPOINTMENT_WINDOW_DAYS = 14;
  * rheumatology appointment exists (Tech Arch §J / PROJECT_MEMORY.md). */
 export const APPOINTMENT_PREPARATION_FALLBACK_LOOKBACK_DAYS = 90;
 
+/**
+ * How far ahead `MedicationAdministration` "pending" rows are materialized
+ * from a schedule, topped up whenever Today loads. Not specified by Tech
+ * Arch — introduced in Phase 9 to satisfy the PRD §5 activation requirement
+ * ("Today reflects the next expected medication event") without generating
+ * an unbounded number of future rows. Named and centralized here for the
+ * same reason as the other windows above: never a magic number per screen.
+ */
+export const MEDICATION_ADMINISTRATION_GENERATION_WINDOW_DAYS = 7;
+
 /** Minimum-data thresholds for Insights (Tech Arch §I) — constants, not
  * user-configurable in V1. */
 export const INSIGHTS_THRESHOLDS = {
