@@ -7,6 +7,7 @@ import { useTranslation } from "@/localization";
 import { InjectionForm } from "@/features/injections/InjectionForm";
 import { useInjections, type CreateInjectionFormInput } from "@/features/injections/useInjections";
 import { finishOnboarding } from "@/features/onboarding/finishOnboarding";
+import { getOnboardingSelection } from "@/features/onboarding/onboardingDraft";
 
 export default function OnboardingAddInjectionScreen() {
   const { t } = useTranslation();
@@ -17,6 +18,10 @@ export default function OnboardingAddInjectionScreen() {
   const [saveError, setSaveError] = useState(false);
 
   const proceed = () => {
+    if (getOnboardingSelection().appointments) {
+      router.push("/onboarding/add-appointment");
+      return;
+    }
     finishOnboarding();
     router.replace("/");
   };

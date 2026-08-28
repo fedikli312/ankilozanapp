@@ -26,15 +26,20 @@ export default function WhatToRememberScreen() {
   const handleContinue = () => {
     setOnboardingSelection(selection);
 
-    // Appointments/Symptoms aren't built yet (see PROJECT_MEMORY.md) - the
-    // selection is still recorded, but only Medications/Injections lead to
-    // an add step in this build.
+    // Symptoms has no dedicated onboarding step (the check-in sheet is
+    // reached from Today itself once onboarding finishes) - the selection
+    // is still recorded either way, but only Medications/Injections/
+    // Appointments lead to an add step here, in that order.
     if (selection.medications) {
       router.push("/onboarding/add-medication");
       return;
     }
     if (selection.injections) {
       router.push("/onboarding/add-injection");
+      return;
+    }
+    if (selection.appointments) {
+      router.push("/onboarding/add-appointment");
       return;
     }
     finishOnboarding();

@@ -22,6 +22,10 @@ export default function OnboardingAddMedicationScreen() {
       router.push("/onboarding/add-injection");
       return;
     }
+    if (getOnboardingSelection().appointments) {
+      router.push("/onboarding/add-appointment");
+      return;
+    }
     finishOnboarding();
     router.replace("/");
   };
