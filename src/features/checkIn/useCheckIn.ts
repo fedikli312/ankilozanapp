@@ -27,6 +27,7 @@ export function useCheckIn() {
           morningStiffnessBucket: todaysCheckIn.morningStiffnessBucket,
           wellbeing: todaysCheckIn.wellbeing ?? undefined,
           bodyAreas,
+          notes: todaysCheckIn.notes ?? "",
         }
       : undefined;
 

@@ -29,7 +29,7 @@ export default function AppointmentPreparationScreen() {
     );
   }
 
-  const { appointment, range, hasPriorRheumatologyAppointment, pain, stiffness, fatigue, medicationHistory, injectionHistory, crpResults, esrResults, flaggedNotes } = data;
+  const { appointment, range, hasPriorRheumatologyAppointment, pain, stiffness, fatigue, medicationHistory, injectionHistory, crpResults, esrResults, recordedNotes } = data;
 
   const who = appointment.doctorOrInstitution || t(`appointments.type.${appointment.type}`);
   const rangeLabel = hasPriorRheumatologyAppointment
@@ -121,10 +121,10 @@ export default function AppointmentPreparationScreen() {
       )}
 
       <SectionTitle>{t("appointmentPreparation.notes")}</SectionTitle>
-      {flaggedNotes.length === 0 ? (
+      {recordedNotes.length === 0 ? (
         <Text style={{ color: colors.textSecondary, marginBottom: spacing.xl }}>{t("appointmentPreparation.noneRecorded")}</Text>
       ) : (
-        flaggedNotes.map((n) => (
+        recordedNotes.map((n) => (
           <Text key={n.date} style={{ color: colors.textPrimary, marginBottom: spacing.xs }}>
             {n.date} — {n.notes}
           </Text>

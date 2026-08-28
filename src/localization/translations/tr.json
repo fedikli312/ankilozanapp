@@ -209,6 +209,8 @@
       "other": "Diğer"
     },
     "addMore": "+ Daha fazla ekle",
+    "noteLabel": "Hatırlamak istediğiniz bir şey var mı? (isteğe bağlı)",
+    "noteCounter": "%{count}/%{max} karakter",
     "save": "Kontrolü kaydet"
   },
   "labs": {

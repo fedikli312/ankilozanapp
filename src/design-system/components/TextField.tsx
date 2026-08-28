@@ -10,6 +10,12 @@ export type TextFieldProps = {
   keyboardType?: KeyboardTypeOptions;
   multiline?: boolean;
   errorMessage?: string;
+  /** Native character cap (e.g. `CHECK_IN_NOTE_MAX_LENGTH`) — enforced by the OS text input itself. */
+  maxLength?: number;
+  /** Announced by VoiceOver alongside the label — e.g. a "x/400 characters" state. */
+  accessibilityHint?: string;
+  /** Short state line rendered under the field (e.g. a character counter). */
+  helperText?: string;
 };
 
 /** Visual Design Spec §11 — persistent label above the field, never placeholder-only. */
@@ -21,6 +27,9 @@ export function TextField({
   keyboardType,
   multiline,
   errorMessage,
+  maxLength,
+  accessibilityHint,
+  helperText,
 }: TextFieldProps) {
   const { colors, typography, spacing, radius } = useTheme();
 
@@ -42,7 +51,9 @@ export function TextField({
         placeholderTextColor={colors.textSecondary}
         keyboardType={keyboardType}
         multiline={multiline}
+        maxLength={maxLength}
         accessibilityLabel={label}
+        accessibilityHint={accessibilityHint}
         style={{
           backgroundColor: colors.surfaceHighlight,
           borderRadius: radius.small,
@@ -56,6 +67,14 @@ export function TextField({
       {errorMessage ? (
         <Text style={{ color: colors.statusDanger, fontSize: typography.caption.fontSize, marginTop: 4 }}>
           {errorMessage}
+        </Text>
+      ) : helperText ? (
+        <Text
+          style={{ color: colors.textSecondary, fontSize: typography.caption.fontSize, marginTop: 4 }}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        >
+          {helperText}
         </Text>
       ) : null}
     </View>

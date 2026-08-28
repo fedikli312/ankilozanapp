@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, Chip, StepperField, useTheme } from "../../design-system";
+import { Button, Chip, StepperField, TextField, useTheme } from "../../design-system";
 import { useTranslation } from "../../localization";
+import { CHECK_IN_NOTE_MAX_LENGTH } from "../../domain/constants";
 import type { BodyAreaRegion } from "../../repositories";
 import type { SaveCheckInInput } from "./useCheckIn";
 
@@ -12,6 +13,7 @@ export type CheckInFormValue = {
   morningStiffnessBucket: "none" | "under_15" | "15_30" | "30_60" | "over_60";
   wellbeing?: number;
   bodyAreas: BodyAreaRegion[];
+  notes: string;
 };
 
 export type CheckInFormProps = {
@@ -45,6 +47,7 @@ const DEFAULT_VALUE: CheckInFormValue = {
   fatigue: 0,
   morningStiffnessBucket: "none",
   bodyAreas: [],
+  notes: "",
 };
 
 /** UX spec §E: default fields always visible, optional fields behind a single "+ Add more" disclosure. Target 15–30 seconds. */
@@ -53,7 +56,9 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
   const { colors, typography, spacing } = useTheme();
   const [value, setValue] = useState<CheckInFormValue>(initialValue ?? DEFAULT_VALUE);
   const [showMore, setShowMore] = useState(
-    initialValue?.wellbeing !== undefined || (initialValue?.bodyAreas.length ?? 0) > 0,
+    initialValue?.wellbeing !== undefined ||
+      (initialValue?.bodyAreas.length ?? 0) > 0 ||
+      (initialValue?.notes.length ?? 0) > 0,
   );
 
   useEffect(() => {
@@ -128,7 +133,7 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
           <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xs }}>
             {t("checkIn.bodyAreaLabel")}
           </Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs, marginBottom: spacing.md }}>
             {BODY_AREAS.map((area) => (
               <Chip
                 key={area}
@@ -138,6 +143,16 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
               />
             ))}
           </View>
+
+          <TextField
+            label={t("checkIn.noteLabel")}
+            value={value.notes}
+            onChangeText={(notes) => setValue((prev) => ({ ...prev, notes }))}
+            multiline
+            maxLength={CHECK_IN_NOTE_MAX_LENGTH}
+            helperText={t("checkIn.noteCounter", { count: value.notes.length, max: CHECK_IN_NOTE_MAX_LENGTH })}
+            accessibilityHint={t("checkIn.noteCounter", { count: value.notes.length, max: CHECK_IN_NOTE_MAX_LENGTH })}
+          />
         </View>
       )}
 
@@ -150,6 +165,7 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
             morningStiffnessBucket: value.morningStiffnessBucket,
             wellbeing: value.wellbeing,
             bodyAreas: value.bodyAreas,
+            notes: value.notes.trim() ? value.notes.trim() : undefined,
           })
         }
       />

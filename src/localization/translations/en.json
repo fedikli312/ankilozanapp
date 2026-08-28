@@ -209,6 +209,8 @@
       "other": "Other"
     },
     "addMore": "+ Add more",
+    "noteLabel": "Anything you want to remember? (optional)",
+    "noteCounter": "%{count}/%{max} characters",
     "save": "Save check-in"
   },
   "labs": {

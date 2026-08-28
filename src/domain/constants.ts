@@ -23,6 +23,14 @@ export const APPOINTMENT_PREPARATION_FALLBACK_LOOKBACK_DAYS = 90;
  */
 export const MEDICATION_ADMINISTRATION_GENERATION_WINDOW_DAYS = 7;
 
+/**
+ * Maximum length of the optional Daily Check-in note (PROJECT_MEMORY.md —
+ * "close the check-in-notes V1 gap"). Kept short by design: this is a
+ * quick daily check-in, not a journal. Enforced via `TextField`'s native
+ * `maxLength`, not re-validated elsewhere.
+ */
+export const CHECK_IN_NOTE_MAX_LENGTH = 400;
+
 /** Minimum-data thresholds for Insights (Tech Arch §I) — constants, not
  * user-configurable in V1. */
 export const INSIGHTS_THRESHOLDS = {

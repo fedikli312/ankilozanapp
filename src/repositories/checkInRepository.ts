@@ -41,7 +41,7 @@ export function upsertCheckIn(db: AppDatabase, input: UpsertCheckInInput): void 
       fatigue: input.fatigue,
       morningStiffnessBucket: input.morningStiffnessBucket,
       wellbeing: input.wellbeing,
-      notes: input.notes,
+      notes: input.notes ?? null,
       flaggedImportant: input.flaggedImportant ?? false,
     })
     .onConflictDoUpdate({
@@ -51,7 +51,10 @@ export function upsertCheckIn(db: AppDatabase, input: UpsertCheckInInput): void 
         fatigue: input.fatigue,
         morningStiffnessBucket: input.morningStiffnessBucket,
         wellbeing: input.wellbeing,
-        notes: input.notes,
+        // Explicit `?? null` (not left `undefined`): an update must be able to
+        // clear a previously-saved note when the user removes the text and
+        // re-saves the same day, not silently retain the old value.
+        notes: input.notes ?? null,
         flaggedImportant: input.flaggedImportant ?? false,
         updatedAt: new Date().toISOString(),
       },

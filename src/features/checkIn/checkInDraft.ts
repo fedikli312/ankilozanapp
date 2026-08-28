@@ -18,6 +18,7 @@ export type CheckInDraft = {
   morningStiffnessBucket: "none" | "under_15" | "15_30" | "30_60" | "over_60";
   wellbeing?: number;
   bodyAreas: BodyAreaRegion[];
+  notes: string;
 };
 
 let draft: CheckInDraft | null = null;

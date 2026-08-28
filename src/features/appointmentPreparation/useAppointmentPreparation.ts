@@ -93,8 +93,13 @@ export function useAppointmentPreparation(appointmentId: string) {
     (r) => r.recordedDate >= range.rangeStart && r.recordedDate < range.rangeEnd,
   );
 
-  const flaggedNotes = checkIns
-    .filter((c) => c.flaggedImportant && c.notes)
+  // Reads every check-in note in range, not just ones flagged important:
+  // `flaggedImportant` has no approved UX to set it in V1 (it stays an
+  // unused, always-false schema column per PROJECT_MEMORY.md), so gating on
+  // it here would make this section permanently empty regardless of what
+  // the user actually wrote.
+  const recordedNotes = checkIns
+    .filter((c) => c.notes && c.notes.trim().length > 0)
     .sort((a, b) => a.date.localeCompare(b.date))
     .map((c) => ({ date: c.date, notes: c.notes as string }));
 
@@ -113,6 +118,6 @@ export function useAppointmentPreparation(appointmentId: string) {
     injectionHistory,
     crpResults,
     esrResults,
-    flaggedNotes,
+    recordedNotes,
   } as const;
 }
