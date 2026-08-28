@@ -55,7 +55,7 @@ export function TextField({
         accessibilityLabel={label}
         accessibilityHint={accessibilityHint}
         style={{
-          backgroundColor: colors.surfaceHighlight,
+          backgroundColor: colors.borderHairline,
           borderRadius: radius.small,
           paddingHorizontal: spacing.md,
           paddingVertical: spacing.sm,

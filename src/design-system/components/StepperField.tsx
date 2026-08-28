@@ -44,7 +44,7 @@ export function StepperField({ label, value, min, max, onChange, formatValue }: 
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
           style={{
-            backgroundColor: colors.surfaceHighlight,
+            backgroundColor: colors.borderHairline,
             borderRadius: radius.small,
             paddingHorizontal: spacing.sm,
           }}
@@ -67,7 +67,7 @@ export function StepperField({ label, value, min, max, onChange, formatValue }: 
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
           style={{
-            backgroundColor: colors.surfaceHighlight,
+            backgroundColor: colors.borderHairline,
             borderRadius: radius.small,
             paddingHorizontal: spacing.sm,
           }}

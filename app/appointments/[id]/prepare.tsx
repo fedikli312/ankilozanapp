@@ -44,9 +44,20 @@ export default function AppointmentPreparationScreen() {
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary }}>
         {t("appointmentPreparation.headerTitle", { who, date: formatDate(parseDateOnly(appointment.date), locale) })}
       </Text>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.xs }}>
-        {rangeLabel}
-      </Text>
+      <View
+        style={{
+          alignSelf: "flex-start",
+          backgroundColor: colors.surfaceHighlight,
+          borderRadius: 999,
+          paddingHorizontal: spacing.sm,
+          paddingVertical: spacing.xs / 2,
+          marginTop: spacing.sm,
+        }}
+      >
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textPrimary, fontWeight: "600" }}>
+          {rangeLabel}
+        </Text>
+      </View>
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.sm, fontStyle: "italic" }}>
         {t("appointmentPreparation.disclaimer")}
       </Text>
