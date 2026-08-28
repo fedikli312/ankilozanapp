@@ -78,6 +78,7 @@ export function useMedications() {
       try {
         outcome = await reconcileMedicationReminders(db, {
           medicationId,
+          medicationName: input.name,
           frequencyType: input.frequencyType,
           intervalDays: input.intervalDays ?? null,
           effectiveFrom,

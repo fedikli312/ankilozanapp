@@ -109,6 +109,11 @@ export async function cancelScheduledNotification(identifier: string): Promise<v
   await Notifications.cancelScheduledNotificationAsync(identifier);
 }
 
+/** Used only by "Delete all local data" (UX spec §L) — every other cancellation is scoped to one source via `cancelScheduledNotification`. */
+export async function cancelAllScheduledNotifications(): Promise<void> {
+  await Notifications.cancelAllScheduledNotificationsAsync();
+}
+
 export async function getAllScheduledNotificationIdentifiers(): Promise<string[]> {
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
   return scheduled.map((n) => n.identifier);

@@ -47,7 +47,16 @@
     "addInjection": {
       "title": "İlk iğnenizi ekleyin"
     },
+    "addAppointment": {
+      "title": "Yaklaşan bir randevu ekleyin"
+    },
     "reminderPrompt": "Zamanı geldiğinde size hatırlatacağız"
+  },
+  "tabs": {
+    "today": "Bugün",
+    "track": "Takip",
+    "appointments": "Randevular",
+    "insights": "Analiz"
   },
   "medications": {
     "listTitle": "İlaçlar",
@@ -115,6 +124,198 @@
       "missed": "Kaçırıldı"
     }
   },
+  "appointments": {
+    "listTitle": "Randevular",
+    "emptyTitle": "Henüz randevu eklenmedi",
+    "addAction": "Randevu ekle",
+    "upcoming": "Yaklaşan",
+    "past": "Geçmiş",
+    "type": {
+      "rheumatology": "Romatoloji",
+      "laboratory": "Laboratuvar",
+      "imaging": "Görüntüleme",
+      "other": "Diğer"
+    },
+    "status": {
+      "scheduled": "Planlandı",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi"
+    },
+    "form": {
+      "type": "Tür",
+      "doctorOrInstitution": "Doktor veya kurum",
+      "doctorOrInstitutionPlaceholder": "İsteğe bağlı",
+      "date": "Tarih",
+      "today": "Bugün",
+      "addTime": "Saat ekle",
+      "notes": "Notlar",
+      "notesPlaceholder": "İsteğe bağlı",
+      "reminderToggle": "Bana hatırlat",
+      "reminderLeadDays": "Kaç gün önce",
+      "save": "Randevuyu kaydet"
+    },
+    "detail": {
+      "edit": "Düzenle",
+      "cancel": "Randevuyu iptal et",
+      "prepare": "Bu randevu için hazırlan"
+    }
+  },
+  "appointmentPreparation": {
+    "headerTitle": "%{who} için hazırlık — %{date}",
+    "rangeSincePrevious": "Son randevunuzdan bu yana özet (%{start} – %{end})",
+    "rangeFallback": "Son %{days} günün özeti",
+    "disclaimer": "Kaydettiklerinizin bir özeti — doktorunuzla birlikte incelemeniz için.",
+    "symptomTrends": "Belirti eğilimleri",
+    "painSummary": "Bu dönemde ağrı ortalaması 10 üzerinden %{average}.",
+    "stiffnessSummary": "Bu dönemde sabah tutukluğu en sık \"%{bucket}\" olarak kaydedildi.",
+    "fatigueSummary": "Bu dönemde yorgunluk ortalaması 10 üzerinden %{average}.",
+    "medicationHistory": "İlaç geçmişi",
+    "medicationAdherence": "%{name} — planlanan dozların %%{percentage}'i alındı",
+    "medicationCounts": "%{name} — %{taken} alındı, %{missed} kaçırıldı",
+    "injectionHistory": "İğne geçmişi",
+    "injectionCounts": "%{name} — %{completed} yapıldı, %{missed} kaçırıldı",
+    "recentLabs": "Son laboratuvar değerleri",
+    "notes": "Önemli olarak işaretlediğiniz notlar",
+    "noneRecorded": "Bu dönemde bir kayıt yok."
+  },
+  "checkIn": {
+    "title": "Bugün nasıl hissediyorsunuz?",
+    "painLabel": "Ağrı, 10 üzerinden %{value}",
+    "fatigueLabel": "Yorgunluk, 10 üzerinden %{value}",
+    "stiffnessLabel": "Sabah tutukluğu",
+    "stiffness": {
+      "none": "Yok",
+      "under_15": "15 dakikadan az",
+      "15_30": "15–30 dakika",
+      "30_60": "30–60 dakika",
+      "over_60": "60 dakikadan fazla"
+    },
+    "wellbeingLabel": "Genel iyilik hali",
+    "wellbeing": {
+      "1": "Çok kötü",
+      "2": "Kötü",
+      "3": "İdare eder",
+      "4": "İyi",
+      "5": "Çok iyi"
+    },
+    "bodyAreaLabel": "Etkilenen bölgeler",
+    "bodyArea": {
+      "neck": "Boyun",
+      "upper_back": "Üst sırt",
+      "lower_back": "Alt sırt",
+      "hips": "Kalçalar",
+      "shoulders": "Omuzlar",
+      "chest_ribs": "Göğüs/kaburgalar",
+      "other": "Diğer"
+    },
+    "addMore": "+ Daha fazla ekle",
+    "save": "Kontrolü kaydet"
+  },
+  "labs": {
+    "addAction": "Sonuç ekle",
+    "emptyTitle": "Henüz %{marker} sonucu yok",
+    "latest": "Son değer: %{value} %{unit} (%{date})",
+    "rangeSummary": "%{count} sonuç arasında %{min} ile %{max} %{unit} arasında değişti",
+    "marker": {
+      "CRP": "CRP",
+      "ESR": "ESR"
+    },
+    "form": {
+      "unit": "Birim",
+      "date": "Tarih",
+      "institution": "Kurum",
+      "institutionPlaceholder": "İsteğe bağlı",
+      "notes": "Notlar",
+      "notesPlaceholder": "İsteğe bağlı",
+      "save": "Sonucu kaydet",
+      "editTitle": "Sonucu düzenle",
+      "delete": "Sonucu sil"
+    }
+  },
+  "insights": {
+    "title": "Analiz",
+    "disclaimer": "Bu eğilimler kaydettiklerinizi yansıtır. Bir tanı değildir.",
+    "notEnoughData": "Belirtilerinizin zaman içinde nasıl değiştiğini görmek için kontrol kaydetmeye devam edin.",
+    "notEnoughDataGeneric": "Bir eğilim göstermek için henüz yeterli veri yok.",
+    "averageOnly": "Bu dönemde ortalama %{average}",
+    "averageUp": "Ortalama %{average}, önceki dönemdeki %{previous}'ten yüksek",
+    "averageDown": "Ortalama %{average}, önceki dönemdeki %{previous}'ten düşük",
+    "averageFlat": "Ortalama %{average}, önceki dönemle benzer",
+    "stiffnessSummary": "En sık \"%{bucket}\" — %{total} kayıttan %{count} tanesi",
+    "adherenceSummary": "Planlanan dozların %%{percentage}'i alındı",
+    "adherenceCounts": "%{taken} alındı, %{missed} kaçırıldı",
+    "injectionSummary": "%{completed} yapıldı, %{missed} kaçırıldı",
+    "labSummary": "Son değer: %{date} tarihinde %{value}",
+    "detailNumericSummary": "%{count} kontrol arasında ortalama %{average}",
+    "metric": {
+      "pain": "Ağrı",
+      "stiffness": "Sabah tutukluğu",
+      "fatigue": "Yorgunluk",
+      "medicationAdherence": "İlaç uyumu",
+      "injectionHistory": "İğne geçmişi",
+      "crp": "CRP",
+      "esr": "ESR"
+    },
+    "range": {
+      "4w": "4 hafta",
+      "3m": "3 ay",
+      "6m": "6 ay",
+      "all": "Tüm zamanlar"
+    }
+  },
+  "track": {
+    "title": "Takip",
+    "symptoms": "Belirtiler",
+    "labs": "Tahliller",
+    "noneYet": "Henüz bir şey yok",
+    "countActive": "%{count} aktif",
+    "symptomsSummary": "Ağrı %{pain} · %{date}",
+    "labsSummary": "%{marker} %{value} %{unit} · %{date}"
+  },
+  "symptoms": {
+    "title": "Belirtiler",
+    "emptyTitle": "Henüz kontrol kaydı yok",
+    "rowLabel": "Ağrı %{pain} · Yorgunluk %{fatigue}",
+    "todayCaption": "Bugün · Tutukluk: %{stiffness}"
+  },
+  "profile": {
+    "title": "Profil",
+    "reminderSettings": "Hatırlatıcı ayarları",
+    "notificationPrivacy": "Bildirim gizliliği",
+    "language": "Dil",
+    "privacyAndData": "Gizlilik ve veriler",
+    "disclaimer": "Tıbbi uyarı",
+    "about": "Hakkında",
+    "languageSystem": "Sistem dilini kullan",
+    "languageSelected": "Seçili",
+    "languageOption": {
+      "en": "English",
+      "tr": "Türkçe"
+    },
+    "showDetailsToggle": "Bildirimlerde ayrıntıları göster",
+    "showDetailsDescription": "Kilit ekranında ilaç veya iğne adlarını göster",
+    "showDetailsNote": "Bu ayardan bağımsız olarak belirti değerleri, laboratuvar değerleri ve notlar hiçbir zaman bir bildirime dahil edilmez.",
+    "reminderDefaults": {
+      "note": "Her hatırlatıcının zamanlaması ilgili ilaç, iğne veya randevu üzerinden ayarlanır. Onaylı varsayılanlar şunlardır:",
+      "medication": "İlaç",
+      "medicationValue": "Planlanan saatte",
+      "injection": "İğne",
+      "injectionValue": "Bir gün önce ve planlanan günde",
+      "appointment": "Randevu",
+      "appointmentValue": "Bir gün önce"
+    },
+    "privacyBody": "Ankilozanapp; belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları gibi sağlık bilgilerinizi yalnızca bu cihazda saklar. Hiçbir şey bir sunucuya gönderilmez.",
+    "privacyBackup": "Cihazınızın kendi yedeklemesi (iCloud gibi), diğer uygulamaları yedeklediği gibi bu verileri de içerebilir.",
+    "exportData": "Verilerinizi dışa aktarın",
+    "exportDataComingLater": "Yakında",
+    "deleteAllData": "Tüm yerel verileri sil",
+    "deleteDataExplanation": "Bu işlem, bu cihazda kaydettiğiniz her şeyi — belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları — kalıcı olarak siler. Bu işlem geri alınamaz.",
+    "deleteDataAcknowledge": "Bunun geri alınamayacağını anlıyorum",
+    "deleteDataConfirm": "Tüm yerel verileri sil",
+    "deleteDataInProgress": "Siliniyor…",
+    "disclaimerBody": "Ankilozanapp; belirtileriniz, tedavileriniz ve randevularınızla ilgili bilgileri kaydetmenize ve düzenlemenize yardımcı olur. Tıbbi durumları teşhis etmez, öngörmez veya yorumlamaz ve tedavi önermez. Profesyonel tıbbi tavsiyenin yerini tutmaz — bakımınızla ilgili her zaman doktorunuza danışın.",
+    "version": "Sürüm %{version}"
+  },
   "today": {
     "title": "Bugün",
     "emptyPrompt": "Burada görmek için ilk ilacınızı veya iğnenizi ekleyin.",
@@ -122,6 +323,10 @@
     "dueToday": "Bugün yapılacaklar",
     "nextMedication": "Sonraki ilaç",
     "nextInjection": "Sonraki iğne",
-    "logNow": "Şimdi kaydet"
+    "upcomingAppointment": "Yaklaşan randevu",
+    "logNow": "Şimdi kaydet",
+    "checkInPrompt": "Bugün nasıl hissediyorsunuz?",
+    "checkInCta": "Kontrol kaydet",
+    "checkInCompleted": "Kontrol kaydedildi — Ağrı %{pain}, Tutukluk %{stiffness}"
   }
 }

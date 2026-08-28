@@ -5,3 +5,4 @@ export * from "./computeStiffnessHistory";
 export * from "./computeMedicationAdherence";
 export * from "./computeInjectionHistory";
 export * from "./computeLabHistory";
+export * from "./resolveInsightsRange";

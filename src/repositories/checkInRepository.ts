@@ -70,6 +70,15 @@ export function getCheckInByDate(db: AppDatabase, date: string) {
   return db.select().from(dailyCheckIn).where(eq(dailyCheckIn.date, date)).get();
 }
 
+export function getBodyAreasForCheckIn(db: AppDatabase, checkInId: string): BodyAreaRegion[] {
+  return db
+    .select()
+    .from(checkInBodyArea)
+    .where(eq(checkInBodyArea.checkInId, checkInId))
+    .all()
+    .map((row) => row.region as BodyAreaRegion);
+}
+
 export function getCheckInsInRange(
   db: AppDatabase,
   rangeStartInclusive: string,

@@ -103,6 +103,7 @@ export function useMedicationDetail(medicationId: string) {
 
       const outcome = await reconcileMedicationReminders(db, {
         medicationId,
+        medicationName: medication?.name ?? "",
         frequencyType: input.frequencyType,
         intervalDays: input.intervalDays ?? null,
         effectiveFrom: effectiveDate,
@@ -115,7 +116,7 @@ export function useMedicationDetail(medicationId: string) {
       refresh();
       return outcome;
     },
-    [schedule, medicationId, locale, refresh],
+    [schedule, medication, medicationId, locale, refresh],
   );
 
   return {

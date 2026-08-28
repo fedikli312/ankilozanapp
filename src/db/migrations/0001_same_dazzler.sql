@@ -1,0 +1,1 @@
+ALTER TABLE `user_preferences` ADD `last_known_timezone` text;

@@ -10,3 +10,5 @@ export { Chip } from "./components/Chip";
 export { StepperField } from "./components/StepperField";
 export { ListRow } from "./components/ListRow";
 export { ScreenContainer } from "./components/ScreenContainer";
+export { TrendChart } from "./components/TrendChart";
+export type { TrendChartPoint } from "./components/TrendChart";

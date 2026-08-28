@@ -27,3 +27,8 @@ export function getInjectionTreatmentById(db: AppDatabase, id: string) {
 export function getActiveInjectionTreatments(db: AppDatabase) {
   return db.select().from(injectionTreatment).where(eq(injectionTreatment.active, true)).all();
 }
+
+/** Active and archived — Insights/Appointment Preparation history must still include a discontinued treatment's own record. */
+export function getAllInjectionTreatments(db: AppDatabase) {
+  return db.select().from(injectionTreatment).all();
+}

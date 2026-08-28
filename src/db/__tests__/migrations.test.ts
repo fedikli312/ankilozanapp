@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import path from "node:path";
 
 import Database from "better-sqlite3";
@@ -50,10 +51,16 @@ describe("initial schema migration", () => {
     // duplicate rows in drizzle's own migration bookkeeping table.
     expect(() => migrate(db, { migrationsFolder })).not.toThrow();
 
+    // Asserts the bookkeeping table has exactly one row per migration file
+    // on disk (currently 2: the initial schema + the Phase 16 preferences
+    // column), not a hardcoded count that would go stale with every future
+    // migration — the re-run-is-a-no-op behavior is what this test protects.
+    const migrationFileCount = readdirSync(migrationsFolder).filter((name) => name.endsWith(".sql")).length;
+
     const appliedCount = db.get<{ count: number }>(
       sql`select count(*) as count from __drizzle_migrations`,
     );
-    expect(appliedCount?.count).toBe(1);
+    expect(appliedCount?.count).toBe(migrationFileCount);
   });
 
   it("enforces the one-check-in-per-day unique constraint", () => {

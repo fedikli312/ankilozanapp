@@ -11,3 +11,5 @@ export * from "./labReminderRepository";
 export * from "./checkInRepository";
 export * from "./scheduledNotificationRepository";
 export * from "./onboardingStateRepository";
+export * from "./userPreferencesRepository";
+export * from "./dataManagementRepository";

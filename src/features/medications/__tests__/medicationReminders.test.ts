@@ -14,6 +14,7 @@ jest.mock("../../../notifications/client", () => ({
 
 const basePlan = {
   medicationId: "med-1",
+  medicationName: "Sulfasalazine",
   frequencyType: "daily" as const,
   intervalDays: null,
   effectiveFrom: "2026-08-26",

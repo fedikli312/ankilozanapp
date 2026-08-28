@@ -34,13 +34,14 @@ export function useInjectionDetail(injectionTreatmentId: string) {
       if (!schedule) return "disabled" as const;
       return reconcileInjectionReminders(db, {
         injectionTreatmentId,
+        treatmentName: treatment?.name ?? "",
         nextInjectionDate,
         reminderLeadDays: schedule.reminderLeadDays,
         reminderOnScheduledDay: schedule.reminderOnScheduledDay,
         locale,
       });
     },
-    [schedule, injectionTreatmentId, locale],
+    [schedule, treatment, injectionTreatmentId, locale],
   );
 
   /** Completed today by default — the Today "Log now" action (UX spec §D). */

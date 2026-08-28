@@ -12,15 +12,18 @@ import {
   createScheduledNotification,
   deleteScheduledNotificationsForSource,
   getScheduledNotificationsForSource,
+  getUserPreferences,
   type AppDatabase,
 } from "../../repositories";
 import { generateId } from "../../shared/id";
 
 /** UX spec §G/§N don't specify a time of day for injection reminders — 09:00 local is this feature's default. */
-const DEFAULT_REMINDER_HOUR = 9;
+export const DEFAULT_REMINDER_HOUR = 9;
 
 export type InjectionReminderPlan = {
   injectionTreatmentId: string;
+  /** Only ever used when the user has explicitly opted into detailed notification content (UX spec §N). */
+  treatmentName: string;
   nextInjectionDate: string;
   /**
    * `InjectionSchedule` (Tech Arch §D) has no dedicated `reminderEnabled`
@@ -61,7 +64,12 @@ export async function reconcileInjectionReminders(
   }
   if (!shouldAttemptScheduling(status)) return "permission-denied";
 
-  const content = buildNotificationContent({ locale: plan.locale, detailOptIn: false });
+  const detailOptIn = getUserPreferences(db)?.notificationDetailOptIn ?? false;
+  const content = buildNotificationContent({
+    locale: plan.locale,
+    detailOptIn,
+    detailedBody: plan.treatmentName,
+  });
 
   const dates: string[] = [];
   if (plan.reminderLeadDays > 0) dates.push(addDays(plan.nextInjectionDate, -plan.reminderLeadDays));

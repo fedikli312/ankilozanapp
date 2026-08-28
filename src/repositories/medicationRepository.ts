@@ -42,3 +42,8 @@ export function getMedicationById(db: AppDatabase, id: string) {
 export function getActiveMedications(db: AppDatabase) {
   return db.select().from(medication).where(eq(medication.active, true)).all();
 }
+
+/** Active and archived — Insights/Appointment Preparation history must still include a discontinued medication's own record. */
+export function getAllMedications(db: AppDatabase) {
+  return db.select().from(medication).all();
+}

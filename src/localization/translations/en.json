@@ -47,7 +47,16 @@
     "addInjection": {
       "title": "Add your first injection"
     },
+    "addAppointment": {
+      "title": "Add an upcoming appointment"
+    },
     "reminderPrompt": "We'll remind you when it's time"
+  },
+  "tabs": {
+    "today": "Today",
+    "track": "Track",
+    "appointments": "Appointments",
+    "insights": "Insights"
   },
   "medications": {
     "listTitle": "Medications",
@@ -115,6 +124,198 @@
       "missed": "Missed"
     }
   },
+  "appointments": {
+    "listTitle": "Appointments",
+    "emptyTitle": "No appointments yet",
+    "addAction": "Add appointment",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "type": {
+      "rheumatology": "Rheumatology",
+      "laboratory": "Laboratory",
+      "imaging": "Imaging",
+      "other": "Other"
+    },
+    "status": {
+      "scheduled": "Scheduled",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "form": {
+      "type": "Type",
+      "doctorOrInstitution": "Doctor or institution",
+      "doctorOrInstitutionPlaceholder": "Optional",
+      "date": "Date",
+      "today": "Today",
+      "addTime": "Add a time",
+      "notes": "Notes",
+      "notesPlaceholder": "Optional",
+      "reminderToggle": "Remind me",
+      "reminderLeadDays": "Days before",
+      "save": "Save appointment"
+    },
+    "detail": {
+      "edit": "Edit",
+      "cancel": "Cancel appointment",
+      "prepare": "Prepare for this appointment"
+    }
+  },
+  "appointmentPreparation": {
+    "headerTitle": "Preparing for %{who} — %{date}",
+    "rangeSincePrevious": "Summarizing since your last appointment (%{start} – %{end})",
+    "rangeFallback": "Summarizing the last %{days} days",
+    "disclaimer": "A summary of what you've recorded — for you to review with your doctor.",
+    "symptomTrends": "Symptom trends",
+    "painSummary": "Pain has averaged %{average} out of 10 over this period.",
+    "stiffnessSummary": "Morning stiffness was most often \"%{bucket}\" during this period.",
+    "fatigueSummary": "Fatigue has averaged %{average} out of 10 over this period.",
+    "medicationHistory": "Medication history",
+    "medicationAdherence": "%{name} — taken %{percentage}% of scheduled doses",
+    "medicationCounts": "%{name} — %{taken} taken, %{missed} missed",
+    "injectionHistory": "Injection history",
+    "injectionCounts": "%{name} — %{completed} completed, %{missed} missed",
+    "recentLabs": "Recent lab values",
+    "notes": "Notes you flagged as important",
+    "noneRecorded": "Nothing recorded in this period."
+  },
+  "checkIn": {
+    "title": "How are you feeling today?",
+    "painLabel": "Pain, %{value} out of 10",
+    "fatigueLabel": "Fatigue, %{value} out of 10",
+    "stiffnessLabel": "Morning stiffness",
+    "stiffness": {
+      "none": "None",
+      "under_15": "Under 15 min",
+      "15_30": "15–30 min",
+      "30_60": "30–60 min",
+      "over_60": "Over 60 min"
+    },
+    "wellbeingLabel": "General wellbeing",
+    "wellbeing": {
+      "1": "Very poor",
+      "2": "Poor",
+      "3": "Okay",
+      "4": "Good",
+      "5": "Very good"
+    },
+    "bodyAreaLabel": "Affected areas",
+    "bodyArea": {
+      "neck": "Neck",
+      "upper_back": "Upper back",
+      "lower_back": "Lower back",
+      "hips": "Hips",
+      "shoulders": "Shoulders",
+      "chest_ribs": "Chest/ribs",
+      "other": "Other"
+    },
+    "addMore": "+ Add more",
+    "save": "Save check-in"
+  },
+  "labs": {
+    "addAction": "Add result",
+    "emptyTitle": "No %{marker} results yet",
+    "latest": "Latest: %{value} %{unit} (%{date})",
+    "rangeSummary": "Ranged from %{min} to %{max} %{unit} across %{count} results",
+    "marker": {
+      "CRP": "CRP",
+      "ESR": "ESR"
+    },
+    "form": {
+      "unit": "Unit",
+      "date": "Date",
+      "institution": "Institution",
+      "institutionPlaceholder": "Optional",
+      "notes": "Notes",
+      "notesPlaceholder": "Optional",
+      "save": "Save result",
+      "editTitle": "Edit result",
+      "delete": "Delete result"
+    }
+  },
+  "insights": {
+    "title": "Insights",
+    "disclaimer": "These trends reflect what you've recorded. They're not a diagnosis.",
+    "notEnoughData": "Keep checking in to see how your symptoms change over time.",
+    "notEnoughDataGeneric": "Not enough data yet to show a trend.",
+    "averageOnly": "Averaging %{average} this period",
+    "averageUp": "Averaging %{average}, up from %{previous} last period",
+    "averageDown": "Averaging %{average}, down from %{previous} last period",
+    "averageFlat": "Averaging %{average}, about the same as last period",
+    "stiffnessSummary": "Most often \"%{bucket}\" — %{count} of %{total} entries",
+    "adherenceSummary": "%{percentage}% of scheduled doses taken",
+    "adherenceCounts": "%{taken} taken, %{missed} missed",
+    "injectionSummary": "%{completed} completed, %{missed} missed",
+    "labSummary": "Most recent: %{value} on %{date}",
+    "detailNumericSummary": "Averaging %{average} across %{count} check-ins",
+    "metric": {
+      "pain": "Pain",
+      "stiffness": "Morning stiffness",
+      "fatigue": "Fatigue",
+      "medicationAdherence": "Medication adherence",
+      "injectionHistory": "Injection history",
+      "crp": "CRP",
+      "esr": "ESR"
+    },
+    "range": {
+      "4w": "4 weeks",
+      "3m": "3 months",
+      "6m": "6 months",
+      "all": "All time"
+    }
+  },
+  "track": {
+    "title": "Track",
+    "symptoms": "Symptoms",
+    "labs": "Labs",
+    "noneYet": "Nothing yet",
+    "countActive": "%{count} active",
+    "symptomsSummary": "Pain %{pain} · %{date}",
+    "labsSummary": "%{marker} %{value} %{unit} · %{date}"
+  },
+  "symptoms": {
+    "title": "Symptoms",
+    "emptyTitle": "No check-ins yet",
+    "rowLabel": "Pain %{pain} · Fatigue %{fatigue}",
+    "todayCaption": "Today · Stiffness: %{stiffness}"
+  },
+  "profile": {
+    "title": "Profile",
+    "reminderSettings": "Reminder settings",
+    "notificationPrivacy": "Notification privacy",
+    "language": "Language",
+    "privacyAndData": "Privacy & data",
+    "disclaimer": "Medical disclaimer",
+    "about": "About",
+    "languageSystem": "Use system language",
+    "languageSelected": "Selected",
+    "languageOption": {
+      "en": "English",
+      "tr": "Türkçe"
+    },
+    "showDetailsToggle": "Show details in notifications",
+    "showDetailsDescription": "Show medication or injection names on the lock screen",
+    "showDetailsNote": "Symptom values, lab values, and notes are never included in a notification, regardless of this setting.",
+    "reminderDefaults": {
+      "note": "Each reminder's timing is set on the medication, injection, or appointment itself. These are the approved defaults:",
+      "medication": "Medication",
+      "medicationValue": "At the scheduled time",
+      "injection": "Injection",
+      "injectionValue": "One day before and on the scheduled day",
+      "appointment": "Appointment",
+      "appointmentValue": "One day before"
+    },
+    "privacyBody": "Ankilozanapp stores your health information — symptoms, medications, injections, appointments, and lab results — on this device only. Nothing is sent to a server.",
+    "privacyBackup": "Your device's own backup (like iCloud) may include this data, the same way it backs up any other app.",
+    "exportData": "Export your data",
+    "exportDataComingLater": "Coming later",
+    "deleteAllData": "Delete all local data",
+    "deleteDataExplanation": "This permanently removes everything you've recorded on this device — symptoms, medications, injections, appointments, and lab results. This cannot be undone.",
+    "deleteDataAcknowledge": "I understand this cannot be undone",
+    "deleteDataConfirm": "Delete all local data",
+    "deleteDataInProgress": "Deleting…",
+    "disclaimerBody": "Ankilozanapp helps you record and organize information about your symptoms, treatments, and appointments. It does not diagnose, predict, or interpret medical conditions, and it does not recommend treatment. It is not a substitute for professional medical advice — always consult your doctor about your care.",
+    "version": "Version %{version}"
+  },
   "today": {
     "title": "Today",
     "emptyPrompt": "Add your first medication or injection to see it here.",
@@ -122,6 +323,10 @@
     "dueToday": "Due today",
     "nextMedication": "Next medication",
     "nextInjection": "Next injection",
-    "logNow": "Log now"
+    "upcomingAppointment": "Upcoming appointment",
+    "logNow": "Log now",
+    "checkInPrompt": "How are you feeling today?",
+    "checkInCta": "Check in",
+    "checkInCompleted": "Checked in — Pain %{pain}, Stiffness %{stiffness}"
   }
 }

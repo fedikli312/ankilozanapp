@@ -12,6 +12,7 @@ jest.mock("../../../notifications/client", () => ({
 
 const basePlan = {
   injectionTreatmentId: "inj-1",
+  treatmentName: "Adalimumab",
   nextInjectionDate: "2026-09-10",
   reminderLeadDays: 1,
   reminderOnScheduledDay: true,

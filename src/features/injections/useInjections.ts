@@ -87,6 +87,7 @@ export function useInjections() {
       try {
         outcome = await reconcileInjectionReminders(db, {
           injectionTreatmentId,
+          treatmentName: input.name,
           nextInjectionDate: nextDate,
           reminderLeadDays,
           reminderOnScheduledDay,

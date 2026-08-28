@@ -17,12 +17,15 @@ import {
   createScheduledNotification,
   deleteScheduledNotificationsForSource,
   getScheduledNotificationsForSource,
+  getUserPreferences,
   type AppDatabase,
 } from "../../repositories";
 import { generateId } from "../../shared/id";
 
 export type MedicationReminderPlan = {
   medicationId: string;
+  /** Only ever used when the user has explicitly opted into detailed notification content (UX spec §N). */
+  medicationName: string;
   frequencyType: FrequencyType;
   intervalDays: number | null;
   effectiveFrom: string;
@@ -68,7 +71,13 @@ export async function reconcileMedicationReminders(
   }
   if (!shouldAttemptScheduling(status)) return "permission-denied";
 
-  const content = buildNotificationContent({ locale: plan.locale, detailOptIn: false });
+  // Profile → "Show details in notifications" (UX spec §L/§N) — off by default; read fresh each reconciliation so a mid-flight preference change takes effect on the next edit/add without a separate migration step.
+  const detailOptIn = getUserPreferences(db)?.notificationDetailOptIn ?? false;
+  const content = buildNotificationContent({
+    locale: plan.locale,
+    detailOptIn,
+    detailedBody: plan.medicationName,
+  });
 
   for (const time of plan.timesOfDay) {
     const [hour, minute] = time.split(":").map(Number);
