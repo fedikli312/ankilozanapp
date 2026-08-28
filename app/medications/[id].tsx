@@ -92,7 +92,7 @@ export default function MedicationDetailScreen() {
             caption={statusLabel(item.status)}
             trailing={
               item.status === "pending" ? (
-                <View style={{ flexDirection: "row", gap: spacing.xs }}>
+                <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-end", gap: spacing.xs, maxWidth: 160 }}>
                   <Button label={t("medications.detail.markTaken")} onPress={() => markTaken(item.id)} variant="secondary" />
                   <Button label={t("medications.detail.markMissed")} onPress={() => markMissed(item.id)} variant="secondary" />
                 </View>
