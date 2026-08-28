@@ -8,12 +8,21 @@ import {
   getActiveMedications,
   getAdministrationsForMedication,
   getAdministrationsForTreatment,
+  getCheckInByDate,
   getCurrentSchedule,
   getScheduleDays,
   getScheduleTimes,
+  getUpcomingAppointments,
   markAdministration,
 } from "../../repositories";
 import { todayDateOnly } from "../../shared/today";
+
+export type UpcomingAppointmentRow = {
+  id: string;
+  type: "rheumatology" | "laboratory" | "imaging" | "other";
+  doctorOrInstitution: string | null;
+  date: string;
+};
 
 export type DueMedicationRow = {
   administrationId: string;
@@ -51,6 +60,12 @@ export function useTodayData() {
   const medications = getActiveMedications(db);
   const injections = getActiveInjectionTreatments(db);
   const today = todayDateOnly();
+  const todaysCheckIn = getCheckInByDate(db, today);
+
+  // 14-day window, named domain constant (Tech Arch §D) — same rule as the Appointments tab's own 14-day surfacing, applied here via the repository helper that already wraps it.
+  const upcomingAppointment: UpcomingAppointmentRow | null = getUpcomingAppointments(db, today)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((a) => ({ id: a.id, type: a.type, doctorOrInstitution: a.doctorOrInstitution, date: a.date }))[0] ?? null;
 
   const allMedicationAdministrations = medications.flatMap((medication) =>
     getAdministrationsForMedication(db, medication.id)
@@ -97,6 +112,8 @@ export function useTodayData() {
     dueToday,
     nextMedication,
     nextInjection: nextInjectionRows[0] ?? null,
+    todaysCheckIn,
+    upcomingAppointment,
     markTaken,
   };
 }

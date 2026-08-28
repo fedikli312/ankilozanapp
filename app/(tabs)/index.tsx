@@ -20,20 +20,41 @@ function TodayContent() {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
-  const { hasAnyTreatment, dueToday, nextMedication, nextInjection, markTaken } = useTodayData();
+  const {
+    hasAnyTreatment,
+    dueToday,
+    nextMedication,
+    nextInjection,
+    todaysCheckIn,
+    upcomingAppointment,
+    markTaken,
+  } = useTodayData();
 
   return (
     <ScreenContainer scroll>
-      <Text
-        style={{
-          fontSize: typography.title.fontSize,
-          fontWeight: typography.title.fontWeight,
-          color: colors.textPrimary,
-          marginBottom: spacing.lg,
-        }}
-      >
-        {t("today.title")}
-      </Text>
+      {/* Priority 1 (UX spec §D): the one dominant action while incomplete, a quiet collapsed row once done. */}
+      {!todaysCheckIn ? (
+        <View
+          style={{
+            backgroundColor: colors.surfaceHighlight,
+            borderRadius: 16,
+            padding: spacing.lg,
+            marginBottom: spacing.lg,
+          }}
+        >
+          <Text style={{ fontSize: typography.headline.fontSize, color: colors.textPrimary, marginBottom: spacing.sm }}>
+            {t("today.checkInPrompt")}
+          </Text>
+          <Button label={t("today.checkInCta")} onPress={() => router.push("/check-in")} />
+        </View>
+      ) : (
+        <View style={{ marginBottom: spacing.lg }}>
+          <ListRow
+            label={t("today.checkInCompleted", { pain: todaysCheckIn.pain, stiffness: t(`checkIn.stiffness.${todaysCheckIn.morningStiffnessBucket}`) })}
+            onPress={() => router.push("/check-in")}
+          />
+        </View>
+      )}
 
       {!hasAnyTreatment ? (
         <View style={{ alignItems: "flex-start" }}>
@@ -84,7 +105,20 @@ function TodayContent() {
             </View>
           ) : null}
 
-          <View style={{ flexDirection: "row", gap: spacing.sm, marginTop: spacing.md }}>
+          {upcomingAppointment ? (
+            <View style={{ marginBottom: spacing.lg }}>
+              <Text style={{ fontSize: typography.headline.fontSize, color: colors.textPrimary, marginBottom: spacing.sm }}>
+                {t("today.upcomingAppointment")}
+              </Text>
+              <ListRow
+                label={upcomingAppointment.doctorOrInstitution || t(`appointments.type.${upcomingAppointment.type}`)}
+                caption={upcomingAppointment.date}
+                onPress={() => router.push(`/appointments/${upcomingAppointment.id}`)}
+              />
+            </View>
+          ) : null}
+
+          <View style={{ flexDirection: "row", gap: spacing.sm, marginTop: spacing.md, flexWrap: "wrap" }}>
             <Button label={t("medications.listTitle")} onPress={() => router.push("/medications")} variant="secondary" />
             <Button label={t("injections.listTitle")} onPress={() => router.push("/injections")} variant="secondary" />
           </View>
