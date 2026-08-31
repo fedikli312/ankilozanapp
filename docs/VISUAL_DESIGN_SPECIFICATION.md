@@ -12,7 +12,9 @@ No product name is finalized here and no logo/wordmark/app-icon is created — n
 
 The product should read as: **calm, personal, warm, trustworthy, premium, modern, quiet, native, human.**
 
-It must never read as: a hospital portal, an enterprise medical dashboard, a generic SaaS dashboard, a fitness gamification app, an AI chatbot, or an Apple Health clone.
+It must never read as: a hospital portal, an enterprise medical dashboard, a generic SaaS dashboard, a fitness gamification app, or an AI chatbot.
+
+**Amended 2026-08-31, per `docs/REDESIGN_SPECIFICATION.md` §2.1 (approved):** the original "must never read as... an Apple Health clone" clause is superseded by a more precise framing. The product's information hierarchy may draw on principles from high-quality native iOS health apps — Apple Health among them — combined with native iOS restraint, modern medication/treatment tracking, and this product's own calm chronic-condition-companion tone. This means borrowing strong typographic hierarchy, clean white surfaces, compact metrics, native grouped rows, restrained accent colors, and simple charts. It explicitly does **not** mean copying Apple Health's screen layouts one-for-one, its proprietary visual assets, exact card compositions, exact iconography/layout combinations, or any Apple branding. The product must remain visually its own.
 
 Practical translation:
 - **Calm/quiet** → generous whitespace, restrained color, no dense grids, no urgent red.

@@ -68,6 +68,8 @@ No monetization step exists in this journey for V1 (see §9).
 8. Insights (descriptive trends only)
 9. Appointment preparation (in-app summary view)
 10. Reminders (local notifications, privacy-preserving by default)
+11. Nutrition — educational supportive content only (added 2026-08-31, see §10.12; not medical nutrition therapy)
+12. Breathing/Posture ("Nefes & Postür") — short supportive wellbeing routines (added 2026-08-31, see §10.13; explicitly not the deferred exercise/physiotherapy module)
 
 ### Nice to have (not V1, direction approved — implementation deferred)
 - Shareable doctor summary as a **human-readable PDF**.
@@ -76,7 +78,9 @@ No monetization step exists in this journey for V1 (see §9).
 - Additional lab markers beyond CRP/ESR.
 
 ### Explicitly out of scope (current phase)
-Exercise or physiotherapy functionality, nutrition functionality, community/social features, gamification (including streaks), medical diagnosis, automatic flare diagnosis, medication recommendations, treatment recommendations, doctor replacement, AI-generated medical advice, wearable integrations, doctor portal, ASDAS, any paywall/premium tier, third-party analytics SDK, server-side push notifications (default assumption), export implementation (direction approved, not built yet).
+Exercise or physiotherapy functionality (a general workout/strength/stretching-library module remains deferred — see §10.13 for the narrow, non-exercise breathing/posture feature that is now in scope), community/social features, gamification (including streaks), medical diagnosis, automatic flare diagnosis, medication recommendations, treatment recommendations, doctor replacement, AI-generated medical advice, wearable integrations, doctor portal, ASDAS, any paywall/premium tier, third-party analytics SDK, server-side push notifications (default assumption), export implementation (direction approved, not built yet), food diary/meal logging/calorie or macro tracking (see §10.12 — Nutrition stays educational content only, not a tracking system).
+
+**Amendment, 2026-08-31:** "Nutrition functionality" is removed from this out-of-scope list per `docs/REDESIGN_SPECIFICATION.md` §6 (approved) and replaced by the narrow scope in §10.12 below. This is a deliberate, explicit scope change, not a silent drift — the original decision to exclude nutrition entirely (see `PROJECT_MEMORY.md`, 2026-08-25) is superseded for this narrow educational-content case only; food tracking, meal plans, and condition-specific dietary claims remain out of scope.
 
 ## 8. Information architecture
 
@@ -159,6 +163,18 @@ Never shown: automated flare labels, correlation presented as causation, predict
 - V1 target languages: **English and Turkish**.
 - Architecture and UX must be localization-ready from the beginning — externalized strings, no logic keyed on English text.
 - Layouts must not depend on fixed English string lengths (Turkish strings commonly run longer); this is a binding UX constraint carried into `docs/UX_SPECIFICATION.md`.
+
+### 10.12 Nutrition (added 2026-08-31)
+- **Educational supportive content only** — browse fixed categories (Sebze & meyveler, Tam tahıllar, Protein kaynakları, Omega-3 içeren besinler, Su tüketimi, Dengeli tabak yaklaşımı), read concise guidance, optionally see a rotating "today" suggestion on Today.
+- **Not**: medical nutrition therapy, an AS-specific diet, an anti-inflammatory treatment recommendation, a food diary, meal logging, or calorie/macro tracking.
+- **V1 is static, bundled, localized content — no database table, no repository layer, no user-entered data of any kind.** No favorites/saved items in V1 (see `docs/REDESIGN_SPECIFICATION.md` §6); if persistence is wanted later, it requires its own separately approved product/domain decision.
+- **Copy rule**: language such as *"Genel dengeli beslenmeyi destekleyen seçenekler"*; never claims like *"AS için yemelisin," "İnflamasyonu düşürür," "Ağrıyı azaltır," "Hastalığı kontrol eder"* unless a future, separately medically-reviewed feature explicitly supports them.
+
+### 10.13 Breathing & Posture — "Nefes & Postür" (added 2026-08-31)
+- **Not** the deferred general exercise/physiotherapy module (§7) — no workout plans, strength programs, stretching libraries, exercise streaks, or exercise completion goals/gamification.
+- V1 scope: 3–5 short supportive routines (e.g. 2 dakikalık sakin nefes, Diyafram nefesi, Göğüs kafesi nefes farkındalığı, Masa başı postür molası, Duruş farkındalığı), each with title, duration, static text instructions, an optional static illustration placeholder, and a start action.
+- **Completion is ephemeral session-local UI state only — no historical storage, no streak, no XP/score, no leaderboard.** No treatment claims of any kind. Persisted completion history, if ever wanted, is a separate future product/domain decision, not assumed here.
+- No new database table, no repository layer for V1.
 
 ## 11. Empty / loading / error / offline expectations
 
