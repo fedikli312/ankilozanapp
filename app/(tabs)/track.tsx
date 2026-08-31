@@ -87,10 +87,26 @@ export default function TrackLandingScreen() {
         />
       </GroupedList>
 
-      {/* Redesign Spec §8: "GÜNLÜK DESTEK" (Nutrition/Breathing-Posture) is
-          intentionally not rendered yet — those routes don't exist until
-          Phase I, and the spec's own fallback is to avoid exposing dead
-          navigation rather than showing a disabled/"coming soon" row. */}
+      {/* Redesign Spec §8/§J: "GÜNLÜK DESTEK" — visually subordinate to
+          SAĞLIK TAKİBİ above, never equal weight (product-safety-adjacent
+          rule: supportive content must never look as clinically
+          authoritative as the actual health-record features). */}
+      <GroupedList title={t("track.supportGroupTitle")} emphasis="subordinate">
+        <ListRow
+          leading={icon("nutrition-outline")}
+          label={t("track.nutrition")}
+          caption={t("track.nutritionCaption")}
+          onPress={() => router.push("/nutrition")}
+          chevron
+        />
+        <ListRow
+          leading={icon("leaf-outline")}
+          label={t("track.breathing")}
+          caption={t("track.breathingCaption")}
+          onPress={() => router.push("/breathing")}
+          chevron
+        />
+      </GroupedList>
     </ScreenContainer>
   );
 }

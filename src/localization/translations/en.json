@@ -359,7 +359,12 @@
     "latestCheckInOn": "Latest entry: %{date}",
     "injectionsToday": "Next: today",
     "injectionsNextIn": "Next: in %{count} days",
-    "labsLatestResult": "Latest result: %{date}"
+    "labsLatestResult": "Latest result: %{date}",
+    "supportGroupTitle": "Daily support",
+    "nutrition": "Nutrition",
+    "nutritionCaption": "General information for daily nutrition",
+    "breathing": "Breathing & Posture",
+    "breathingCaption": "Short breathing and posture practices"
   },
   "symptoms": {
     "title": "Symptoms",
@@ -444,6 +449,50 @@
     "recentAveragePain": "Average pain",
     "recentCheckInFrequency": "Check-in frequency",
     "recentFrequencyUnit": "/7 days",
-    "previewOnboardingDevOnly": "Preview onboarding (web only)"
+    "previewOnboardingDevOnly": "Preview onboarding (web only)",
+    "supportiveTitle": "A short break for today",
+    "supportiveBreathing": "Breathing & Posture"
+  },
+  "nutrition": {
+    "title": "Nutrition",
+    "subtitle": "General information for your everyday eating habits.",
+    "disclaimer": "This information is for general education only and is not a substitute for personal medical or nutritional advice.",
+    "category": {
+      "balancedPlate": "A balanced plate",
+      "fiber": "Fiber sources",
+      "protein": "Protein sources",
+      "fluids": "Fluid intake",
+      "routine": "Daily routine"
+    },
+    "item": {
+      "varietyHeading": "A variety of food groups",
+      "varietyBody": "You can include vegetables, whole grains, and protein sources together in your meals.",
+      "vegFruitHeading": "Vegetables and fruit",
+      "vegFruitBody": "You can add a variety of colors and types of vegetables and fruit to your daily routine.",
+      "wholeGrainHeading": "Whole grains",
+      "wholeGrainBody": "You can try whole-grain options instead of white bread.",
+      "proteinVarietyHeading": "A variety of sources",
+      "proteinVarietyBody": "You can choose from options like legumes, eggs, fish, and lean meat.",
+      "waterHeading": "Regular water intake",
+      "waterBody": "You can try to drink water at regular intervals throughout the day.",
+      "mealTimesHeading": "Regular meal times",
+      "mealTimesBody": "Planning your meals around similar times each day can help."
+    }
+  },
+  "breathing": {
+    "title": "Breathing & Posture",
+    "subtitle": "Take short breaks during the day to notice your breathing and posture.",
+    "safetyNote": "Stop if you feel discomfort, dizziness, or noticeable pain.",
+    "practice": {
+      "calmBreathingTitle": "Calm breathing",
+      "calmBreathingDuration": "2 minutes",
+      "calmBreathingBody": "Sit in a comfortable position.\nBreathe in and out gently through your nose.\nContinue for a few rounds without forcing your breath.",
+      "postureAwarenessTitle": "Posture awareness",
+      "postureAwarenessDuration": "1 minute",
+      "postureAwarenessBody": "Let your shoulders relax.\nFind an upright position without pushing your head forward.\nTry to hold this position as you breathe.",
+      "deskBreakTitle": "Desk break",
+      "deskBreakDuration": "1 minute",
+      "deskBreakBody": "Take a short break when you've been in the same position for a while.\nStand up or change position comfortably."
+    }
   }
 }

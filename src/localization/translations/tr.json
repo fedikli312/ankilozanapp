@@ -359,7 +359,12 @@
     "latestCheckInOn": "Son kayıt: %{date}",
     "injectionsToday": "Sonraki: bugün",
     "injectionsNextIn": "Sonraki: %{count} gün sonra",
-    "labsLatestResult": "Son sonuç: %{date}"
+    "labsLatestResult": "Son sonuç: %{date}",
+    "supportGroupTitle": "Günlük destek",
+    "nutrition": "Beslenme",
+    "nutritionCaption": "Günlük beslenme için genel bilgiler",
+    "breathing": "Nefes & Postür",
+    "breathingCaption": "Kısa nefes ve postür uygulamaları"
   },
   "symptoms": {
     "title": "Belirtiler",
@@ -444,6 +449,50 @@
     "recentAveragePain": "Ortalama ağrı",
     "recentCheckInFrequency": "Kontrol sıklığı",
     "recentFrequencyUnit": "/7 gün",
-    "previewOnboardingDevOnly": "Onboarding'i önizle (yalnızca web)"
+    "previewOnboardingDevOnly": "Onboarding'i önizle (yalnızca web)",
+    "supportiveTitle": "Bugün için kısa bir mola",
+    "supportiveBreathing": "Nefes & Postür"
+  },
+  "nutrition": {
+    "title": "Beslenme",
+    "subtitle": "Günlük beslenme alışkanlıkların için genel bilgiler.",
+    "disclaimer": "Bu bilgiler genel bilgilendirme amaçlıdır ve kişisel tıbbi veya beslenme önerisi yerine geçmez.",
+    "category": {
+      "balancedPlate": "Dengeli tabak",
+      "fiber": "Lif kaynakları",
+      "protein": "Protein kaynakları",
+      "fluids": "Sıvı alımı",
+      "routine": "Günlük rutin"
+    },
+    "item": {
+      "varietyHeading": "Çeşitli besin grupları",
+      "varietyBody": "Öğünlerinde sebze, tam tahıl ve protein kaynaklarına birlikte yer verebilirsin.",
+      "vegFruitHeading": "Sebze ve meyveler",
+      "vegFruitBody": "Öğünlerinde farklı renk ve türde sebze-meyveye yer verebilirsin.",
+      "wholeGrainHeading": "Tam tahıllar",
+      "wholeGrainBody": "Beyaz ekmek yerine tam tahıllı seçenekleri deneyebilirsin.",
+      "proteinVarietyHeading": "Çeşitli protein kaynakları",
+      "proteinVarietyBody": "Baklagiller, yumurta, balık ve yağsız et gibi seçenekler arasından çeşitlilik sağlayabilirsin.",
+      "waterHeading": "Düzenli su tüketimi",
+      "waterBody": "Gün içinde düzenli aralıklarla su içmeyi hatırlayabilirsin.",
+      "mealTimesHeading": "Düzenli öğün saatleri",
+      "mealTimesBody": "Öğünlerini gün içinde benzer saatlerde planlamak sana yardımcı olabilir."
+    }
+  },
+  "breathing": {
+    "title": "Nefes & Postür",
+    "subtitle": "Gün içinde kısa molalarla nefesine ve duruşuna dikkat et.",
+    "safetyNote": "Rahatsızlık, baş dönmesi veya belirgin ağrı hissedersen uygulamayı bırak.",
+    "practice": {
+      "calmBreathingTitle": "Sakin nefes",
+      "calmBreathingDuration": "2 dakika",
+      "calmBreathingBody": "Rahat bir pozisyonda otur.\nBurnundan rahatça nefes al ve ver.\nNefesini zorlamadan birkaç tur devam et.",
+      "postureAwarenessTitle": "Postür farkındalığı",
+      "postureAwarenessDuration": "1 dakika",
+      "postureAwarenessBody": "Omuzlarını rahat bırak.\nBaşını öne doğru zorlamadan dik bir pozisyon bul.\nNefes alırken bu pozisyonu korumaya çalış.",
+      "deskBreakTitle": "Masa başı mola",
+      "deskBreakDuration": "1 dakika",
+      "deskBreakBody": "Uzun süre aynı pozisyonda kaldığında kısa bir mola ver.\nAyağa kalk veya rahatça pozisyon değiştir."
+    }
   }
 }
