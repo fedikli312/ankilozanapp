@@ -311,9 +311,14 @@
   },
   "insights": {
     "title": "Analiz",
-    "disclaimer": "Bu eğilimler kaydettiklerinizi yansıtır. Bir tanı değildir.",
-    "notEnoughData": "Belirtilerinizin zaman içinde nasıl değiştiğini görmek için kontrol kaydetmeye devam edin.",
+    "subtitle": "Kayıtlarındaki değişimleri zaman içinde gör.",
+    "disclaimer": "Bu eğilimler kaydettiklerini yansıtır. Bir tanı değildir.",
+    "notEnoughData": "Belirtilerinin zaman içinde nasıl değiştiğini görmek için kontrol kaydetmeye devam et.",
     "notEnoughDataGeneric": "Bir eğilim göstermek için henüz yeterli veri yok.",
+    "detailEmptyTitle": "Henüz yeterli kayıt yok.",
+    "detailEmptyBody": "Analizlerini görmek için günlük kayıt eklemeye devam et.",
+    "needMoreForTrend": "Trend için daha fazla kayıt gerekli.",
+    "stiffnessMostCommon": "En sık: %{bucket}",
     "averageOnly": "Bu dönemde ortalama %{average}",
     "averageUp": "Ortalama %{average}, önceki dönemdeki %{previous}'ten yüksek",
     "averageDown": "Ortalama %{average}, önceki dönemdeki %{previous}'ten düşük",
@@ -331,7 +336,7 @@
       "medicationAdherence": "İlaç uyumu",
       "injectionHistory": "İğne geçmişi",
       "crp": "CRP",
-      "esr": "ESR"
+      "esr": "Sedimentasyon"
     },
     "range": {
       "4w": "4 hafta",

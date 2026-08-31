@@ -1,9 +1,9 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import type { ComponentProps } from "react";
-import { FlatList, Text, View } from "react-native";
+import { Text } from "react-native";
 
-import { ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { useInsightsLanding } from "@/features/insights/useInsightsLanding";
 import type { InsightMetricKey } from "@/features/insights/types";
@@ -59,30 +59,33 @@ export default function InsightsLandingScreen() {
     { key: "stiffness", label: t("insights.metric.stiffness"), summary: stiffnessSummary(t, data.stiffness), icon: "time-outline" },
     { key: "fatigue", label: t("insights.metric.fatigue"), summary: numericSummary(t, data.fatigue), icon: "battery-half-outline" },
     { key: "medicationAdherence", label: t("insights.metric.medicationAdherence"), summary: adherenceSummary(t, data.medicationAdherence), icon: "medkit-outline" },
-    { key: "injectionHistory", label: t("insights.metric.injectionHistory"), summary: injectionSummary(t, data.injectionHistory), icon: "water-outline" },
+    { key: "injectionHistory", label: t("insights.metric.injectionHistory"), summary: injectionSummary(t, data.injectionHistory), icon: "medical-outline" },
     { key: "crp", label: t("insights.metric.crp"), summary: labSummary(t, data.crp), icon: "flask-outline" },
     { key: "esr", label: t("insights.metric.esr"), summary: labSummary(t, data.esr), icon: "flask-outline" },
   ];
 
   return (
-    <ScreenContainer>
+    <ScreenContainer scroll>
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
-        {t("insights.disclaimer")}
+        {t("insights.subtitle")}
       </Text>
-      <FlatList
-        data={rows}
-        keyExtractor={(item) => item.key}
-        renderItem={({ item }) => (
+
+      <GroupedList>
+        {rows.map((item) => (
           <ListRow
+            key={item.key}
             leading={<Ionicons name={item.icon} size={20} color={colors.textSecondary} />}
             label={item.label}
             caption={item.summary}
             onPress={() => router.push(`/insights/${item.key}`)}
             chevron
           />
-        )}
-        ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: colors.borderHairline }} />}
-      />
+        ))}
+      </GroupedList>
+
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.sm, fontStyle: "italic" }}>
+        {t("insights.disclaimer")}
+      </Text>
     </ScreenContainer>
   );
 }
