@@ -186,6 +186,7 @@
   },
   "appointments": {
     "listTitle": "Appointments",
+    "subtitle": "Your upcoming and past appointments.",
     "emptyTitle": "No appointments yet",
     "addAction": "Add appointment",
     "upcoming": "Upcoming",
@@ -217,25 +218,27 @@
     "detail": {
       "edit": "Edit",
       "cancel": "Cancel appointment",
-      "prepare": "Prepare for this appointment"
+      "prepare": "Prepare for this appointment",
+      "detailsTitle": "Details",
+      "settingsTitle": "Settings",
+      "time": "Time"
     }
   },
   "appointmentPreparation": {
-    "headerTitle": "Preparing for %{who} — %{date}",
-    "rangeSincePrevious": "Summarizing since your last appointment (%{start} – %{end})",
-    "rangeFallback": "Summarizing the last %{days} days",
+    "title": "Prepare for appointment",
+    "headerSubtitle": "%{who} — %{date}",
+    "summaryLine": "%{checkIns}-day record · %{treatments} treatments · %{labs} lab results",
     "disclaimer": "A summary of what you've recorded — for you to review with your doctor.",
-    "symptomTrends": "Symptom trends",
-    "painSummary": "Pain has averaged %{average} out of 10 over this period.",
-    "stiffnessSummary": "Morning stiffness was most often \"%{bucket}\" during this period.",
-    "fatigueSummary": "Fatigue has averaged %{average} out of 10 over this period.",
-    "medicationHistory": "Medication history",
+    "symptoms": "Symptoms",
+    "painSummary": "Average %{average} out of 10 over this period",
+    "stiffnessSummary": "Most often \"%{bucket}\" during this period",
+    "fatigueSummary": "Average %{average} out of 10 over this period",
+    "treatments": "Treatments",
     "medicationAdherence": "%{name} — taken %{percentage}% of scheduled doses",
     "medicationCounts": "%{name} — %{taken} taken, %{missed} missed",
-    "injectionHistory": "Injection history",
     "injectionCounts": "%{name} — %{completed} completed, %{missed} missed",
-    "recentLabs": "Recent lab values",
-    "notes": "Notes you flagged as important",
+    "labs": "Labs",
+    "notes": "Notes",
     "noneRecorded": "Nothing recorded in this period."
   },
   "checkIn": {

@@ -186,6 +186,7 @@
   },
   "appointments": {
     "listTitle": "Randevular",
+    "subtitle": "Yaklaşan ve geçmiş randevuların.",
     "emptyTitle": "Henüz randevu eklenmedi",
     "addAction": "Randevu ekle",
     "upcoming": "Yaklaşan",
@@ -217,25 +218,27 @@
     "detail": {
       "edit": "Düzenle",
       "cancel": "Randevuyu iptal et",
-      "prepare": "Bu randevu için hazırlan"
+      "prepare": "Randevuya hazırlan",
+      "detailsTitle": "Detaylar",
+      "settingsTitle": "Ayarlar",
+      "time": "Saat"
     }
   },
   "appointmentPreparation": {
-    "headerTitle": "%{who} için hazırlık — %{date}",
-    "rangeSincePrevious": "Son randevunuzdan bu yana özet (%{start} – %{end})",
-    "rangeFallback": "Son %{days} günün özeti",
-    "disclaimer": "Kaydettiklerinizin bir özeti — doktorunuzla birlikte incelemeniz için.",
-    "symptomTrends": "Belirti eğilimleri",
-    "painSummary": "Bu dönemde ağrı ortalaması 10 üzerinden %{average}.",
-    "stiffnessSummary": "Bu dönemde sabah tutukluğu en sık \"%{bucket}\" olarak kaydedildi.",
-    "fatigueSummary": "Bu dönemde yorgunluk ortalaması 10 üzerinden %{average}.",
-    "medicationHistory": "İlaç geçmişi",
+    "title": "Randevuya hazırlan",
+    "headerSubtitle": "%{who} — %{date}",
+    "summaryLine": "%{checkIns} günlük kayıt · %{treatments} tedavi · %{labs} tahlil sonucu",
+    "disclaimer": "Kaydettiklerinin bir özeti — doktorunla birlikte incelemen için.",
+    "symptoms": "Belirtiler",
+    "painSummary": "Bu dönemde ortalama 10 üzerinden %{average}",
+    "stiffnessSummary": "Bu dönemde en sık \"%{bucket}\"",
+    "fatigueSummary": "Bu dönemde ortalama 10 üzerinden %{average}",
+    "treatments": "Tedaviler",
     "medicationAdherence": "%{name} — planlanan dozların %%{percentage}'i alındı",
     "medicationCounts": "%{name} — %{taken} alındı, %{missed} kaçırıldı",
-    "injectionHistory": "İğne geçmişi",
     "injectionCounts": "%{name} — %{completed} yapıldı, %{missed} kaçırıldı",
-    "recentLabs": "Son laboratuvar değerleri",
-    "notes": "Önemli olarak işaretlediğiniz notlar",
+    "labs": "Tahliller",
+    "notes": "Notlar",
     "noneRecorded": "Bu dönemde bir kayıt yok."
   },
   "checkIn": {

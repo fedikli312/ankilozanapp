@@ -111,6 +111,7 @@ export function useAppointmentPreparation(appointmentId: string) {
     appointment,
     range: lookback,
     hasPriorRheumatologyAppointment,
+    checkInCount: checkIns.length,
     pain,
     stiffness,
     fatigue,

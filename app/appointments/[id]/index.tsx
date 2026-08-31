@@ -2,16 +2,16 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, ListRow, ScreenContainer, useTheme } from "@/design-system";
-import { useTranslation } from "@/localization";
-import { addDays, diffInDays } from "@/domain/dateUtils";
+import { Button, DateBlock, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { formatDate, formatDateBlock, useTranslation } from "@/localization";
+import { addDays, diffInDays, parseDateOnly } from "@/domain/dateUtils";
 import { todayDateOnly } from "@/shared/today";
 import { useAppointmentDetail } from "@/features/appointments/useAppointmentDetail";
 import { AppointmentForm, type AppointmentFormOutput } from "@/features/appointments/AppointmentForm";
 
 export default function AppointmentDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const { appointment, edit, cancel } = useAppointmentDetail(id);
@@ -65,39 +65,60 @@ export default function AppointmentDetailScreen() {
     );
   }
 
+  const typeLabel = t(`appointments.type.${appointment.type}`);
+  const dateBlock = formatDateBlock(parseDateOnly(appointment.date), locale);
+
   return (
     <ScreenContainer scroll>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>
-        {t(`appointments.type.${appointment.type}`)}
-      </Text>
-      <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary }}>
-        {appointment.doctorOrInstitution || t(`appointments.type.${appointment.type}`)}
-      </Text>
-      <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
-        {appointment.date}
-        {appointment.time ? ` · ${appointment.time}` : ""}
-      </Text>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.lg }}>
-        {t(`appointments.status.${appointment.status}`)}
-      </Text>
+      {/* Top identity block (Redesign Spec §G.5): date block, type, time,
+          doctor/institution — only fields that actually exist. */}
+      <View style={{ flexDirection: "row", alignItems: "flex-start", gap: spacing.sm, marginBottom: spacing.md }}>
+        <DateBlock day={dateBlock.day} month={dateBlock.month} emphasis="strong" />
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{typeLabel}</Text>
+          <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary }}>
+            {appointment.doctorOrInstitution || typeLabel}
+          </Text>
+          {appointment.time ? (
+            <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary }}>{appointment.time}</Text>
+          ) : null}
+          {appointment.status !== "scheduled" ? (
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.statusNeutral, marginTop: 2 }}>
+              {t(`appointments.status.${appointment.status}`)}
+            </Text>
+          ) : null}
+        </View>
+      </View>
+
+      <GroupedList title={t("appointments.detail.detailsTitle")}>
+        <ListRow label={t("appointments.form.date")} caption={formatDate(parseDateOnly(appointment.date), locale)} />
+        {appointment.time ? <ListRow label={t("appointments.detail.time")} caption={appointment.time} /> : null}
+        {appointment.doctorOrInstitution ? (
+          <ListRow label={t("appointments.form.doctorOrInstitution")} caption={appointment.doctorOrInstitution} />
+        ) : null}
+      </GroupedList>
 
       {appointment.notes ? (
-        <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, marginBottom: spacing.lg }}>
+        <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, marginBottom: spacing.md }}>
           {appointment.notes}
         </Text>
       ) : null}
 
       {appointment.type === "rheumatology" ? (
-        <View style={{ marginBottom: spacing.lg }}>
+        <View style={{ marginBottom: spacing.md }}>
           <Button label={t("appointments.detail.prepare")} onPress={() => router.push(`/appointments/${appointment.id}/prepare`)} />
         </View>
       ) : null}
 
       {isFuture ? (
-        <View style={{ gap: spacing.xs, marginBottom: spacing.lg }}>
-          <ListRow label={t("appointments.detail.edit")} onPress={() => setEditing(true)} />
-          <Button label={t("appointments.detail.cancel")} onPress={cancel} variant="destructive" />
-        </View>
+        <>
+          <GroupedList title={t("appointments.detail.settingsTitle")}>
+            <ListRow label={t("appointments.detail.edit")} onPress={() => setEditing(true)} chevron />
+          </GroupedList>
+          <View style={{ marginTop: spacing.md }}>
+            <Button label={t("appointments.detail.cancel")} onPress={cancel} variant="destructive" />
+          </View>
+        </>
       ) : null}
     </ScreenContainer>
   );
