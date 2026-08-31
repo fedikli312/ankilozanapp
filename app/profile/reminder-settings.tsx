@@ -1,7 +1,9 @@
-import { Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Text } from "react-native";
 
-import { ScreenContainer, useTheme } from "@/design-system";
+import { GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
+import { getNotificationPermissionStatusAsync, type PermissionStatus } from "@/notifications";
 
 /**
  * UX spec §L describes "per-category defaults and lead times" here. Tech
@@ -18,6 +20,12 @@ import { useTranslation } from "@/localization";
 export default function ReminderSettingsScreen() {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
+  const [permissionStatus, setPermissionStatus] = useState<PermissionStatus | null>(null);
+
+  // Read-only status check — never requests permission (Redesign Spec §I.4).
+  useEffect(() => {
+    getNotificationPermissionStatusAsync().then(setPermissionStatus).catch(() => setPermissionStatus(null));
+  }, []);
 
   const rows = [
     { label: t("profile.reminderDefaults.medication"), value: t("profile.reminderDefaults.medicationValue") },
@@ -26,19 +34,25 @@ export default function ReminderSettingsScreen() {
   ];
 
   return (
-    <ScreenContainer>
+    <ScreenContainer scroll>
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.sm }}>
         {t("profile.reminderSettings")}
       </Text>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.lg }}>
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
         {t("profile.reminderDefaults.note")}
       </Text>
-      {rows.map((row) => (
-        <View key={row.label} style={{ marginBottom: spacing.md }}>
-          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary }}>{row.label}</Text>
-          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: 2 }}>{row.value}</Text>
-        </View>
-      ))}
+
+      <GroupedList title={t("profile.group.reminders")}>
+        {rows.map((row) => (
+          <ListRow key={row.label} label={row.label} caption={row.value} />
+        ))}
+      </GroupedList>
+
+      {permissionStatus ? (
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.sm }}>
+          {permissionStatus === "granted" ? t("profile.notificationPermissionOn") : t("notifications.remindersOff")}
+        </Text>
+      ) : null}
     </ScreenContainer>
   );
 }

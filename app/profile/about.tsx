@@ -14,9 +14,10 @@ export default function AboutScreen() {
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("common.appName")}
       </Text>
-      <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary }}>
+      <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary, marginBottom: spacing.sm }}>
         {t("profile.version", { version })}
       </Text>
+      <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary }}>{t("profile.tagline")}</Text>
     </ScreenContainer>
   );
 }

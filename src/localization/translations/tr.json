@@ -9,6 +9,8 @@
     "continue": "Devam Et",
     "add": "Ekle",
     "back": "Geri",
+    "on": "Açık",
+    "off": "Kapalı",
     "saveError": "Kaydedilemedi. Lütfen tekrar deneyin.",
     "weekday": {
       "0": "Paz",
@@ -26,7 +28,7 @@
   "notifications": {
     "defaultTitle": "Ankilozanapp",
     "defaultBody": "Bir sağlık hatırlatıcınız var.",
-    "remindersOff": "Hatırlatıcılar kapalı — bildirim almak için Ayarlar'dan etkinleştirin."
+    "remindersOff": "Hatırlatıcılar kapalı — bildirim almak için Ayarlar'dan etkinleştir."
   },
   "onboarding": {
     "progress": {
@@ -367,9 +369,10 @@
   },
   "profile": {
     "title": "Profil",
+    "localFirstTrust": "Sağlık kayıtların bu cihazda saklanır.",
     "group": {
       "reminders": "Hatırlatıcılar",
-      "preferences": "Tercihler",
+      "preferences": "Uygulama",
       "privacyData": "Gizlilik ve veriler",
       "about": "Hakkında"
     },
@@ -377,8 +380,9 @@
     "notificationPrivacy": "Bildirim gizliliği",
     "language": "Dil",
     "privacyAndData": "Gizlilik ve veriler",
-    "disclaimer": "Tıbbi uyarı",
+    "disclaimer": "Tıbbi bilgilendirme",
     "about": "Hakkında",
+    "notificationPermissionOn": "Bildirim izni açık",
     "languageSystem": "Sistem dilini kullan",
     "languageSelected": "Seçili",
     "languageOption": {
@@ -397,17 +401,22 @@
       "appointment": "Randevu",
       "appointmentValue": "Bir gün önce"
     },
-    "privacyBody": "Ankilozanapp; belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları gibi sağlık bilgilerinizi yalnızca bu cihazda saklar. Hiçbir şey bir sunucuya gönderilmez.",
-    "privacyBackup": "Cihazınızın kendi yedeklemesi (iCloud gibi), diğer uygulamaları yedeklediği gibi bu verileri de içerebilir.",
-    "exportData": "Verilerinizi dışa aktarın",
+    "dataGroupTitle": "Verilerin",
+    "dataManagementTitle": "Veri yönetimi",
+    "privacyBody": "Ankilozanapp; belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları gibi sağlık bilgilerini yalnızca bu cihazda saklar. Hiçbir şey bir sunucuya gönderilmez.",
+    "privacyBackup": "Cihazının kendi yedeklemesi (iCloud gibi), diğer uygulamaları yedeklediği gibi bu verileri de içerebilir.",
+    "exportData": "Verilerini dışa aktar",
     "exportDataComingLater": "Yakında",
     "deleteAllData": "Tüm yerel verileri sil",
-    "deleteDataExplanation": "Bu işlem, bu cihazda kaydettiğiniz her şeyi — belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları — kalıcı olarak siler. Bu işlem geri alınamaz.",
+    "deleteDataQuestion": "Tüm yerel veriler silinsin mi?",
+    "deleteDataExplanation": "Bu işlem, bu cihazda kaydettiğin her şeyi — belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları — kalıcı olarak siler. Bu işlem geri alınamaz.",
     "deleteDataAcknowledge": "Bunun geri alınamayacağını anlıyorum",
-    "deleteDataConfirm": "Tüm yerel verileri sil",
+    "deleteDataCancel": "Vazgeç",
+    "deleteDataConfirm": "Verileri sil",
     "deleteDataInProgress": "Siliniyor…",
-    "disclaimerBody": "Ankilozanapp; belirtileriniz, tedavileriniz ve randevularınızla ilgili bilgileri kaydetmenize ve düzenlemenize yardımcı olur. Tıbbi durumları teşhis etmez, öngörmez veya yorumlamaz ve tedavi önermez. Profesyonel tıbbi tavsiyenin yerini tutmaz — bakımınızla ilgili her zaman doktorunuza danışın.",
-    "version": "Sürüm %{version}"
+    "disclaimerBody": "Ankilozanapp; belirtilerin, tedavilerin ve randevularınla ilgili bilgileri kaydetmene ve düzenlemene yardımcı olur. Tıbbi durumları teşhis etmez, öngörmez veya yorumlamaz ve tedavi önermez. Profesyonel tıbbi tavsiyenin yerini tutmaz — bakımınla ilgili her zaman doktoruna danış.",
+    "version": "Sürüm %{version}",
+    "tagline": "Romatoloji randevuların arasında olanları hatırlar."
   },
   "today": {
     "title": "Bugün",

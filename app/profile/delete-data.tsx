@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
 import { Button, ScreenContainer, ToggleRow, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
@@ -21,7 +21,7 @@ export default function DeleteDataScreen() {
   return (
     <ScreenContainer scroll>
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
-        {t("profile.deleteAllData")}
+        {t("profile.deleteDataQuestion")}
       </Text>
       <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, marginBottom: spacing.lg }}>
         {t("profile.deleteDataExplanation")}
@@ -33,13 +33,16 @@ export default function DeleteDataScreen() {
         onValueChange={setAcknowledged}
       />
 
-      <Button
-        label={deleting ? t("profile.deleteDataInProgress") : t("profile.deleteDataConfirm")}
-        variant="destructive"
-        disabled={!acknowledged || deleting}
-        loading={deleting}
-        onPress={handleDelete}
-      />
+      <View style={{ marginTop: spacing.md, gap: spacing.xs }}>
+        <Button
+          label={deleting ? t("profile.deleteDataInProgress") : t("profile.deleteDataConfirm")}
+          variant="destructive"
+          disabled={!acknowledged || deleting}
+          loading={deleting}
+          onPress={handleDelete}
+        />
+        <Button label={t("profile.deleteDataCancel")} variant="secondary" disabled={deleting} onPress={() => router.back()} />
+      </View>
     </ScreenContainer>
   );
 }

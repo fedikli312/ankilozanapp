@@ -9,6 +9,8 @@
     "continue": "Continue",
     "add": "Add",
     "back": "Back",
+    "on": "On",
+    "off": "Off",
     "saveError": "Couldn't save. Please try again.",
     "weekday": {
       "0": "Sun",
@@ -367,9 +369,10 @@
   },
   "profile": {
     "title": "Profile",
+    "localFirstTrust": "Your health records are stored on this device.",
     "group": {
       "reminders": "Reminders",
-      "preferences": "Preferences",
+      "preferences": "App",
       "privacyData": "Privacy & data",
       "about": "About"
     },
@@ -377,8 +380,9 @@
     "notificationPrivacy": "Notification privacy",
     "language": "Language",
     "privacyAndData": "Privacy & data",
-    "disclaimer": "Medical disclaimer",
+    "disclaimer": "Medical information",
     "about": "About",
+    "notificationPermissionOn": "Notification permission on",
     "languageSystem": "Use system language",
     "languageSelected": "Selected",
     "languageOption": {
@@ -397,17 +401,22 @@
       "appointment": "Appointment",
       "appointmentValue": "One day before"
     },
+    "dataGroupTitle": "Your data",
+    "dataManagementTitle": "Data management",
     "privacyBody": "Ankilozanapp stores your health information — symptoms, medications, injections, appointments, and lab results — on this device only. Nothing is sent to a server.",
     "privacyBackup": "Your device's own backup (like iCloud) may include this data, the same way it backs up any other app.",
     "exportData": "Export your data",
     "exportDataComingLater": "Coming later",
     "deleteAllData": "Delete all local data",
+    "deleteDataQuestion": "Delete all local data?",
     "deleteDataExplanation": "This permanently removes everything you've recorded on this device — symptoms, medications, injections, appointments, and lab results. This cannot be undone.",
     "deleteDataAcknowledge": "I understand this cannot be undone",
-    "deleteDataConfirm": "Delete all local data",
+    "deleteDataCancel": "Cancel",
+    "deleteDataConfirm": "Delete data",
     "deleteDataInProgress": "Deleting…",
     "disclaimerBody": "Ankilozanapp helps you record and organize information about your symptoms, treatments, and appointments. It does not diagnose, predict, or interpret medical conditions, and it does not recommend treatment. It is not a substitute for professional medical advice — always consult your doctor about your care.",
-    "version": "Version %{version}"
+    "version": "Version %{version}",
+    "tagline": "Remembers what happens between your rheumatology appointments."
   },
   "today": {
     "title": "Today",
