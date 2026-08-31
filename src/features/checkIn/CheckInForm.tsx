@@ -146,6 +146,7 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
 
           <TextField
             label={t("checkIn.noteLabel")}
+            placeholder={t("checkIn.notePrompt")}
             value={value.notes}
             onChangeText={(notes) => setValue((prev) => ({ ...prev, notes }))}
             multiline

@@ -1,10 +1,24 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Redirect, useRouter } from "expo-router";
 import { Platform, Text, View } from "react-native";
 
-import { AccessibleTouchable, Button, DateBlock, ListRow, SectionLabel, ScreenContainer, useTheme } from "@/design-system";
+import {
+  AccessibleTouchable,
+  Button,
+  DateBlock,
+  GroupedList,
+  ListRow,
+  MetricCard,
+  SectionLabel,
+  ScreenContainer,
+  useTheme,
+} from "@/design-system";
 import { formatDateBlock, formatHeadingDate, useTranslation } from "@/localization";
+import { diffInDays } from "@/domain/dateUtils";
 import { useOnboardingState } from "@/features/onboarding/useOnboardingState";
 import { useTodayData } from "@/features/today/useTodayData";
+import { TodaySupportiveSlot } from "@/features/today/TodaySupportiveSlot";
+import { todayDateOnly } from "@/shared/today";
 
 export default function TodayScreen() {
   const { completed } = useOnboardingState();
@@ -26,19 +40,47 @@ function TodayContent() {
     nextMedication,
     nextInjection,
     todaysCheckIn,
+    yesterdayCheckIn,
+    recentSummary,
     upcomingAppointment,
     markTaken,
   } = useTodayData();
 
   const appointmentDateBlock = upcomingAppointment ? formatDateBlock(new Date(upcomingAppointment.date), locale) : null;
+  const today = new Date();
+  const todayOnly = todayDateOnly();
+
+  const injectionDaysLeft = nextInjection ? diffInDays(todayOnly, nextInjection.scheduledFor.slice(0, 10)) : null;
+  const injectionCaption = nextInjection
+    ? injectionDaysLeft !== null && injectionDaysLeft <= 0
+      ? `${t("today.injectionDueToday")} · ${nextInjection.scheduledFor.slice(0, 10)}`
+      : `${t("today.injectionDaysLeft", { count: injectionDaysLeft })} · ${nextInjection.scheduledFor.slice(0, 10)}`
+    : undefined;
 
   return (
     <ScreenContainer scroll>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
-        {formatHeadingDate(new Date(), locale)}
+      {/* Redesign Spec §9 header: greeting + strong question + one supporting line. */}
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: 2 }}>
+        {t("today.greeting")}
+      </Text>
+      <Text
+        style={{
+          fontSize: typography.title.fontSize,
+          fontWeight: typography.title.fontWeight,
+          color: colors.textPrimary,
+          marginBottom: spacing.xxs,
+        }}
+      >
+        {t("today.headerTitle")}
+      </Text>
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: 2 }}>
+        {t("today.headerSubtitle")}
+      </Text>
+      <Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
+        {formatHeadingDate(today, locale)}
       </Text>
 
-      {/* Priority 1 (UX spec §D): the one dominant action while incomplete, a quiet collapsed row once done — the app's single `surfaceHighlight` moment per §13. */}
+      {/* Priority 1 (UX spec §D): the one dominant action while incomplete, a quiet completed summary once done — the app's single `surfaceHighlight` moment per Visual Design Spec §13. */}
       {!todaysCheckIn ? (
         <View
           style={{
@@ -51,18 +93,32 @@ function TodayContent() {
           <Text style={{ fontSize: typography.caption.fontSize, fontWeight: "600", color: colors.accent, marginBottom: 2 }}>
             {t("today.checkInSectionTitle")}
           </Text>
-          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, marginBottom: spacing.sm }}>
+          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, marginBottom: spacing.xs }}>
             {t("today.checkInPrompt")}
           </Text>
+          {/* Previous context only, never presented as today's value (Redesign Spec §9). */}
+          {yesterdayCheckIn ? (
+            <Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary, marginBottom: spacing.sm }}>
+              {t("today.checkInYesterdayContext", { pain: yesterdayCheckIn.pain })}
+            </Text>
+          ) : null}
           <Button label={t("today.checkInCta")} onPress={() => router.push("/check-in")} />
         </View>
       ) : (
         <View style={{ marginBottom: spacing.lg }}>
-          <ListRow
-            label={t("today.checkInCompleted", { pain: todaysCheckIn.pain, stiffness: t(`checkIn.stiffness.${todaysCheckIn.morningStiffnessBucket}`) })}
-            onPress={() => router.push("/check-in")}
-            chevron
-          />
+          <Text style={{ fontSize: typography.caption.fontSize, fontWeight: "600", color: colors.accent, marginBottom: spacing.xs }}>
+            {t("today.checkInSectionTitle")}
+          </Text>
+          <View style={{ flexDirection: "row", gap: spacing.xs, marginBottom: spacing.xs }}>
+            <MetricCard label={t("today.metricPain")} value={String(todaysCheckIn.pain)} unit="/10" />
+            <MetricCard label={t("checkIn.stiffnessLabel")} value={t(`checkIn.stiffness.${todaysCheckIn.morningStiffnessBucket}`)} />
+            <MetricCard label={t("today.metricFatigue")} value={String(todaysCheckIn.fatigue)} unit="/10" />
+          </View>
+          <AccessibleTouchable onPress={() => router.push("/check-in")} accessibilityRole="button" accessibilityLabel={t("today.viewOrEditCheckIn")}>
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent, marginTop: spacing.xxs }}>
+              {t("today.viewOrEditCheckIn")}
+            </Text>
+          </AccessibleTouchable>
         </View>
       )}
 
@@ -76,46 +132,52 @@ function TodayContent() {
       ) : (
         <>
           {dueToday.length > 0 ? (
-            <View style={{ marginBottom: spacing.md }}>
-              <SectionLabel>{t("today.dueToday")}</SectionLabel>
+            <GroupedList title={t("today.dueToday")}>
               {dueToday.map((row) => (
                 <ListRow
                   key={row.administrationId}
                   label={row.medicationName}
-                  caption={`${row.medicationDose} · ${row.scheduledFor.split("T")[1]}`}
+                  caption={`${row.medicationDose} · ${row.scheduledFor.split("T")[1] ?? ""}`}
                   trailing={
-                    <Button label={t("medications.detail.markTaken")} onPress={() => markTaken(row.administrationId)} variant="secondary" />
+                    row.status === "taken" ? (
+                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                        <Ionicons name="checkmark-circle" size={16} color={colors.accent} />
+                        <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent }}>
+                          {t("today.markTakenShort")}
+                        </Text>
+                      </View>
+                    ) : (
+                      <Button label={t("today.markTakenShort")} onPress={() => markTaken(row.administrationId)} variant="secondary" />
+                    )
                   }
                 />
               ))}
-            </View>
+            </GroupedList>
           ) : nextMedication ? (
-            <View style={{ marginBottom: spacing.md }}>
-              <SectionLabel>{t("today.nextMedication")}</SectionLabel>
+            <GroupedList title={t("today.nextMedication")}>
               <ListRow
                 label={nextMedication.medicationName}
                 caption={`${nextMedication.medicationDose} · ${nextMedication.scheduledFor.replace("T", " ")}`}
                 onPress={() => router.push("/medications")}
                 chevron
               />
-            </View>
+            </GroupedList>
           ) : null}
 
           {nextInjection ? (
-            <View style={{ marginBottom: spacing.md }}>
-              <SectionLabel>{t("today.nextInjection")}</SectionLabel>
+            <GroupedList title={t("today.nextInjection")}>
               <ListRow
+                leading={<Ionicons name="medical-outline" size={20} color={colors.textSecondary} />}
                 label={nextInjection.treatmentName}
-                caption={nextInjection.scheduledFor}
+                caption={injectionCaption}
                 onPress={() => router.push(`/injections/${nextInjection.treatmentId}`)}
                 chevron
               />
-            </View>
+            </GroupedList>
           ) : null}
 
           {upcomingAppointment && appointmentDateBlock ? (
-            <View style={{ marginBottom: spacing.md }}>
-              <SectionLabel>{t("today.upcomingAppointment")}</SectionLabel>
+            <GroupedList title={t("today.upcomingAppointment")}>
               <ListRow
                 leading={<DateBlock day={appointmentDateBlock.day} month={appointmentDateBlock.month} emphasis="strong" />}
                 label={upcomingAppointment.doctorOrInstitution || t(`appointments.type.${upcomingAppointment.type}`)}
@@ -127,6 +189,26 @@ function TodayContent() {
                 onPress={() => router.push(`/appointments/${upcomingAppointment.id}`)}
                 chevron
               />
+            </GroupedList>
+          ) : null}
+
+          <TodaySupportiveSlot />
+
+          {recentSummary ? (
+            <View style={{ marginBottom: spacing.md }}>
+              <SectionLabel>{t("today.recentSummaryTitle")}</SectionLabel>
+              <View style={{ flexDirection: "row", gap: spacing.xs }}>
+                <MetricCard
+                  label={t("today.recentAveragePain")}
+                  value={recentSummary.averagePain.toFixed(1)}
+                  unit="/10"
+                />
+                <MetricCard
+                  label={t("today.recentCheckInFrequency")}
+                  value={String(recentSummary.checkInCount)}
+                  unit={t("today.recentFrequencyUnit")}
+                />
+              </View>
             </View>
           ) : null}
 

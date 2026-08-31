@@ -228,7 +228,7 @@
     "noneRecorded": "Bu dönemde bir kayıt yok."
   },
   "checkIn": {
-    "title": "Bugün nasıl hissediyorsunuz?",
+    "title": "Günlük Kayıt",
     "painLabel": "Ağrı, 10 üzerinden %{value}",
     "fatigueLabel": "Yorgunluk, 10 üzerinden %{value}",
     "stiffnessLabel": "Sabah tutukluğu",
@@ -257,10 +257,11 @@
       "chest_ribs": "Göğüs/kaburgalar",
       "other": "Diğer"
     },
-    "addMore": "+ Daha fazla ekle",
-    "noteLabel": "Hatırlamak istediğiniz bir şey var mı? (isteğe bağlı)",
+    "addMore": "Daha fazlası",
+    "noteLabel": "Not",
+    "notePrompt": "Bugün hatırlamak istediğin bir şey var mı?",
     "noteCounter": "%{count}/%{max} karakter",
-    "save": "Kontrolü kaydet"
+    "save": "Kaydet"
   },
   "labs": {
     "addAction": "Sonuç ekle",
@@ -376,8 +377,11 @@
   },
   "today": {
     "title": "Bugün",
-    "emptyPrompt": "Burada görmek için ilk ilacınızı veya iğnenizi ekleyin.",
-    "emptyAction": "Başlayın",
+    "greeting": "Merhaba",
+    "headerTitle": "Bugün nasılsın?",
+    "headerSubtitle": "Kendini değerlendir, tedavilerini takip et.",
+    "emptyPrompt": "Burada görmek için ilk ilacını veya iğneni ekle.",
+    "emptyAction": "Başla",
     "dueToday": "Bugün",
     "nextMedication": "Sonraki ilaç",
     "nextInjection": "Sıradaki",
@@ -385,8 +389,18 @@
     "logNow": "Şimdi kaydet",
     "checkInSectionTitle": "Günlük kontrol",
     "checkInPrompt": "Bugün henüz kayıt yapmadın.",
+    "checkInYesterdayContext": "Dün: Ağrı %{pain}/10",
     "checkInCta": "Kontrolü başlat",
-    "checkInCompleted": "Kontrol kaydedildi — Ağrı %{pain}, Tutukluk %{stiffness}",
+    "metricPain": "Ağrı",
+    "metricFatigue": "Yorgunluk",
+    "viewOrEditCheckIn": "Kaydı görüntüle",
+    "markTakenShort": "Alındı",
+    "injectionDaysLeft": "%{count} gün kaldı",
+    "injectionDueToday": "Bugün",
+    "recentSummaryTitle": "Son 7 gün",
+    "recentAveragePain": "Ortalama ağrı",
+    "recentCheckInFrequency": "Kontrol sıklığı",
+    "recentFrequencyUnit": "/7 gün",
     "previewOnboardingDevOnly": "Onboarding'i önizle (yalnızca web)"
   }
 }

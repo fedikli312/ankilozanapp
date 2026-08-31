@@ -228,7 +228,7 @@
     "noneRecorded": "Nothing recorded in this period."
   },
   "checkIn": {
-    "title": "How are you feeling today?",
+    "title": "Daily Log",
     "painLabel": "Pain, %{value} out of 10",
     "fatigueLabel": "Fatigue, %{value} out of 10",
     "stiffnessLabel": "Morning stiffness",
@@ -257,10 +257,11 @@
       "chest_ribs": "Chest/ribs",
       "other": "Other"
     },
-    "addMore": "+ Add more",
-    "noteLabel": "Anything you want to remember? (optional)",
+    "addMore": "More",
+    "noteLabel": "Note",
+    "notePrompt": "Anything you want to remember today?",
     "noteCounter": "%{count}/%{max} characters",
-    "save": "Save check-in"
+    "save": "Save"
   },
   "labs": {
     "addAction": "Add result",
@@ -376,6 +377,9 @@
   },
   "today": {
     "title": "Today",
+    "greeting": "Hello",
+    "headerTitle": "How are you today?",
+    "headerSubtitle": "Check in with yourself and keep track of your treatments.",
     "emptyPrompt": "Add your first medication or injection to see it here.",
     "emptyAction": "Get started",
     "dueToday": "Today",
@@ -385,8 +389,18 @@
     "logNow": "Log now",
     "checkInSectionTitle": "Daily check-in",
     "checkInPrompt": "You haven't checked in yet today.",
+    "checkInYesterdayContext": "Yesterday: Pain %{pain}/10",
     "checkInCta": "Start check-in",
-    "checkInCompleted": "Checked in — Pain %{pain}, Stiffness %{stiffness}",
+    "metricPain": "Pain",
+    "metricFatigue": "Fatigue",
+    "viewOrEditCheckIn": "View entry",
+    "markTakenShort": "Taken",
+    "injectionDaysLeft": "%{count} days left",
+    "injectionDueToday": "Today",
+    "recentSummaryTitle": "Last 7 days",
+    "recentAveragePain": "Average pain",
+    "recentCheckInFrequency": "Check-in frequency",
+    "recentFrequencyUnit": "/7 days",
     "previewOnboardingDevOnly": "Preview onboarding (web only)"
   }
 }

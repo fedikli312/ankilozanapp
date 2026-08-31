@@ -2,6 +2,8 @@ import { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
 
 import { db } from "../../db";
+import { addDays } from "../../domain/dateUtils";
+import { computePainHistory } from "../../domain/insights";
 import { generateDueAdministrations } from "../medications/medicationAdministrations";
 import {
   getActiveInjectionTreatments,
@@ -9,6 +11,7 @@ import {
   getAdministrationsForMedication,
   getAdministrationsForTreatment,
   getCheckInByDate,
+  getCheckInsInRange,
   getCurrentSchedule,
   getScheduleDays,
   getScheduleTimes,
@@ -30,6 +33,7 @@ export type DueMedicationRow = {
   medicationName: string;
   medicationDose: string;
   scheduledFor: string;
+  status: "pending" | "taken";
 };
 
 export type NextInjectionRow = {
@@ -63,6 +67,10 @@ export function useTodayData() {
   const injections = getActiveInjectionTreatments(db);
   const today = todayDateOnly();
   const todaysCheckIn = getCheckInByDate(db, today);
+  // Redesign Phase D (§"check-in summary"): "previous context" line on the
+  // not-yet-checked-in card — explicitly the previous day's own recorded
+  // value, never presented as today's. Plain repository read, no new domain logic.
+  const yesterdayCheckIn = getCheckInByDate(db, addDays(today, -1));
 
   // 14-day window, named domain constant (Tech Arch §D) — same rule as the Appointments tab's own 14-day surfacing, applied here via the repository helper that already wraps it.
   const upcomingAppointment: UpcomingAppointmentRow | null = getUpcomingAppointments(db, today)
@@ -70,17 +78,29 @@ export function useTodayData() {
     .map((a) => ({ id: a.id, type: a.type, doctorOrInstitution: a.doctorOrInstitution, date: a.date, time: a.time ?? null }))[0] ?? null;
 
   const allMedicationAdministrations = medications.flatMap((medication) =>
-    getAdministrationsForMedication(db, medication.id)
-      .filter((a) => a.status === "pending")
-      .map((a) => ({ ...a, medicationName: medication.name, medicationDose: medication.dose })),
+    getAdministrationsForMedication(db, medication.id).map((a) => ({
+      ...a,
+      medicationName: medication.name,
+      medicationDose: medication.dose,
+    })),
   );
 
+  // UX spec §D: taken items "visually settle... rather than disappear" —
+  // today's list includes both still-pending and already-taken doses so a
+  // completed dose renders as a quiet success row instead of vanishing.
   const dueToday: DueMedicationRow[] = allMedicationAdministrations
-    .filter((a) => a.scheduledFor.startsWith(today))
+    .filter((a) => a.scheduledFor.startsWith(today) && (a.status === "pending" || a.status === "taken"))
     .sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor))
-    .map((a) => ({ administrationId: a.id, medicationName: a.medicationName, medicationDose: a.medicationDose, scheduledFor: a.scheduledFor }));
+    .map((a) => ({
+      administrationId: a.id,
+      medicationName: a.medicationName,
+      medicationDose: a.medicationDose,
+      scheduledFor: a.scheduledFor,
+      status: a.status as "pending" | "taken",
+    }));
 
-  const nextMedicationSorted = allMedicationAdministrations
+  const pendingAdministrations = allMedicationAdministrations.filter((a) => a.status === "pending");
+  const nextMedicationSorted = pendingAdministrations
     .slice()
     .sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor));
   const nextMedication: DueMedicationRow | null = nextMedicationSorted[0]
@@ -89,7 +109,24 @@ export function useTodayData() {
         medicationName: nextMedicationSorted[0].medicationName,
         medicationDose: nextMedicationSorted[0].medicationDose,
         scheduledFor: nextMedicationSorted[0].scheduledFor,
+        status: "pending",
       }
+    : null;
+
+  // Redesign Phase D "Son 7 gün" — composes existing Insights domain logic
+  // (computePainHistory) and the existing check-in-range repository read
+  // over a plain 7-day window; no new domain function. Renders only when
+  // computePainHistory's own sufficiency threshold (>=3 check-ins) is met,
+  // matching Today's "a section only renders when it has real content" rule.
+  const recentRangeStart = addDays(today, -6);
+  const recentRangeEnd = addDays(today, 1);
+  const recentCheckIns = getCheckInsInRange(db, recentRangeStart, recentRangeEnd);
+  const recentPainTrend = computePainHistory(recentCheckIns, {
+    rangeStart: recentRangeStart,
+    rangeEnd: recentRangeEnd,
+  });
+  const recentSummary = recentPainTrend.sufficientData
+    ? { averagePain: recentPainTrend.average, checkInCount: recentCheckIns.length, windowDays: 7 }
     : null;
 
   const nextInjectionRows: NextInjectionRow[] = injections
@@ -116,6 +153,8 @@ export function useTodayData() {
     nextMedication,
     nextInjection: nextInjectionRows[0] ?? null,
     todaysCheckIn,
+    yesterdayCheckIn,
+    recentSummary,
     upcomingAppointment,
     markTaken,
   };
