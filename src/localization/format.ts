@@ -33,6 +33,11 @@ export function formatHeadingDate(date: Date, locale: SupportedLocale): string {
   return `${dayMonthYear}, ${weekday}`;
 }
 
+/** Short day+month, no year, e.g. "18 Ağustos" — Track/Insights landing row captions (Redesign Spec §8). */
+export function formatShortDate(date: Date, locale: SupportedLocale): string {
+  return new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { day: "numeric", month: "long" }).format(date);
+}
+
 /** Compact day/month for the appointment date-block (Visual Design Spec §26's date pill), e.g. { day: "07", month: "EYL" }. */
 export function formatDateBlock(date: Date, locale: SupportedLocale): { day: string; month: string } {
   const day = new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { day: "2-digit" }).format(date);

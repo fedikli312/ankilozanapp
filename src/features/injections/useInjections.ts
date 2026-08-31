@@ -2,14 +2,15 @@ import { useCallback, useState } from "react";
 import { useFocusEffect } from "expo-router";
 
 import { calculateNextInjectionDate } from "../../domain/scheduling";
-import { addDays } from "../../domain/dateUtils";
+import { addDays, diffInDays } from "../../domain/dateUtils";
 import { useTranslation } from "../../localization";
 import { db } from "../../db";
 import {
   createInitialInjectionSchedule,
   createInjectionTreatment,
   createPendingInjectionAdministration,
-  getActiveInjectionTreatments,
+  getAdministrationsForTreatment,
+  getAllInjectionTreatments,
   logInjectionAdministration,
 } from "../../repositories";
 import { generateId } from "../../shared/id";
@@ -27,17 +28,39 @@ export type CreateInjectionFormInput = {
   reminderEnabled: boolean;
 };
 
+export type InjectionListRow = {
+  id: string;
+  name: string;
+  dose: string;
+  archivedAt: string | null;
+  nextInjectionDate: string | null;
+  nextInjectionDaysLeft: number | null;
+};
+
+function buildRow(treatmentId: string, name: string, dose: string, archivedAt: string | null): InjectionListRow {
+  const pending = getAdministrationsForTreatment(db, treatmentId).find((a) => a.status === "pending");
+  const nextInjectionDate = pending?.scheduledFor ?? null;
+  const nextInjectionDaysLeft = nextInjectionDate ? diffInDays(todayDateOnly(), nextInjectionDate) : null;
+
+  return { id: treatmentId, name, dose, archivedAt, nextInjectionDate, nextInjectionDaysLeft };
+}
+
 export function useInjections() {
   const { locale } = useTranslation();
-  const [treatments, setTreatments] = useState(() => getActiveInjectionTreatments(db));
+  const [rows, setRows] = useState(() => getAllInjectionTreatments(db).map((t) => buildRow(t.id, t.name, t.dose, t.archivedAt)));
 
-  const refresh = useCallback(() => setTreatments(getActiveInjectionTreatments(db)), []);
+  const refresh = useCallback(() => {
+    setRows(getAllInjectionTreatments(db).map((t) => buildRow(t.id, t.name, t.dose, t.archivedAt)));
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
       refresh();
     }, [refresh]),
   );
+
+  const treatments = rows.filter((r) => !r.archivedAt);
+  const archivedTreatments = rows.filter((r) => r.archivedAt);
 
   const addInjection = useCallback(
     async (input: CreateInjectionFormInput): Promise<ReminderOutcome> => {
@@ -103,5 +126,5 @@ export function useInjections() {
     [locale, refresh],
   );
 
-  return { treatments, addInjection, refresh };
+  return { treatments, archivedTreatments, addInjection, refresh };
 }

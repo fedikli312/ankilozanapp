@@ -111,6 +111,8 @@
     "listTitle": "İlaçlar",
     "emptyTitle": "Henüz bir şey eklenmedi",
     "addAction": "İlaç ekle",
+    "sectionActive": "Aktif",
+    "sectionArchived": "Geçmiş",
     "form": {
       "name": "Ad",
       "namePlaceholder": "örn. Sulfasalazin",
@@ -135,7 +137,13 @@
       "history": "Geçmiş",
       "editSchedule": "Programı düzenle",
       "archive": "Arşivle",
-      "archived": "Arşivlendi"
+      "archived": "Arşivlendi",
+      "planTitle": "Plan",
+      "settingsTitle": "Ayarlar",
+      "schedule": "Program",
+      "startDate": "Başlangıç tarihi",
+      "reminderOn": "Açık",
+      "reminderOff": "Kapalı"
     },
     "status": {
       "pending": "Bekliyor",
@@ -165,7 +173,10 @@
       "nextInjection": "Sonraki iğne",
       "history": "Geçmiş",
       "archive": "Arşivle",
-      "archived": "Arşivlendi"
+      "archived": "Arşivlendi",
+      "everyDays": "%{count} günde bir",
+      "rescheduleEarlier": "1 gün erkene al",
+      "rescheduleLater": "1 gün ertele"
     },
     "status": {
       "pending": "Bekliyor",
@@ -318,12 +329,16 @@
   "track": {
     "title": "Takip",
     "subtitle": "Sağlık geçmişin",
+    "healthGroupTitle": "Sağlık takibi",
     "symptoms": "Belirtiler",
     "labs": "Tahliller",
     "noneYet": "Henüz bir şey yok",
     "countActive": "%{count} aktif",
-    "symptomsSummary": "Ağrı %{pain} · %{date}",
-    "labsSummary": "%{marker} %{value} %{unit} · %{date}"
+    "latestCheckInToday": "Son kayıt: bugün",
+    "latestCheckInOn": "Son kayıt: %{date}",
+    "injectionsToday": "Sonraki: bugün",
+    "injectionsNextIn": "Sonraki: %{count} gün sonra",
+    "labsLatestResult": "Son sonuç: %{date}"
   },
   "symptoms": {
     "title": "Belirtiler",

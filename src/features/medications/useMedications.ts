@@ -4,7 +4,14 @@ import { useFocusEffect } from "expo-router";
 import { db } from "../../db";
 import type { FrequencyType } from "../../domain/scheduling/types";
 import { useTranslation } from "../../localization";
-import { createInitialSchedule, createMedication, getActiveMedications } from "../../repositories";
+import {
+  createInitialSchedule,
+  createMedication,
+  getAdministrationsForMedication,
+  getAllMedications,
+  getCurrentSchedule,
+  getScheduleTimes,
+} from "../../repositories";
 import { generateId } from "../../shared/id";
 import { todayDateOnly } from "../../shared/today";
 import { generateDueAdministrations } from "./medicationAdministrations";
@@ -22,12 +29,44 @@ export type CreateMedicationFormInput = {
   reminderEnabled: boolean;
 };
 
+export type MedicationListRow = {
+  id: string;
+  name: string;
+  dose: string;
+  archivedAt: string | null;
+  /** Schedule times joined for display, e.g. "08:00 · 20:00" — real values only, empty when no schedule exists. */
+  scheduleTimesLabel: string;
+  /** Earliest still-pending administration's scheduled time, if any. */
+  nextDoseAt: string | null;
+};
+
+function buildRow(medicationId: string, name: string, dose: string, archivedAt: string | null): MedicationListRow {
+  const schedule = getCurrentSchedule(db, medicationId);
+  const scheduleTimesLabel = schedule
+    ? getScheduleTimes(db, schedule.id)
+        .map((t) => t.timeOfDay)
+        .join(" · ")
+    : "";
+  const nextPending = getAdministrationsForMedication(db, medicationId)
+    .filter((a) => a.status === "pending")
+    .sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor))[0];
+
+  return {
+    id: medicationId,
+    name,
+    dose,
+    archivedAt,
+    scheduleTimesLabel,
+    nextDoseAt: nextPending?.scheduledFor ?? null,
+  };
+}
+
 export function useMedications() {
   const { locale } = useTranslation();
-  const [medications, setMedications] = useState(() => getActiveMedications(db));
+  const [rows, setRows] = useState(() => getAllMedications(db).map((m) => buildRow(m.id, m.name, m.dose, m.archivedAt)));
 
   const refresh = useCallback(() => {
-    setMedications(getActiveMedications(db));
+    setRows(getAllMedications(db).map((m) => buildRow(m.id, m.name, m.dose, m.archivedAt)));
   }, []);
 
   // Re-fetch on focus (Tech Arch §K) — e.g. returning from the detail screen
@@ -37,6 +76,9 @@ export function useMedications() {
       refresh();
     }, [refresh]),
   );
+
+  const medications = rows.filter((r) => !r.archivedAt);
+  const archivedMedications = rows.filter((r) => r.archivedAt);
 
   const addMedication = useCallback(
     async (input: CreateMedicationFormInput): Promise<ReminderOutcome> => {
@@ -97,5 +139,5 @@ export function useMedications() {
     [locale, refresh],
   );
 
-  return { medications, addMedication, refresh };
+  return { medications, archivedMedications, addMedication, refresh };
 }

@@ -111,6 +111,8 @@
     "listTitle": "Medications",
     "emptyTitle": "Nothing added yet",
     "addAction": "Add medication",
+    "sectionActive": "Active",
+    "sectionArchived": "Past",
     "form": {
       "name": "Name",
       "namePlaceholder": "e.g. Sulfasalazine",
@@ -135,7 +137,13 @@
       "history": "History",
       "editSchedule": "Edit schedule",
       "archive": "Archive",
-      "archived": "Archived"
+      "archived": "Archived",
+      "planTitle": "Plan",
+      "settingsTitle": "Settings",
+      "schedule": "Schedule",
+      "startDate": "Start date",
+      "reminderOn": "On",
+      "reminderOff": "Off"
     },
     "status": {
       "pending": "Due",
@@ -165,7 +173,10 @@
       "nextInjection": "Next injection",
       "history": "History",
       "archive": "Archive",
-      "archived": "Archived"
+      "archived": "Archived",
+      "everyDays": "Every %{count} days",
+      "rescheduleEarlier": "1 day earlier",
+      "rescheduleLater": "1 day later"
     },
     "status": {
       "pending": "Due",
@@ -318,12 +329,16 @@
   "track": {
     "title": "Track",
     "subtitle": "Your health history",
+    "healthGroupTitle": "Health tracking",
     "symptoms": "Symptoms",
     "labs": "Labs",
     "noneYet": "Nothing yet",
     "countActive": "%{count} active",
-    "symptomsSummary": "Pain %{pain} · %{date}",
-    "labsSummary": "%{marker} %{value} %{unit} · %{date}"
+    "latestCheckInToday": "Latest entry: today",
+    "latestCheckInOn": "Latest entry: %{date}",
+    "injectionsToday": "Next: today",
+    "injectionsNextIn": "Next: in %{count} days",
+    "labsLatestResult": "Latest result: %{date}"
   },
   "symptoms": {
     "title": "Symptoms",
