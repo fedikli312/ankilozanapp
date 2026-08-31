@@ -39,7 +39,7 @@ export default function OnboardingAddAppointmentScreen() {
   return (
     <ScreenContainer scroll>
       <OnboardingProgress step={7} />
-      <Text style={{ fontSize: 20, fontWeight: "600", color: colors.textPrimary, marginBottom: 16 }}>
+      <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("onboarding.addAppointment.title")}
       </Text>
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>

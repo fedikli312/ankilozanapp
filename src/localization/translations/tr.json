@@ -23,11 +23,11 @@
     }
   },
   "database": {
-    "migrationError": "Verileriniz hazırlanamadı. Lütfen uygulamayı yeniden başlatın."
+    "migrationError": "Verilerin hazırlanamadı. Lütfen uygulamayı yeniden başlat."
   },
   "notifications": {
     "defaultTitle": "Ankilozanapp",
-    "defaultBody": "Bir sağlık hatırlatıcınız var.",
+    "defaultBody": "Bir sağlık hatırlatman var.",
     "remindersOff": "Hatırlatıcılar kapalı — bildirim almak için Ayarlar'dan etkinleştir."
   },
   "onboarding": {
@@ -73,10 +73,10 @@
       "addInjection": "İğne ekle"
     },
     "addMedication": {
-      "title": "İlk ilacınızı ekleyin"
+      "title": "İlk ilacını ekle"
     },
     "addInjection": {
-      "title": "İlk iğnenizi ekleyin"
+      "title": "İlk iğneni ekle"
     },
     "reminders": {
       "title": "Dozlarını ve randevularını hatırlayabilirsin.",
@@ -322,9 +322,7 @@
     "needMoreForTrend": "Trend için daha fazla kayıt gerekli.",
     "stiffnessMostCommon": "En sık: %{bucket}",
     "averageOnly": "Bu dönemde ortalama %{average}",
-    "averageUp": "Ortalama %{average}, önceki dönemdeki %{previous}'ten yüksek",
-    "averageDown": "Ortalama %{average}, önceki dönemdeki %{previous}'ten düşük",
-    "averageFlat": "Ortalama %{average}, önceki dönemle benzer",
+    "averageComparison": "Ortalama %{average} · Önceki dönem %{previous}",
     "stiffnessSummary": "En sık \"%{bucket}\" — %{total} kayıttan %{count} tanesi",
     "adherenceSummary": "Planlanan dozların %%{percentage}'i alındı",
     "adherenceCounts": "%{taken} alındı, %{missed} kaçırıldı",

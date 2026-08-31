@@ -10,7 +10,7 @@ import type { CreateInjectionFormInput } from "@/features/injections/useInjectio
 
 export default function AddInjectionScreen() {
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const { addInjection } = useInjections();
   const [submitting, setSubmitting] = useState(false);
@@ -36,13 +36,13 @@ export default function AddInjectionScreen() {
 
   return (
     <ScreenContainer scroll>
-      <Text style={{ fontSize: 20, fontWeight: "600", color: colors.textPrimary, marginBottom: 16 }}>
+      <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("injections.addAction")}
       </Text>
       {remindersOff ? (
-        <Text style={{ color: colors.statusWarning, marginBottom: 12 }}>{t("notifications.remindersOff")}</Text>
+        <Text style={{ color: colors.statusWarning, marginBottom: spacing.sm }}>{t("notifications.remindersOff")}</Text>
       ) : null}
-      {saveError ? <Text style={{ color: colors.statusDanger, marginBottom: 12 }}>{t("common.saveError")}</Text> : null}
+      {saveError ? <Text style={{ color: colors.statusDanger, marginBottom: spacing.sm }}>{t("common.saveError")}</Text> : null}
       <InjectionForm onSubmit={handleSubmit} submitting={submitting} />
     </ScreenContainer>
   );

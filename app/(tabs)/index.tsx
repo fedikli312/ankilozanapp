@@ -13,7 +13,7 @@ import {
   ScreenContainer,
   useTheme,
 } from "@/design-system";
-import { formatDateBlock, formatHeadingDate, useTranslation } from "@/localization";
+import { formatDateBlock, formatHeadingDate, formatShortDate, useTranslation } from "@/localization";
 import { diffInDays } from "@/domain/dateUtils";
 import { useOnboardingState } from "@/features/onboarding/useOnboardingState";
 import { useTodayData } from "@/features/today/useTodayData";
@@ -51,10 +51,11 @@ function TodayContent() {
   const todayOnly = todayDateOnly();
 
   const injectionDaysLeft = nextInjection ? diffInDays(todayOnly, nextInjection.scheduledFor.slice(0, 10)) : null;
+  const injectionDateLabel = nextInjection ? formatShortDate(new Date(nextInjection.scheduledFor.slice(0, 10)), locale) : "";
   const injectionCaption = nextInjection
     ? injectionDaysLeft !== null && injectionDaysLeft <= 0
-      ? `${t("today.injectionDueToday")} · ${nextInjection.scheduledFor.slice(0, 10)}`
-      : `${t("today.injectionDaysLeft", { count: injectionDaysLeft })} · ${nextInjection.scheduledFor.slice(0, 10)}`
+      ? `${t("today.injectionDueToday")} · ${injectionDateLabel}`
+      : `${t("today.injectionDaysLeft", { count: injectionDaysLeft })} · ${injectionDateLabel}`
     : undefined;
 
   return (
@@ -157,7 +158,7 @@ function TodayContent() {
             <GroupedList title={t("today.nextMedication")}>
               <ListRow
                 label={nextMedication.medicationName}
-                caption={`${nextMedication.medicationDose} · ${nextMedication.scheduledFor.replace("T", " ")}`}
+                caption={`${nextMedication.medicationDose} · ${formatShortDate(new Date(nextMedication.scheduledFor.slice(0, 10)), locale)} ${nextMedication.scheduledFor.slice(11, 16)}`}
                 onPress={() => router.push("/medications")}
                 chevron
               />

@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 
 import { Button, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
-import { useTranslation } from "@/localization";
+import { formatDate, formatShortDate, useTranslation } from "@/localization";
 import { useMedicationDetail } from "@/features/medications/useMedicationDetail";
 import { MedicationScheduleFields, type MedicationScheduleFieldsValue } from "@/features/medications/MedicationScheduleFields";
 
 export default function MedicationDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const {
     medication,
@@ -87,7 +87,7 @@ export default function MedicationDetailScreen() {
         <GroupedList title={t("medications.detail.planTitle")}>
           <ListRow label={t("medications.detail.schedule")} caption={scheduleTimes.map((s) => s.timeOfDay).join(" · ")} />
           {schedule.effectiveFrom ? (
-            <ListRow label={t("medications.detail.startDate")} caption={schedule.effectiveFrom} />
+            <ListRow label={t("medications.detail.startDate")} caption={formatDate(new Date(schedule.effectiveFrom), locale)} />
           ) : null}
           <ListRow
             label={t("medications.form.reminderToggle")}
@@ -102,7 +102,7 @@ export default function MedicationDetailScreen() {
           return (
             <ListRow
               key={item.id}
-              label={item.scheduledFor.replace("T", " ")}
+              label={`${formatShortDate(new Date(item.scheduledFor.slice(0, 10)), locale)} ${item.scheduledFor.slice(11, 16)}`}
               caption={item.status === "pending" ? undefined : statusLabel(item.status)}
               leading={
                 badge ? <Ionicons name={badge.icon} size={18} color={badge.color} /> : undefined

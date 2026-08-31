@@ -3,12 +3,12 @@ import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 
 import { Button, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
-import { useTranslation } from "@/localization";
+import { formatDate, useTranslation } from "@/localization";
 import { useInjectionDetail } from "@/features/injections/useInjectionDetail";
 
 export default function InjectionDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const {
     treatment,
@@ -55,7 +55,7 @@ export default function InjectionDetailScreen() {
           />
         ) : null}
         {nextInjectionDate ? (
-          <ListRow label={t("injections.detail.nextInjection")} caption={nextInjectionDate} />
+          <ListRow label={t("injections.detail.nextInjection")} caption={formatDate(new Date(nextInjectionDate), locale)} />
         ) : null}
         {schedule ? (
           <ListRow
@@ -84,7 +84,7 @@ export default function InjectionDetailScreen() {
           return (
             <ListRow
               key={item.id}
-              label={item.scheduledFor}
+              label={formatDate(new Date(item.scheduledFor), locale)}
               caption={item.status === "pending" ? undefined : statusLabel(item.status)}
               leading={badge ? <Ionicons name={badge.icon} size={18} color={badge.color} /> : undefined}
             />

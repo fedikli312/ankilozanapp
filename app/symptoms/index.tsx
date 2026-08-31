@@ -1,12 +1,13 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { FlatList, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
-import { Button, ListRow, ScreenContainer, useTheme } from "@/design-system";
-import { useTranslation } from "@/localization";
+import { Button, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { formatShortDate, useTranslation } from "@/localization";
 import { useSymptomsHistory } from "@/features/checkIn/useSymptomsHistory";
 
 export default function SymptomsHistoryScreen() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const { checkIns, today } = useSymptomsHistory();
@@ -25,26 +26,26 @@ export default function SymptomsHistoryScreen() {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer scroll>
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("symptoms.title")}
       </Text>
-      <FlatList
-        data={checkIns}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+      <GroupedList>
+        {checkIns.map((item) => (
           <ListRow
+            key={item.id}
+            leading={<Ionicons name="pulse-outline" size={20} color={colors.textSecondary} />}
             label={t("symptoms.rowLabel", { pain: item.pain, fatigue: item.fatigue })}
             caption={
               item.date === today
                 ? t("symptoms.todayCaption", { stiffness: t(`checkIn.stiffness.${item.morningStiffnessBucket}`) })
-                : item.date
+                : formatShortDate(new Date(item.date), locale)
             }
             onPress={item.date === today ? () => router.push("/check-in") : undefined}
+            chevron={item.date === today}
           />
-        )}
-        ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: colors.borderHairline }} />}
-      />
+        ))}
+      </GroupedList>
     </ScreenContainer>
   );
 }

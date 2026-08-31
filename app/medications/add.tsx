@@ -10,7 +10,7 @@ import type { CreateMedicationFormInput } from "@/features/medications/useMedica
 
 export default function AddMedicationScreen() {
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const { addMedication } = useMedications();
   const [submitting, setSubmitting] = useState(false);
@@ -37,14 +37,14 @@ export default function AddMedicationScreen() {
 
   return (
     <ScreenContainer scroll>
-      <Text style={{ fontSize: 20, fontWeight: "600", color: colors.textPrimary, marginBottom: 16 }}>
+      <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("medications.addAction")}
       </Text>
       {remindersOff ? (
-        <Text style={{ color: colors.statusWarning, marginBottom: 12 }}>{t("notifications.remindersOff")}</Text>
+        <Text style={{ color: colors.statusWarning, marginBottom: spacing.sm }}>{t("notifications.remindersOff")}</Text>
       ) : null}
       {saveError ? (
-        <Text style={{ color: colors.statusDanger, marginBottom: 12 }}>{t("common.saveError")}</Text>
+        <Text style={{ color: colors.statusDanger, marginBottom: spacing.sm }}>{t("common.saveError")}</Text>
       ) : null}
       <MedicationForm onSubmit={handleSubmit} submitting={submitting} />
     </ScreenContainer>

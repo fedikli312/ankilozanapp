@@ -9,14 +9,18 @@ import { useInsightsLanding } from "@/features/insights/useInsightsLanding";
 import type { InsightMetricKey } from "@/features/insights/types";
 import type { NumericTrend, StiffnessHistory, LabHistory, MedicationAdherence, InjectionHistory } from "@/domain/insights";
 
+/**
+ * Strictly neutral factual presentation (Redesign Spec Phase K §7) — states
+ * both numbers without directional/interpretive wording ("up from"/"down
+ * from"/"about the same as"). `trend.direction` remains in the domain data
+ * unchanged; this only stops reading it for copy.
+ */
 function numericSummary(t: (k: string, o?: Record<string, unknown>) => string, trend: NumericTrend): string {
   if (!trend.sufficientData) return t("insights.notEnoughData");
   const average = trend.average.toFixed(1);
   if (trend.previousPeriodAverage === null) return t("insights.averageOnly", { average });
   const previous = trend.previousPeriodAverage.toFixed(1);
-  if (trend.direction === "down") return t("insights.averageDown", { average, previous });
-  if (trend.direction === "up") return t("insights.averageUp", { average, previous });
-  return t("insights.averageFlat", { average });
+  return t("insights.averageComparison", { average, previous });
 }
 
 function stiffnessSummary(t: (k: string, o?: Record<string, unknown>) => string, stiffness: StiffnessHistory): string {
