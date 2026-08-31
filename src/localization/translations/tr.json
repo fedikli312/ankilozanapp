@@ -5,6 +5,7 @@
     "save": "Kaydet",
     "retry": "Tekrar Dene",
     "skip": "Şimdilik Geç",
+    "later": "Daha Sonra",
     "continue": "Devam Et",
     "add": "Ekle",
     "back": "Geri",
@@ -28,18 +29,46 @@
     "remindersOff": "Hatırlatıcılar kapalı — bildirim almak için Ayarlar'dan etkinleştirin."
   },
   "onboarding": {
+    "progress": {
+      "label": "Adım %{step}/%{total}"
+    },
     "welcome": {
-      "title": "Ankilozanapp, romatoloji randevularınız arasında yaşananları hatırlar."
+      "eyebrow": "Ankilozan spondilit için günlük takip",
+      "title": "Sağlığını takip etmek artık daha kolay.",
+      "supporting": "Belirtilerini, tedavilerini ve randevularını tek bir yerde düzenle.",
+      "cta": "Başlayalım"
     },
     "privacy": {
-      "body": "Sağlık bilgileriniz bu cihazda saklanır. Bunlar size aittir — istediğiniz zaman dışa aktarabilir veya silebilirsiniz."
+      "title": "Sağlık bilgilerin sana ait.",
+      "body": "Bu sürümde sağlık kayıtların cihazında saklanır.",
+      "reassurance": {
+        "onDevice": "Sağlık verilerin cihazında saklanır",
+        "noAdsOrAnalytics": "Reklam veya sağlık verisi analitiği kullanılmaz",
+        "deletableAnytime": "Verilerini istediğin zaman silebilirsin"
+      },
+      "moreLink": "Gizlilik hakkında daha fazla"
     },
     "whatToRemember": {
-      "title": "Neyi hatırlamanızda yardımcı olalım?",
+      "title": "Neleri takip etmek istersin?",
+      "supporting": "İstediğin zaman değiştirebilirsin.",
       "medications": "İlaçlar",
       "injections": "İğneler",
       "appointments": "Randevular",
       "symptoms": "Belirtiler"
+    },
+    "checkInPreview": {
+      "title": "Günlük kontrolün bir dakikadan kısa sürer.",
+      "pain": "Ağrı",
+      "stiffness": "Sabah tutukluğu",
+      "fatigue": "Yorgunluk",
+      "minutesUnit": "dk",
+      "supporting": "Zaman içinde nasıl hissettiğini daha kolay hatırlamana yardımcı olur."
+    },
+    "addTreatment": {
+      "title": "Şu anda kullandığın bir tedavi var mı?",
+      "supporting": "İstersen ilaç veya iğne planını şimdi ekleyebilirsin.",
+      "addMedication": "İlaç ekle",
+      "addInjection": "İğne ekle"
     },
     "addMedication": {
       "title": "İlk ilacınızı ekleyin"
@@ -47,8 +76,28 @@
     "addInjection": {
       "title": "İlk iğnenizi ekleyin"
     },
+    "reminders": {
+      "title": "Dozlarını ve randevularını hatırlayabilirsin.",
+      "supporting": "Hatırlatıcıları yalnızca sen açtığında kullanırız.",
+      "examples": {
+        "medicationTimes": "İlaç saatleri",
+        "injectionDates": "İğne tarihleri",
+        "appointments": "Randevular"
+      },
+      "enableCta": "Hatırlatıcıları ayarla"
+    },
     "addAppointment": {
-      "title": "Yaklaşan bir randevu ekleyin"
+      "title": "Yaklaşan bir randevun var mı?",
+      "supporting": "Eklediğinde Bugün ekranında ve randevu hazırlığında görebilirsin.",
+      "cta": "Randevu ekle"
+    },
+    "ready": {
+      "title": "Her şey hazır.",
+      "treatmentCount": "%{count} tedavi",
+      "appointmentCount": "%{count} yaklaşan randevu",
+      "checkInReady": "Günlük takip hazır",
+      "supporting": "İstediğin zaman ilaç, iğne veya randevu ekleyebilirsin.",
+      "cta": "Bugün'e git"
     },
     "reminderPrompt": "Zamanı geldiğinde size hatırlatacağız"
   },
@@ -337,6 +386,7 @@
     "checkInSectionTitle": "Günlük kontrol",
     "checkInPrompt": "Bugün henüz kayıt yapmadın.",
     "checkInCta": "Kontrolü başlat",
-    "checkInCompleted": "Kontrol kaydedildi — Ağrı %{pain}, Tutukluk %{stiffness}"
+    "checkInCompleted": "Kontrol kaydedildi — Ağrı %{pain}, Tutukluk %{stiffness}",
+    "previewOnboardingDevOnly": "Onboarding'i önizle (yalnızca web)"
   }
 }

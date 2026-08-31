@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 
 import { Button, Chip, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
-import { finishOnboarding } from "@/features/onboarding/finishOnboarding";
+import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
 import { setOnboardingSelection, type OnboardingSelection } from "@/features/onboarding/onboardingDraft";
 
 const DEFAULT_SELECTION: OnboardingSelection = {
@@ -25,39 +25,30 @@ export default function WhatToRememberScreen() {
 
   const handleContinue = () => {
     setOnboardingSelection(selection);
-
-    // Symptoms has no dedicated onboarding step (the check-in sheet is
-    // reached from Today itself once onboarding finishes) - the selection
-    // is still recorded either way, but only Medications/Injections/
-    // Appointments lead to an add step here, in that order.
-    if (selection.medications) {
-      router.push("/onboarding/add-medication");
-      return;
-    }
-    if (selection.injections) {
-      router.push("/onboarding/add-injection");
-      return;
-    }
-    if (selection.appointments) {
-      router.push("/onboarding/add-appointment");
-      return;
-    }
-    finishOnboarding();
-    router.replace("/");
+    // Every path now flows through the fixed check-in preview → add-treatment
+    // → reminders → optional appointment → ready sequence (Redesign Spec
+    // §4); the selection made here still personalizes which "add" action is
+    // offered on the Add-treatment screen, it just no longer branches the
+    // route taken from this screen directly.
+    router.push("/onboarding/checkin-preview");
   };
 
   return (
     <ScreenContainer>
+      <OnboardingProgress step={3} />
       <View style={{ flex: 1 }}>
         <Text
           style={{
-            fontSize: typography.headline.fontSize,
-            fontWeight: typography.headline.fontWeight,
+            fontSize: typography.title.fontSize,
+            fontWeight: typography.title.fontWeight,
             color: colors.textPrimary,
-            marginBottom: spacing.lg,
+            marginBottom: spacing.xs,
           }}
         >
           {t("onboarding.whatToRemember.title")}
+        </Text>
+        <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary, marginBottom: spacing.lg }}>
+          {t("onboarding.whatToRemember.supporting")}
         </Text>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs }}>
           <Chip

@@ -6,7 +6,7 @@ import { Button, Chip, ScreenContainer, StepperField, useTheme } from "@/design-
 import { useTranslation } from "@/localization";
 import { useAppointments } from "@/features/appointments/useAppointments";
 import type { CreateAppointmentInput } from "@/repositories";
-import { finishOnboarding } from "@/features/onboarding/finishOnboarding";
+import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
 
 const APPOINTMENT_TYPES: CreateAppointmentInput["type"][] = ["rheumatology", "laboratory", "imaging", "other"];
 
@@ -20,9 +20,11 @@ export default function OnboardingAddAppointmentScreen() {
   const [daysFromToday, setDaysFromToday] = useState(14);
   const [submitting, setSubmitting] = useState(false);
 
+  // Redesign Spec §4: this is now the second-to-last onboarding step — it
+  // always continues to the Ready-summary screen next, which is what
+  // actually completes onboarding.
   const proceed = () => {
-    finishOnboarding();
-    router.replace("/");
+    router.push("/onboarding/ready");
   };
 
   const handleSave = async () => {
@@ -36,8 +38,12 @@ export default function OnboardingAddAppointmentScreen() {
 
   return (
     <ScreenContainer scroll>
+      <OnboardingProgress step={7} />
       <Text style={{ fontSize: 20, fontWeight: "600", color: colors.textPrimary, marginBottom: 16 }}>
         {t("onboarding.addAppointment.title")}
+      </Text>
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
+        {t("onboarding.addAppointment.supporting")}
       </Text>
 
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xs }}>
@@ -60,7 +66,7 @@ export default function OnboardingAddAppointmentScreen() {
         />
       </View>
 
-      <Button label={t("appointments.form.save")} onPress={handleSave} loading={submitting} />
+      <Button label={t("onboarding.addAppointment.cta")} onPress={handleSave} loading={submitting} />
       <Button label={t("common.skip")} onPress={proceed} variant="secondary" />
     </ScreenContainer>
   );

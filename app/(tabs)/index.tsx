@@ -1,7 +1,7 @@
 import { Redirect, useRouter } from "expo-router";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 
-import { Button, DateBlock, ListRow, SectionLabel, ScreenContainer, useTheme } from "@/design-system";
+import { AccessibleTouchable, Button, DateBlock, ListRow, SectionLabel, ScreenContainer, useTheme } from "@/design-system";
 import { formatDateBlock, formatHeadingDate, useTranslation } from "@/localization";
 import { useOnboardingState } from "@/features/onboarding/useOnboardingState";
 import { useTodayData } from "@/features/today/useTodayData";
@@ -136,6 +136,25 @@ function TodayContent() {
           </View>
         </>
       )}
+
+      {/* Dev-web-preview-only entry point: the seeded web preview store
+          starts with onboarding already completed, so this is the only way
+          to reach the onboarding flow from the running preview without
+          typing the URL directly. Platform-gated identically to the mobile
+          preview shell in app/_layout.tsx; unreachable on iOS/Android and
+          never touches real onboarding-completion persistence. */}
+      {Platform.OS === "web" ? (
+        <AccessibleTouchable
+          onPress={() => router.push("/onboarding/welcome")}
+          accessibilityRole="button"
+          accessibilityLabel={t("today.previewOnboardingDevOnly")}
+          style={{ marginTop: spacing.lg, alignSelf: "center" }}
+        >
+          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>
+            {t("today.previewOnboardingDevOnly")}
+          </Text>
+        </AccessibleTouchable>
+      ) : null}
     </ScreenContainer>
   );
 }

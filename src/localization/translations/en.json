@@ -5,6 +5,7 @@
     "save": "Save",
     "retry": "Retry",
     "skip": "Skip for now",
+    "later": "Later",
     "continue": "Continue",
     "add": "Add",
     "back": "Back",
@@ -28,18 +29,46 @@
     "remindersOff": "Reminders are off — enable them in Settings to get notified."
   },
   "onboarding": {
+    "progress": {
+      "label": "Step %{step} of %{total}"
+    },
     "welcome": {
-      "title": "Ankilozanapp remembers what happens between your rheumatology appointments."
+      "eyebrow": "Daily tracking for ankylosing spondylitis",
+      "title": "Tracking your health is now easier.",
+      "supporting": "Organize your symptoms, treatments, and appointments in one place.",
+      "cta": "Let's get started"
     },
     "privacy": {
-      "body": "Your health information is stored on this device. It's yours — you can export or delete it anytime."
+      "title": "Your health information is yours.",
+      "body": "In this version, your health records are stored on your device.",
+      "reassurance": {
+        "onDevice": "Your health data stays on your device",
+        "noAdsOrAnalytics": "No ads or health-data analytics are used",
+        "deletableAnytime": "You can delete your data anytime"
+      },
+      "moreLink": "More about privacy"
     },
     "whatToRemember": {
-      "title": "What do you want help remembering?",
+      "title": "What do you want to track?",
+      "supporting": "You can change this anytime.",
       "medications": "Medications",
       "injections": "Injections",
       "appointments": "Appointments",
       "symptoms": "Symptoms"
+    },
+    "checkInPreview": {
+      "title": "Your daily check-in takes under a minute.",
+      "pain": "Pain",
+      "stiffness": "Morning stiffness",
+      "fatigue": "Fatigue",
+      "minutesUnit": "min",
+      "supporting": "It helps you remember how you've been feeling over time."
+    },
+    "addTreatment": {
+      "title": "Are you currently on a treatment?",
+      "supporting": "You can add your medication or injection plan now, if you'd like.",
+      "addMedication": "Add medication",
+      "addInjection": "Add injection"
     },
     "addMedication": {
       "title": "Add your first medication"
@@ -47,8 +76,28 @@
     "addInjection": {
       "title": "Add your first injection"
     },
+    "reminders": {
+      "title": "You can be reminded about your doses and appointments.",
+      "supporting": "We only use reminders once you turn them on.",
+      "examples": {
+        "medicationTimes": "Medication times",
+        "injectionDates": "Injection dates",
+        "appointments": "Appointments"
+      },
+      "enableCta": "Set up reminders"
+    },
     "addAppointment": {
-      "title": "Add an upcoming appointment"
+      "title": "Add an upcoming appointment",
+      "supporting": "You'll see it on Today and in appointment preparation.",
+      "cta": "Add appointment"
+    },
+    "ready": {
+      "title": "Everything's ready.",
+      "treatmentCount": "%{count} treatments",
+      "appointmentCount": "%{count} upcoming appointments",
+      "checkInReady": "Daily tracking is ready",
+      "supporting": "You can add a medication, injection, or appointment anytime.",
+      "cta": "Go to Today"
     },
     "reminderPrompt": "We'll remind you when it's time"
   },
@@ -337,6 +386,7 @@
     "checkInSectionTitle": "Daily check-in",
     "checkInPrompt": "You haven't checked in yet today.",
     "checkInCta": "Start check-in",
-    "checkInCompleted": "Checked in — Pain %{pain}, Stiffness %{stiffness}"
+    "checkInCompleted": "Checked in — Pain %{pain}, Stiffness %{stiffness}",
+    "previewOnboardingDevOnly": "Preview onboarding (web only)"
   }
 }
