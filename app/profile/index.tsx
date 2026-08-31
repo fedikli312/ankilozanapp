@@ -1,31 +1,40 @@
 import { useRouter } from "expo-router";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
-import { ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { ListRow, SectionLabel, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
-  const { colors, typography, spacing } = useTheme();
+  const { colors } = useTheme();
   const router = useRouter();
 
+  const divider = <View style={{ height: 1, backgroundColor: colors.borderHairline }} />;
+
   return (
-    <ScreenContainer>
-      <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
-        {t("profile.title")}
-      </Text>
+    <ScreenContainer scroll>
+      <SectionLabel>{t("profile.group.reminders")}</SectionLabel>
       <View>
-        <ListRow label={t("profile.reminderSettings")} onPress={() => router.push("/profile/reminder-settings")} />
-        <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("profile.notificationPrivacy")} onPress={() => router.push("/profile/notification-privacy")} />
-        <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("profile.language")} onPress={() => router.push("/profile/language")} />
-        <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("profile.privacyAndData")} onPress={() => router.push("/profile/privacy-data")} />
-        <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("profile.disclaimer")} onPress={() => router.push("/profile/disclaimer")} />
-        <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("profile.about")} onPress={() => router.push("/profile/about")} />
+        <ListRow label={t("profile.reminderSettings")} onPress={() => router.push("/profile/reminder-settings")} chevron />
+        {divider}
+        <ListRow label={t("profile.notificationPrivacy")} onPress={() => router.push("/profile/notification-privacy")} chevron />
+      </View>
+
+      <SectionLabel>{t("profile.group.preferences")}</SectionLabel>
+      <View>
+        <ListRow label={t("profile.language")} onPress={() => router.push("/profile/language")} chevron />
+      </View>
+
+      <SectionLabel>{t("profile.group.privacyData")}</SectionLabel>
+      <View>
+        <ListRow label={t("profile.privacyAndData")} onPress={() => router.push("/profile/privacy-data")} chevron />
+      </View>
+
+      <SectionLabel>{t("profile.group.about")}</SectionLabel>
+      <View>
+        <ListRow label={t("profile.disclaimer")} onPress={() => router.push("/profile/disclaimer")} chevron />
+        {divider}
+        <ListRow label={t("profile.about")} onPress={() => router.push("/profile/about")} chevron />
       </View>
     </ScreenContainer>
   );

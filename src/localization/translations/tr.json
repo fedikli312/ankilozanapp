@@ -267,6 +267,7 @@
   },
   "track": {
     "title": "Takip",
+    "subtitle": "Sağlık geçmişin",
     "symptoms": "Belirtiler",
     "labs": "Tahliller",
     "noneYet": "Henüz bir şey yok",
@@ -282,6 +283,12 @@
   },
   "profile": {
     "title": "Profil",
+    "group": {
+      "reminders": "Hatırlatıcılar",
+      "preferences": "Tercihler",
+      "privacyData": "Gizlilik ve veriler",
+      "about": "Hakkında"
+    },
     "reminderSettings": "Hatırlatıcı ayarları",
     "notificationPrivacy": "Bildirim gizliliği",
     "language": "Dil",
@@ -322,13 +329,14 @@
     "title": "Bugün",
     "emptyPrompt": "Burada görmek için ilk ilacınızı veya iğnenizi ekleyin.",
     "emptyAction": "Başlayın",
-    "dueToday": "Bugün yapılacaklar",
+    "dueToday": "Bugün",
     "nextMedication": "Sonraki ilaç",
-    "nextInjection": "Sonraki iğne",
+    "nextInjection": "Sıradaki",
     "upcomingAppointment": "Yaklaşan randevu",
     "logNow": "Şimdi kaydet",
-    "checkInPrompt": "Bugün nasıl hissediyorsunuz?",
-    "checkInCta": "Kontrol kaydet",
+    "checkInSectionTitle": "Günlük kontrol",
+    "checkInPrompt": "Bugün henüz kayıt yapmadın.",
+    "checkInCta": "Kontrolü başlat",
     "checkInCompleted": "Kontrol kaydedildi — Ağrı %{pain}, Tutukluk %{stiffness}"
   }
 }

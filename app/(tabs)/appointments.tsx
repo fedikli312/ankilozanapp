@@ -1,19 +1,19 @@
 import { useRouter } from "expo-router";
 import { SectionList, Text, View } from "react-native";
 
-import { Button, ListRow, ScreenContainer, useTheme } from "@/design-system";
-import { useTranslation } from "@/localization";
+import { Button, DateBlock, ListRow, SectionLabel, ScreenContainer, useTheme } from "@/design-system";
+import { formatDateBlock, useTranslation } from "@/localization";
 import { useAppointments } from "@/features/appointments/useAppointments";
 
 export default function AppointmentsListScreen() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const { upcoming, past } = useAppointments();
 
   const sections = [
-    ...(upcoming.length > 0 ? [{ title: t("appointments.upcoming"), data: upcoming }] : []),
-    ...(past.length > 0 ? [{ title: t("appointments.past"), data: past }] : []),
+    ...(upcoming.length > 0 ? [{ title: t("appointments.upcoming"), data: upcoming, emphasis: "strong" as const }] : []),
+    ...(past.length > 0 ? [{ title: t("appointments.past"), data: past, emphasis: "quiet" as const }] : []),
   ];
 
   if (sections.length === 0) {
@@ -31,24 +31,28 @@ export default function AppointmentsListScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
-        {t("appointments.listTitle")}
-      </Text>
       <SectionList
         sections={sections}
         keyExtractor={(item) => item.id}
-        renderSectionHeader={({ section }) => (
-          <Text style={{ fontSize: typography.headline.fontSize, color: colors.textPrimary, marginTop: spacing.md, marginBottom: spacing.xs }}>
-            {section.title}
-          </Text>
-        )}
-        renderItem={({ item }) => (
-          <ListRow
-            label={item.doctorOrInstitution || t(`appointments.type.${item.type}`)}
-            caption={`${t(`appointments.type.${item.type}`)} · ${item.date}${item.time ? ` · ${item.time}` : ""}`}
-            onPress={() => router.push(`/appointments/${item.id}`)}
-          />
-        )}
+        renderSectionHeader={({ section }) => <SectionLabel>{section.title}</SectionLabel>}
+        renderItem={({ item, section }) => {
+          const block = formatDateBlock(new Date(item.date), locale);
+          const typeLabel = t(`appointments.type.${item.type}`);
+          const caption = item.doctorOrInstitution
+            ? section.emphasis === "strong" && item.time
+              ? `${typeLabel} · ${item.time}`
+              : typeLabel
+            : item.time ?? undefined;
+          return (
+            <ListRow
+              leading={<DateBlock day={block.day} month={block.month} emphasis={section.emphasis} />}
+              label={item.doctorOrInstitution || typeLabel}
+              caption={caption}
+              onPress={() => router.push(`/appointments/${item.id}`)}
+              chevron
+            />
+          );
+        }}
         ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: colors.borderHairline }} />}
       />
       <View style={{ marginTop: spacing.md }}>

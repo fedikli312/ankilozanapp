@@ -1,4 +1,6 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+import type { ComponentProps } from "react";
 import { Text, View } from "react-native";
 
 import { ListRow, ScreenContainer, useTheme } from "@/design-system";
@@ -34,19 +36,23 @@ export default function TrackLandingScreen() {
       })
     : t("track.noneYet");
 
+  const icon = (name: ComponentProps<typeof Ionicons>["name"]) => (
+    <Ionicons name={name} size={20} color={colors.textSecondary} />
+  );
+
   return (
     <ScreenContainer>
-      <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
-        {t("track.title")}
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
+        {t("track.subtitle")}
       </Text>
       <View>
-        <ListRow label={t("track.symptoms")} caption={symptomsCaption} onPress={() => router.push("/symptoms")} />
+        <ListRow leading={icon("pulse-outline")} label={t("track.symptoms")} caption={symptomsCaption} onPress={() => router.push("/symptoms")} chevron />
         <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("medications.listTitle")} caption={medicationsCaption} onPress={() => router.push("/medications")} />
+        <ListRow leading={icon("medkit-outline")} label={t("medications.listTitle")} caption={medicationsCaption} onPress={() => router.push("/medications")} chevron />
         <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("injections.listTitle")} caption={injectionsCaption} onPress={() => router.push("/injections")} />
+        <ListRow leading={icon("water-outline")} label={t("injections.listTitle")} caption={injectionsCaption} onPress={() => router.push("/injections")} chevron />
         <View style={{ height: 1, backgroundColor: colors.borderHairline }} />
-        <ListRow label={t("track.labs")} caption={labsCaption} onPress={() => router.push("/labs")} />
+        <ListRow leading={icon("flask-outline")} label={t("track.labs")} caption={labsCaption} onPress={() => router.push("/labs")} chevron />
       </View>
     </ScreenContainer>
   );

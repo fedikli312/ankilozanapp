@@ -1,20 +1,20 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs, useRouter } from "expo-router";
-import { Text } from "react-native";
+import type { ComponentProps } from "react";
 
 import { AccessibleTouchable, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 
-function TabIcon({ glyph, focused }: { glyph: string; focused: boolean }) {
+type IoniconName = ComponentProps<typeof Ionicons>["name"];
+
+function TabIcon({ outline, filled, focused }: { outline: IoniconName; filled: IoniconName; focused: boolean }) {
   const { colors } = useTheme();
-  return <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.5, color: colors.accent }}>{glyph}</Text>;
+  return <Ionicons name={focused ? filled : outline} size={22} color={focused ? colors.accent : colors.textSecondary} />;
 }
 
 /**
  * Profile is a persistent top-right icon on every tab's nav bar, not a 5th
- * tab (UX spec §A/§Q, PROJECT_MEMORY.md's approved 4-tab decision). Uses a
- * plain text glyph rather than an icon library — no new dependency, same
- * approach as the design system's existing glyph buttons (Chip's checkmark,
- * StepperField's +/-).
+ * tab (UX spec §A/§Q, PROJECT_MEMORY.md's approved 4-tab decision).
  */
 function ProfileHeaderButton() {
   const { colors } = useTheme();
@@ -28,7 +28,7 @@ function ProfileHeaderButton() {
       accessibilityLabel={t("profile.title")}
       style={{ paddingHorizontal: 12, alignItems: "center", justifyContent: "center" }}
     >
-      <Text style={{ fontSize: 20, color: colors.accent }}>{"⚙"}</Text>
+      <Ionicons name="settings-outline" size={22} color={colors.accent} />
     </AccessibleTouchable>
   );
 }
@@ -41,10 +41,14 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerRight: () => <ProfileHeaderButton />,
-        headerStyle: { backgroundColor: colors.background },
+        headerStyle: { backgroundColor: colors.surface },
         headerTitleStyle: { color: colors.textPrimary },
         headerShadowVisible: false,
-        tabBarStyle: { backgroundColor: colors.background },
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.borderHairline,
+          borderTopWidth: 1,
+        },
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textSecondary,
       }}
@@ -54,7 +58,7 @@ export default function TabsLayout() {
         options={{
           title: t("today.title"),
           tabBarLabel: t("tabs.today"),
-          tabBarIcon: ({ focused }) => <TabIcon glyph="☀" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon outline="home-outline" filled="home" focused={focused} />,
         }}
       />
       <Tabs.Screen
@@ -62,7 +66,7 @@ export default function TabsLayout() {
         options={{
           title: t("track.title"),
           tabBarLabel: t("tabs.track"),
-          tabBarIcon: ({ focused }) => <TabIcon glyph="📋" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon outline="pulse-outline" filled="pulse" focused={focused} />,
         }}
       />
       <Tabs.Screen
@@ -70,7 +74,7 @@ export default function TabsLayout() {
         options={{
           title: t("appointments.listTitle"),
           tabBarLabel: t("tabs.appointments"),
-          tabBarIcon: ({ focused }) => <TabIcon glyph="📅" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon outline="calendar-outline" filled="calendar" focused={focused} />,
         }}
       />
       <Tabs.Screen
@@ -78,7 +82,7 @@ export default function TabsLayout() {
         options={{
           title: t("insights.title"),
           tabBarLabel: t("tabs.insights"),
-          tabBarIcon: ({ focused }) => <TabIcon glyph="📈" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon outline="analytics-outline" filled="analytics" focused={focused} />,
         }}
       />
     </Tabs>

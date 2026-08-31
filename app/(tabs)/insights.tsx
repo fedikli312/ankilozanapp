@@ -1,4 +1,6 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+import type { ComponentProps } from "react";
 import { FlatList, Text, View } from "react-native";
 
 import { ListRow, ScreenContainer, useTheme } from "@/design-system";
@@ -52,29 +54,32 @@ export default function InsightsLandingScreen() {
   const router = useRouter();
   const data = useInsightsLanding();
 
-  const rows: { key: InsightMetricKey; label: string; summary: string }[] = [
-    { key: "pain", label: t("insights.metric.pain"), summary: numericSummary(t, data.pain) },
-    { key: "stiffness", label: t("insights.metric.stiffness"), summary: stiffnessSummary(t, data.stiffness) },
-    { key: "fatigue", label: t("insights.metric.fatigue"), summary: numericSummary(t, data.fatigue) },
-    { key: "medicationAdherence", label: t("insights.metric.medicationAdherence"), summary: adherenceSummary(t, data.medicationAdherence) },
-    { key: "injectionHistory", label: t("insights.metric.injectionHistory"), summary: injectionSummary(t, data.injectionHistory) },
-    { key: "crp", label: t("insights.metric.crp"), summary: labSummary(t, data.crp) },
-    { key: "esr", label: t("insights.metric.esr"), summary: labSummary(t, data.esr) },
+  const rows: { key: InsightMetricKey; label: string; summary: string; icon: ComponentProps<typeof Ionicons>["name"] }[] = [
+    { key: "pain", label: t("insights.metric.pain"), summary: numericSummary(t, data.pain), icon: "pulse-outline" },
+    { key: "stiffness", label: t("insights.metric.stiffness"), summary: stiffnessSummary(t, data.stiffness), icon: "time-outline" },
+    { key: "fatigue", label: t("insights.metric.fatigue"), summary: numericSummary(t, data.fatigue), icon: "battery-half-outline" },
+    { key: "medicationAdherence", label: t("insights.metric.medicationAdherence"), summary: adherenceSummary(t, data.medicationAdherence), icon: "medkit-outline" },
+    { key: "injectionHistory", label: t("insights.metric.injectionHistory"), summary: injectionSummary(t, data.injectionHistory), icon: "water-outline" },
+    { key: "crp", label: t("insights.metric.crp"), summary: labSummary(t, data.crp), icon: "flask-outline" },
+    { key: "esr", label: t("insights.metric.esr"), summary: labSummary(t, data.esr), icon: "flask-outline" },
   ];
 
   return (
     <ScreenContainer>
-      <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary }}>
-        {t("insights.title")}
-      </Text>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.xs, marginBottom: spacing.md }}>
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
         {t("insights.disclaimer")}
       </Text>
       <FlatList
         data={rows}
         keyExtractor={(item) => item.key}
         renderItem={({ item }) => (
-          <ListRow label={item.label} caption={item.summary} onPress={() => router.push(`/insights/${item.key}`)} />
+          <ListRow
+            leading={<Ionicons name={item.icon} size={20} color={colors.textSecondary} />}
+            label={item.label}
+            caption={item.summary}
+            onPress={() => router.push(`/insights/${item.key}`)}
+            chevron
+          />
         )}
         ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: colors.borderHairline }} />}
       />

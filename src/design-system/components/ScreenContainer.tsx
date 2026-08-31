@@ -8,12 +8,12 @@ export type ScreenContainerProps = PropsWithChildren<{
   scroll?: boolean;
 }>;
 
-/** Warm background per Visual Design Spec §4/§5, safe-area aware. */
+/** Warm canvas background per Redesign Spec §2.2, safe-area aware. */
 export function ScreenContainer({ children, scroll }: ScreenContainerProps) {
   const { colors, spacing } = useTheme();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.backgroundWarm }}>
       {scroll ? (
         <ScrollView contentContainerStyle={{ padding: spacing.lg }}>{children}</ScrollView>
       ) : (

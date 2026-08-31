@@ -21,3 +21,24 @@ export function formatDate(date: Date, locale: SupportedLocale): string {
 export function formatNumber(value: number, locale: SupportedLocale): string {
   return new Intl.NumberFormat(INTL_LOCALE_TAG[locale]).format(value);
 }
+
+/** Today's header subtitle, e.g. "28 Ağustos 2026, Cuma" — display only. */
+export function formatHeadingDate(date: Date, locale: SupportedLocale): string {
+  const dayMonthYear = new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+  const weekday = new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { weekday: "long" }).format(date);
+  return `${dayMonthYear}, ${weekday}`;
+}
+
+/** Compact day/month for the appointment date-block (Visual Design Spec §26's date pill), e.g. { day: "07", month: "EYL" }. */
+export function formatDateBlock(date: Date, locale: SupportedLocale): { day: string; month: string } {
+  const day = new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { day: "2-digit" }).format(date);
+  const month = new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { month: "short" })
+    .format(date)
+    .replace(".", "")
+    .toUpperCase();
+  return { day, month };
+}

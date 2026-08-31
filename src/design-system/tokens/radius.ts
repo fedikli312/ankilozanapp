@@ -1,5 +1,7 @@
 /**
- * Corner-radius tokens — docs/VISUAL_DESIGN_SPECIFICATION.md §8.
+ * Corner-radius tokens — docs/VISUAL_DESIGN_SPECIFICATION.md §8, unchanged
+ * by the redesign (docs/REDESIGN_SPECIFICATION.md §2.5 calls for 14-18pt
+ * card radius — `standard` (16) already sits inside that range).
  * Intentionally small/restrained scale. `pill` is computed per-control from
  * its own height (height / 2), not a fixed number.
  */

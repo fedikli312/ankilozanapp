@@ -22,11 +22,13 @@ export type UpcomingAppointmentRow = {
   type: "rheumatology" | "laboratory" | "imaging" | "other";
   doctorOrInstitution: string | null;
   date: string;
+  time: string | null;
 };
 
 export type DueMedicationRow = {
   administrationId: string;
   medicationName: string;
+  medicationDose: string;
   scheduledFor: string;
 };
 
@@ -65,18 +67,18 @@ export function useTodayData() {
   // 14-day window, named domain constant (Tech Arch §D) — same rule as the Appointments tab's own 14-day surfacing, applied here via the repository helper that already wraps it.
   const upcomingAppointment: UpcomingAppointmentRow | null = getUpcomingAppointments(db, today)
     .sort((a, b) => a.date.localeCompare(b.date))
-    .map((a) => ({ id: a.id, type: a.type, doctorOrInstitution: a.doctorOrInstitution, date: a.date }))[0] ?? null;
+    .map((a) => ({ id: a.id, type: a.type, doctorOrInstitution: a.doctorOrInstitution, date: a.date, time: a.time ?? null }))[0] ?? null;
 
   const allMedicationAdministrations = medications.flatMap((medication) =>
     getAdministrationsForMedication(db, medication.id)
       .filter((a) => a.status === "pending")
-      .map((a) => ({ ...a, medicationName: medication.name })),
+      .map((a) => ({ ...a, medicationName: medication.name, medicationDose: medication.dose })),
   );
 
   const dueToday: DueMedicationRow[] = allMedicationAdministrations
     .filter((a) => a.scheduledFor.startsWith(today))
     .sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor))
-    .map((a) => ({ administrationId: a.id, medicationName: a.medicationName, scheduledFor: a.scheduledFor }));
+    .map((a) => ({ administrationId: a.id, medicationName: a.medicationName, medicationDose: a.medicationDose, scheduledFor: a.scheduledFor }));
 
   const nextMedicationSorted = allMedicationAdministrations
     .slice()
@@ -85,6 +87,7 @@ export function useTodayData() {
     ? {
         administrationId: nextMedicationSorted[0].id,
         medicationName: nextMedicationSorted[0].medicationName,
+        medicationDose: nextMedicationSorted[0].medicationDose,
         scheduledFor: nextMedicationSorted[0].scheduledFor,
       }
     : null;

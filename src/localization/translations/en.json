@@ -267,6 +267,7 @@
   },
   "track": {
     "title": "Track",
+    "subtitle": "Your health history",
     "symptoms": "Symptoms",
     "labs": "Labs",
     "noneYet": "Nothing yet",
@@ -282,6 +283,12 @@
   },
   "profile": {
     "title": "Profile",
+    "group": {
+      "reminders": "Reminders",
+      "preferences": "Preferences",
+      "privacyData": "Privacy & data",
+      "about": "About"
+    },
     "reminderSettings": "Reminder settings",
     "notificationPrivacy": "Notification privacy",
     "language": "Language",
@@ -322,13 +329,14 @@
     "title": "Today",
     "emptyPrompt": "Add your first medication or injection to see it here.",
     "emptyAction": "Get started",
-    "dueToday": "Due today",
+    "dueToday": "Today",
     "nextMedication": "Next medication",
-    "nextInjection": "Next injection",
+    "nextInjection": "Next up",
     "upcomingAppointment": "Upcoming appointment",
     "logNow": "Log now",
-    "checkInPrompt": "How are you feeling today?",
-    "checkInCta": "Check in",
+    "checkInSectionTitle": "Daily check-in",
+    "checkInPrompt": "You haven't checked in yet today.",
+    "checkInCta": "Start check-in",
     "checkInCompleted": "Checked in — Pain %{pain}, Stiffness %{stiffness}"
   }
 }
