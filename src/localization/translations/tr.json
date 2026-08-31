@@ -276,12 +276,23 @@
   },
   "labs": {
     "addAction": "Sonuç ekle",
+    "subtitle": "Sonuçlarını zaman içinde takip et.",
+    "latestResultsTitle": "Son sonuçlar",
     "emptyTitle": "Henüz %{marker} sonucu yok",
     "latest": "Son değer: %{value} %{unit} (%{date})",
     "rangeSummary": "%{count} sonuç arasında %{min} ile %{max} %{unit} arasında değişti",
     "marker": {
       "CRP": "CRP",
-      "ESR": "ESR"
+      "ESR": "Sedimentasyon"
+    },
+    "detail": {
+      "historyTitle": "Geçmiş",
+      "trendTitle": "Trend",
+      "needMoreForTrend": "Trend için daha fazla sonuç gerekli.",
+      "previousChangeLabel": "Önceki sonuca göre",
+      "emptyTitle": "Henüz tahlil sonucu eklemedin.",
+      "emptyBody": "CRP ve sedimentasyon sonuçlarını zaman içinde takip edebilirsin.",
+      "chartSummary": "%{marker} için son %{count} kayıt gösteriliyor. Son değer %{value} %{unit}."
     },
     "form": {
       "unit": "Birim",

@@ -276,12 +276,23 @@
   },
   "labs": {
     "addAction": "Add result",
+    "subtitle": "Track your results over time.",
+    "latestResultsTitle": "Latest results",
     "emptyTitle": "No %{marker} results yet",
     "latest": "Latest: %{value} %{unit} (%{date})",
     "rangeSummary": "Ranged from %{min} to %{max} %{unit} across %{count} results",
     "marker": {
       "CRP": "CRP",
       "ESR": "ESR"
+    },
+    "detail": {
+      "historyTitle": "History",
+      "trendTitle": "Trend",
+      "needMoreForTrend": "More results are needed for a trend.",
+      "previousChangeLabel": "Compared to previous result",
+      "emptyTitle": "You haven't added a lab result yet.",
+      "emptyBody": "You can track CRP and ESR results over time.",
+      "chartSummary": "Showing the last %{count} %{marker} results. Latest value %{value} %{unit}."
     },
     "form": {
       "unit": "Unit",

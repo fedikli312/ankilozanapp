@@ -9,7 +9,7 @@ import { useLabResults, type LabMarker } from "@/features/labs/useLabResults";
 export default function AddOrEditLabResultScreen() {
   const { marker, id } = useLocalSearchParams<{ marker: LabMarker; id?: string }>();
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const { results, addResult, editResult, removeResult } = useLabResults(marker);
 
@@ -17,7 +17,7 @@ export default function AddOrEditLabResultScreen() {
 
   return (
     <ScreenContainer scroll>
-      <Text style={{ fontSize: 20, fontWeight: "600", color: colors.textPrimary, marginBottom: 16 }}>
+      <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {existing ? t("labs.form.editTitle") : t("labs.addAction")}
       </Text>
       <LabResultForm
@@ -44,7 +44,7 @@ export default function AddOrEditLabResultScreen() {
         }}
       />
       {existing ? (
-        <View style={{ marginTop: 16 }}>
+        <View style={{ marginTop: spacing.md }}>
           <Button
             label={t("labs.form.delete")}
             variant="destructive"
