@@ -386,6 +386,8 @@
     "injectionsNextIn": "Next: in %{count} days",
     "labsLatestResult": "Latest result: %{date}",
     "supportGroupTitle": "Daily support",
+    "knowledge": "Understand Your AS",
+    "knowledgeCaption": "Short, trustworthy information about AS",
     "nutrition": "Nutrition",
     "nutritionCaption": "General information for daily nutrition",
     "breathing": "Breathing & Posture",
@@ -475,8 +477,9 @@
     "recentCheckInFrequency": "Check-in frequency",
     "recentFrequencyUnit": "/7 days",
     "previewOnboardingDevOnly": "Preview onboarding (web only)",
-    "supportiveTitle": "A short break for today",
-    "supportiveBreathing": "Breathing & Posture"
+    "supportiveTitle": "For today",
+    "supportiveBreathing": "Breathing & Posture",
+    "supportiveKnowledge": "%{title} · %{readTime}"
   },
   "nutrition": {
     "title": "Nutrition",
@@ -518,6 +521,24 @@
       "deskBreakTitle": "Desk break",
       "deskBreakDuration": "1 minute",
       "deskBreakBody": "Take a short break when you've been in the same position for a while.\nStand up or change position comfortably."
+    }
+  },
+  "knowledge": {
+    "title": "Understand Your AS",
+    "subtitle": "Short, trustworthy, and easy to understand.",
+    "featuredLabel": "Start here",
+    "keyPointsLabel": "Key points",
+    "sourcesLabel": "Sources",
+    "reviewedLabel": "Last reviewed: %{date}",
+    "openSource": "%{organization} — %{title}, external link",
+    "notFound": "Content not found.",
+    "disclaimer": "This content is for general information only and is not a substitute for personal medical advice.",
+    "category": {
+      "basics": "Basics",
+      "symptoms": "Understanding symptoms",
+      "treatment": "Understanding treatment",
+      "dailyLife": "Daily life",
+      "appointmentPrep": "Appointment prep"
     }
   }
 }

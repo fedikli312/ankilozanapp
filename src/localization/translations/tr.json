@@ -386,6 +386,8 @@
     "injectionsNextIn": "Sonraki: %{count} gün sonra",
     "labsLatestResult": "Son sonuç: %{date}",
     "supportGroupTitle": "Günlük destek",
+    "knowledge": "Ankilozanı Anla",
+    "knowledgeCaption": "AS hakkında kısa, güvenilir bilgiler",
     "nutrition": "Beslenme",
     "nutritionCaption": "Günlük beslenme için genel bilgiler",
     "breathing": "Nefes & Postür",
@@ -475,8 +477,9 @@
     "recentCheckInFrequency": "Kontrol sıklığı",
     "recentFrequencyUnit": "/7 gün",
     "previewOnboardingDevOnly": "Onboarding'i önizle (yalnızca web)",
-    "supportiveTitle": "Bugün için kısa bir mola",
-    "supportiveBreathing": "Nefes & Postür"
+    "supportiveTitle": "Bugün için",
+    "supportiveBreathing": "Nefes & Postür",
+    "supportiveKnowledge": "%{title} · %{readTime}"
   },
   "nutrition": {
     "title": "Beslenme",
@@ -518,6 +521,24 @@
       "deskBreakTitle": "Masa başı mola",
       "deskBreakDuration": "1 dakika",
       "deskBreakBody": "Uzun süre aynı pozisyonda kaldığında kısa bir mola ver.\nAyağa kalk veya rahatça pozisyon değiştir."
+    }
+  },
+  "knowledge": {
+    "title": "Ankilozanı Anla",
+    "subtitle": "Kısa, güvenilir ve anlaşılır bilgiler.",
+    "featuredLabel": "Başlangıç",
+    "keyPointsLabel": "Önemli noktalar",
+    "sourcesLabel": "Kaynaklar",
+    "reviewedLabel": "Son gözden geçirme: %{date}",
+    "openSource": "%{organization} — %{title}, harici bağlantı",
+    "notFound": "İçerik bulunamadı.",
+    "disclaimer": "Bu içerikler genel bilgilendirme amaçlıdır ve kişisel tıbbi öneri yerine geçmez.",
+    "category": {
+      "basics": "Temeller",
+      "symptoms": "Belirtileri anlamak",
+      "treatment": "Tedaviyi anlamak",
+      "dailyLife": "Günlük yaşam",
+      "appointmentPrep": "Randevuya hazırlık"
     }
   }
 }

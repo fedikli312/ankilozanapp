@@ -93,6 +93,13 @@ export default function TrackLandingScreen() {
           authoritative as the actual health-record features). */}
       <GroupedList title={t("track.supportGroupTitle")} emphasis="subordinate">
         <ListRow
+          leading={icon("book-outline")}
+          label={t("track.knowledge")}
+          caption={t("track.knowledgeCaption")}
+          onPress={() => router.push("/knowledge")}
+          chevron
+        />
+        <ListRow
           leading={icon("nutrition-outline")}
           label={t("track.nutrition")}
           caption={t("track.nutritionCaption")}
