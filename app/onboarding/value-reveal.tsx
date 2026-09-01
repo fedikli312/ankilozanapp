@@ -33,13 +33,14 @@ export default function ValueRevealScreen() {
   if (goals.includes("appointments") || upcomingAppointmentCount > 0) outcomes.push({ key: "appointment", icon: "calendar-outline" });
 
   const handleContinue = () => {
-    // finishOnboarding() completes onboarding unconditionally, regardless of
-    // what happens next. Phase Q (Hard Paywall + Entitlement UX) is where a
-    // paywall route gets inserted between this CTA and "/" — this call site
-    // is the deliberate insertion point (Product 2.0 spec §14); nothing on
-    // this screen needs to change when that lands.
+    // finishOnboarding() must complete (and persist) onboarding BEFORE the
+    // paywall, not after — Phase Q brief §7: a non-entitled user who closes
+    // the app while on the paywall must not be sent through onboarding
+    // again on relaunch. Completing onboarding and being entitled are two
+    // independent facts (spec §9); this call site is exactly the insertion
+    // point Phase N left for this transition.
     finishOnboarding();
-    router.replace("/");
+    router.replace("/paywall");
   };
 
   return (

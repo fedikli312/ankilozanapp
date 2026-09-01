@@ -114,7 +114,7 @@
         "trends": "Zaman içindeki değişimleri gör",
         "appointment": "Randevuna hazırlan"
       },
-      "cta": "Bugün'e git"
+      "cta": "Devam et"
     },
     "reminderPrompt": "Zamanı geldiğinde sana hatırlatacağız"
   },
@@ -540,5 +540,40 @@
       "dailyLife": "Günlük yaşam",
       "appointmentPrep": "Randevuya hazırlık"
     }
+  },
+  "paywall": {
+    "brand": "Ankilozanapp",
+    "headline": "AS takibini tam senin istediğin gibi kurduk.",
+    "subheadline": "Kişiselleştirilmiş takibine devam etmek için aboneliğini başlat.",
+    "pillar": {
+      "symptoms": "Günlük belirtilerini hızlıca takip et",
+      "treatment": "Tedavi ve enjeksiyon düzenini hatırla",
+      "trends": "Zaman içindeki değişimleri gör",
+      "appointments": "Romatoloji randevularına hazırlan",
+      "knowledge": "Ankilozan hakkında güvenilir içeriklere ulaş"
+    },
+    "planAnnual": "Yıllık",
+    "planMonthly": "Aylık",
+    "recommendedBadge": "Önerilen",
+    "trialBadge": "%{days} gün ücretsiz",
+    "perYear": "%{price} / yıl",
+    "perMonth": "%{price} / ay",
+    "ctaTrial": "%{days} günlük ücretsiz denemeyi başlat",
+    "ctaAnnual": "Yıllık aboneliği başlat",
+    "ctaMonthly": "Aylık aboneliği başlat",
+    "billingTrial": "%{days} gün ücretsiz, sonra %{price}/yıl olarak faturalandırılır. İstediğin zaman iptal edebilirsin.",
+    "billingAnnual": "%{price}/yıl olarak faturalandırılır. İstediğin zaman iptal edebilirsin.",
+    "billingMonthly": "%{price}/ay olarak faturalandırılır. İstediğin zaman iptal edebilirsin.",
+    "restore": "Satın alımları geri yükle",
+    "restoring": "Geri yükleniyor…",
+    "restoreNotFound": "Geri yüklenecek bir abonelik bulunamadı.",
+    "restoreFailed": "Geri yükleme başarısız oldu. Tekrar dene.",
+    "terms": "Şartlar",
+    "privacy": "Gizlilik",
+    "purchaseFailed": "Bir şeyler ters gitti. Tekrar dene.",
+    "purchaseCancelled": "İşlem tamamlanmadı.",
+    "offeringsErrorTitle": "Planlar yüklenemedi.",
+    "offeringsErrorBody": "Bağlantını kontrol edip tekrar dene.",
+    "retry": "Tekrar dene"
   }
 }

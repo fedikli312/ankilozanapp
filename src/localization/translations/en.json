@@ -114,7 +114,7 @@
         "trends": "See how things change over time",
         "appointment": "Walk into appointments prepared"
       },
-      "cta": "Go to Today"
+      "cta": "Continue"
     },
     "reminderPrompt": "We'll remind you when it's time"
   },
@@ -540,5 +540,40 @@
       "dailyLife": "Daily life",
       "appointmentPrep": "Appointment prep"
     }
+  },
+  "paywall": {
+    "brand": "Ankilozanapp",
+    "headline": "We've set up your AS tracking exactly the way you want it.",
+    "subheadline": "Start your subscription to continue with your personalized tracking.",
+    "pillar": {
+      "symptoms": "Track your daily symptoms quickly",
+      "treatment": "Keep your treatment and injection schedule in order",
+      "trends": "See how things change over time",
+      "appointments": "Prepare for your rheumatology appointments",
+      "knowledge": "Access trustworthy information about AS"
+    },
+    "planAnnual": "Annual",
+    "planMonthly": "Monthly",
+    "recommendedBadge": "Recommended",
+    "trialBadge": "%{days}-day free trial",
+    "perYear": "%{price} / year",
+    "perMonth": "%{price} / month",
+    "ctaTrial": "Start your %{days}-day free trial",
+    "ctaAnnual": "Start annual subscription",
+    "ctaMonthly": "Start monthly subscription",
+    "billingTrial": "%{days} days free, then billed at %{price}/year. Cancel anytime.",
+    "billingAnnual": "Billed at %{price}/year. Cancel anytime.",
+    "billingMonthly": "Billed at %{price}/month. Cancel anytime.",
+    "restore": "Restore purchases",
+    "restoring": "Restoring…",
+    "restoreNotFound": "No subscription found to restore.",
+    "restoreFailed": "Restore failed. Please try again.",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "purchaseFailed": "Something went wrong. Please try again.",
+    "purchaseCancelled": "Purchase wasn't completed.",
+    "offeringsErrorTitle": "Plans couldn't load.",
+    "offeringsErrorBody": "Check your connection and try again.",
+    "retry": "Retry"
   }
 }
