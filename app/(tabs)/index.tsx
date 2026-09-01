@@ -40,6 +40,7 @@ function TodayContent() {
     nextMedication,
     nextInjection,
     todaysCheckIn,
+    todaysBodyAreas,
     yesterdayCheckIn,
     recentSummary,
     upcomingAppointment,
@@ -115,6 +116,12 @@ function TodayContent() {
             <MetricCard label={t("checkIn.stiffnessLabel")} value={t(`checkIn.stiffness.${todaysCheckIn.morningStiffnessBucket}`)} />
             <MetricCard label={t("today.metricFatigue")} value={String(todaysCheckIn.fatigue)} unit="/10" />
           </View>
+          {/* Phase O: compact body-area line, only when real — never a placeholder row (Product 2.0 spec §17/§18). */}
+          {todaysBodyAreas.length > 0 ? (
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xxs }}>
+              {todaysBodyAreas.map((area) => t(`checkIn.bodyArea.${area}`)).join(" · ")}
+            </Text>
+          ) : null}
           <AccessibleTouchable onPress={() => router.push("/check-in")} accessibilityRole="button" accessibilityLabel={t("today.viewOrEditCheckIn")}>
             <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent, marginTop: spacing.xxs }}>
               {t("today.viewOrEditCheckIn")}

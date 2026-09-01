@@ -261,7 +261,19 @@
   "checkIn": {
     "title": "Günlük Kayıt",
     "painLabel": "Ağrı, 10 üzerinden %{value}",
+    "pain": {
+      "title": "Ağrı",
+      "anchorNone": "Yok",
+      "anchorMid": "Belirgin",
+      "anchorMax": "Çok yoğun"
+    },
     "fatigueLabel": "Yorgunluk, 10 üzerinden %{value}",
+    "fatigue": {
+      "title": "Yorgunluk",
+      "anchorNone": "Yok",
+      "anchorMid": "Orta",
+      "anchorMax": "Çok yüksek"
+    },
     "stiffnessLabel": "Sabah tutukluğu",
     "stiffness": {
       "none": "Yok",
@@ -270,7 +282,7 @@
       "30_60": "30–60 dakika",
       "over_60": "60 dakikadan fazla"
     },
-    "wellbeingLabel": "Genel iyilik hali",
+    "wellbeingLabel": "Genel iyi oluş",
     "wellbeing": {
       "1": "Çok kötü",
       "2": "Kötü",

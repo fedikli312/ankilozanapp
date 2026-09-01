@@ -31,20 +31,26 @@ export default function SymptomsHistoryScreen() {
         {t("symptoms.title")}
       </Text>
       <GroupedList>
-        {checkIns.map((item) => (
-          <ListRow
-            key={item.id}
-            leading={<Ionicons name="pulse-outline" size={20} color={colors.textSecondary} />}
-            label={t("symptoms.rowLabel", { pain: item.pain, fatigue: item.fatigue })}
-            caption={
-              item.date === today
-                ? t("symptoms.todayCaption", { stiffness: t(`checkIn.stiffness.${item.morningStiffnessBucket}`) })
-                : formatShortDate(new Date(item.date), locale)
-            }
-            onPress={item.date === today ? () => router.push("/check-in") : undefined}
-            chevron={item.date === today}
-          />
-        ))}
+        {checkIns.map((item) => {
+          const baseCaption =
+            item.date === today
+              ? t("symptoms.todayCaption", { stiffness: t(`checkIn.stiffness.${item.morningStiffnessBucket}`) })
+              : formatShortDate(new Date(item.date), locale);
+          // Phase O: compact body-area labels appended to the existing caption —
+          // never a body map per row (Product 2.0 spec §18).
+          const bodyAreasText = item.bodyAreas.map((area) => t(`checkIn.bodyArea.${area}`)).join(" · ");
+
+          return (
+            <ListRow
+              key={item.id}
+              leading={<Ionicons name="pulse-outline" size={20} color={colors.textSecondary} />}
+              label={t("symptoms.rowLabel", { pain: item.pain, fatigue: item.fatigue })}
+              caption={bodyAreasText ? `${baseCaption} · ${bodyAreasText}` : baseCaption}
+              onPress={item.date === today ? () => router.push("/check-in") : undefined}
+              chevron={item.date === today}
+            />
+          );
+        })}
       </GroupedList>
     </ScreenContainer>
   );

@@ -10,6 +10,7 @@ import {
   getActiveMedications,
   getAdministrationsForMedication,
   getAdministrationsForTreatment,
+  getBodyAreasForCheckIn,
   getCheckInByDate,
   getCheckInsInRange,
   getCurrentSchedule,
@@ -67,6 +68,9 @@ export function useTodayData() {
   const injections = getActiveInjectionTreatments(db);
   const today = todayDateOnly();
   const todaysCheckIn = getCheckInByDate(db, today);
+  // Phase O: Today's completed-check-in summary now includes body areas
+  // (Product 2.0 spec §17 — "Pain / Stiffness / Fatigue / Body areas").
+  const todaysBodyAreas = todaysCheckIn ? getBodyAreasForCheckIn(db, todaysCheckIn.id) : [];
   // Redesign Phase D (§"check-in summary"): "previous context" line on the
   // not-yet-checked-in card — explicitly the previous day's own recorded
   // value, never presented as today's. Plain repository read, no new domain logic.
@@ -153,6 +157,7 @@ export function useTodayData() {
     nextMedication,
     nextInjection: nextInjectionRows[0] ?? null,
     todaysCheckIn,
+    todaysBodyAreas,
     yesterdayCheckIn,
     recentSummary,
     upcomingAppointment,

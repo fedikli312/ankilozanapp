@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, Chip, StepperField, TextField, useTheme } from "../../design-system";
+import { Button, Chip, TextField, useTheme } from "../../design-system";
 import { useTranslation } from "../../localization";
 import { CHECK_IN_NOTE_MAX_LENGTH } from "../../domain/constants";
 import type { BodyAreaRegion } from "../../repositories";
+import { BodyRegionMap } from "./BodyRegionMap";
+import { FatigueSelector } from "./FatigueSelector";
+import { PainScale } from "./PainScale";
+import { StiffnessSelector } from "./StiffnessSelector";
 import type { SaveCheckInInput } from "./useCheckIn";
 
 export type CheckInFormValue = {
@@ -22,25 +26,7 @@ export type CheckInFormProps = {
   onChangeDraft?: (value: CheckInFormValue) => void;
 };
 
-const STIFFNESS_BUCKETS: CheckInFormValue["morningStiffnessBucket"][] = [
-  "none",
-  "under_15",
-  "15_30",
-  "30_60",
-  "over_60",
-];
-
 const WELLBEING_LEVELS = [1, 2, 3, 4, 5];
-
-const BODY_AREAS: BodyAreaRegion[] = [
-  "neck",
-  "upper_back",
-  "lower_back",
-  "hips",
-  "shoulders",
-  "chest_ribs",
-  "other",
-];
 
 const DEFAULT_VALUE: CheckInFormValue = {
   pain: 0,
@@ -50,7 +36,18 @@ const DEFAULT_VALUE: CheckInFormValue = {
   notes: "",
 };
 
-/** UX spec §E: default fields always visible, optional fields behind a single "+ Add more" disclosure. Target 15–30 seconds. */
+/**
+ * Phase O — Daily Check-in 2.0 (Product 2.0 spec). Same one-sheet
+ * experience, same default/optional field split as before (UX spec §E:
+ * default fields always visible, optional fields behind a single
+ * "+ Add more" disclosure) — this is a visual/interaction upgrade of the
+ * existing hierarchy, not a restructure of it. Pain/Stiffness/Fatigue keep
+ * their exact stored semantics (0–10 int / 5-value enum / 0–10 int);
+ * Wellbeing's existing Chip row is kept as-is (already exactly 5 states,
+ * already visually lighter than the new controls — no bespoke component
+ * needed for something that already works and is already appropriately
+ * lightweight). Body Map is new (§ BodyRegionMap); Note is unchanged.
+ */
 export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInFormProps) {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
@@ -78,38 +75,19 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
 
   return (
     <View>
-      <View style={{ alignItems: "center", marginBottom: spacing.lg }}>
-        <StepperField
-          label={t("checkIn.painLabel", { value: value.pain })}
-          value={value.pain}
-          min={0}
-          max={10}
-          onChange={(pain) => setValue((prev) => ({ ...prev, pain }))}
+      <View style={{ marginBottom: spacing.lg }}>
+        <PainScale value={value.pain} onChange={(pain) => setValue((prev) => ({ ...prev, pain }))} />
+      </View>
+
+      <View style={{ marginBottom: spacing.lg }}>
+        <StiffnessSelector
+          value={value.morningStiffnessBucket}
+          onChange={(morningStiffnessBucket) => setValue((prev) => ({ ...prev, morningStiffnessBucket }))}
         />
       </View>
 
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xs }}>
-        {t("checkIn.stiffnessLabel")}
-      </Text>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs, marginBottom: spacing.lg }}>
-        {STIFFNESS_BUCKETS.map((bucket) => (
-          <Chip
-            key={bucket}
-            label={t(`checkIn.stiffness.${bucket}`)}
-            selected={value.morningStiffnessBucket === bucket}
-            onPress={() => setValue((prev) => ({ ...prev, morningStiffnessBucket: bucket }))}
-          />
-        ))}
-      </View>
-
-      <View style={{ alignItems: "center", marginBottom: spacing.lg }}>
-        <StepperField
-          label={t("checkIn.fatigueLabel", { value: value.fatigue })}
-          value={value.fatigue}
-          min={0}
-          max={10}
-          onChange={(fatigue) => setValue((prev) => ({ ...prev, fatigue }))}
-        />
+      <View style={{ marginBottom: spacing.lg }}>
+        <FatigueSelector value={value.fatigue} onChange={(fatigue) => setValue((prev) => ({ ...prev, fatigue }))} />
       </View>
 
       {!showMore ? (
@@ -130,18 +108,8 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
             ))}
           </View>
 
-          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xs }}>
-            {t("checkIn.bodyAreaLabel")}
-          </Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs, marginBottom: spacing.md }}>
-            {BODY_AREAS.map((area) => (
-              <Chip
-                key={area}
-                label={t(`checkIn.bodyArea.${area}`)}
-                selected={value.bodyAreas.includes(area)}
-                onPress={() => toggleBodyArea(area)}
-              />
-            ))}
+          <View style={{ marginBottom: spacing.md }}>
+            <BodyRegionMap value={value.bodyAreas} onToggle={toggleBodyArea} />
           </View>
 
           <TextField

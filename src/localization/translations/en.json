@@ -261,7 +261,19 @@
   "checkIn": {
     "title": "Daily Log",
     "painLabel": "Pain, %{value} out of 10",
+    "pain": {
+      "title": "Pain",
+      "anchorNone": "None",
+      "anchorMid": "Noticeable",
+      "anchorMax": "Very intense"
+    },
     "fatigueLabel": "Fatigue, %{value} out of 10",
+    "fatigue": {
+      "title": "Fatigue",
+      "anchorNone": "None",
+      "anchorMid": "Moderate",
+      "anchorMax": "Very high"
+    },
     "stiffnessLabel": "Morning stiffness",
     "stiffness": {
       "none": "None",
