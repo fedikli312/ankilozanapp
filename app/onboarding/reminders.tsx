@@ -1,45 +1,56 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { Button, ScreenContainer, ToggleRow, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
+import { getOnboardingPersonalization, setOnboardingPersonalization } from "@/features/onboarding/onboardingDraft";
 import { requestNotificationPermissionAsync } from "@/notifications";
 
-const EXAMPLE_ROWS: { key: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { key: "medicationTimes", icon: "medical-outline" },
-  { key: "injectionDates", icon: "medical-outline" },
-  { key: "appointments", icon: "calendar-outline" },
-];
-
 /**
- * Explains reminders BEFORE any permission request (Redesign Spec §4 /
- * Phase C brief) — no automatic request on load. The primary CTA is the
- * one, explicit, user-initiated moment permission is requested from this
- * screen, reusing the same `requestNotificationPermissionAsync` primitive
- * every other reminder-bearing save already uses (never a separate/earlier
- * forced prompt). A denial still proceeds — the app stays fully usable.
+ * Product 2.0 Phase N, step 8 — visual per-category reminder intent (spec
+ * §11), replacing the single generic "Enable" button. No permission request
+ * on load (unchanged rule) — the one, explicit, user-initiated request
+ * fires from Continue, and only if at least one toggle is on. A denial
+ * still proceeds; the app stays fully usable either way. Medication/
+ * injection toggles only show when relevant to the treatment context just
+ * chosen — never an empty-feeling row for a treatment the user doesn't
+ * have. These toggles are intent only: they don't change the medication/
+ * injection forms' own existing "Remind me" default (unchanged, out of
+ * scope for Phase N).
  */
 export default function RemindersScreen() {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
+  const { treatmentContext } = getOnboardingPersonalization();
+
+  const showMedication = treatmentContext === "medication" || treatmentContext === "both";
+  const showInjection = treatmentContext === "injection" || treatmentContext === "both";
+
+  const [medications, setMedications] = useState(true);
+  const [injections, setInjections] = useState(true);
+  const [appointments, setAppointments] = useState(true);
 
   const proceed = () => router.push("/onboarding/add-appointment");
 
-  const handleEnable = async () => {
-    try {
-      await requestNotificationPermissionAsync();
-    } catch {
-      // Denial or an unavailable permission API never blocks onboarding.
+  const handleContinue = async () => {
+    const reminderIntent = { medications: showMedication && medications, injections: showInjection && injections, appointments };
+    setOnboardingPersonalization({ reminderIntent });
+    if (reminderIntent.medications || reminderIntent.injections || reminderIntent.appointments) {
+      try {
+        await requestNotificationPermissionAsync();
+      } catch {
+        // Denial or an unavailable permission API never blocks onboarding.
+      }
     }
     proceed();
   };
 
   return (
     <ScreenContainer>
-      <OnboardingProgress step={6} />
+      <OnboardingProgress step={8} />
       <View style={{ flex: 1, justifyContent: "center" }}>
         <Text
           style={{
@@ -55,18 +66,15 @@ export default function RemindersScreen() {
           {t("onboarding.reminders.supporting")}
         </Text>
 
-        {EXAMPLE_ROWS.map((row) => (
-          <ListRow
-            key={row.key}
-            label={t(`onboarding.reminders.examples.${row.key}`)}
-            leading={<Ionicons name={row.icon} size={20} color={colors.textSecondary} />}
-          />
-        ))}
+        {showMedication ? (
+          <ToggleRow label={t("onboarding.reminders.medications")} value={medications} onValueChange={setMedications} />
+        ) : null}
+        {showInjection ? (
+          <ToggleRow label={t("onboarding.reminders.injections")} value={injections} onValueChange={setInjections} />
+        ) : null}
+        <ToggleRow label={t("onboarding.reminders.appointments")} value={appointments} onValueChange={setAppointments} />
       </View>
-      <View style={{ gap: spacing.sm }}>
-        <Button label={t("onboarding.reminders.enableCta")} onPress={handleEnable} />
-        <Button label={t("common.later")} onPress={proceed} variant="secondary" />
-      </View>
+      <Button label={t("onboarding.reminders.enableCta")} onPress={handleContinue} />
     </ScreenContainer>
   );
 }

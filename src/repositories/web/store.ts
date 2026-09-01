@@ -173,6 +173,11 @@ export type OnboardingStateRow = {
   id: string;
   completed: boolean;
   whatToRemember: string;
+  goals: string;
+  prioritySymptoms: string;
+  priorityBodyAreas: string;
+  treatmentContext: "medication" | "injection" | "both" | "none" | null;
+  onboardingVersion: number;
   completedAt: string | null;
   createdAt: string;
   updatedAt: string;
@@ -540,6 +545,15 @@ function buildInitialStore(): Store {
         id: "default",
         completed: true,
         whatToRemember: JSON.stringify(["medications", "injections", "appointments", "symptoms"]),
+        // Seeded as a legacy (pre-Phase-N) onboarding on purpose: onboardingVersion
+        // 1, no personalization answers — exercises the exact "existing local
+        // dev/test onboarding state must not break navigation" requirement
+        // (Furkan's Phase M decision #4) against the real web preview.
+        goals: "[]",
+        prioritySymptoms: "[]",
+        priorityBodyAreas: "[]",
+        treatmentContext: null,
+        onboardingVersion: 1,
         completedAt: isoDaysFromToday(-120),
         createdAt: isoDaysFromToday(-120),
         updatedAt: isoDaysFromToday(-120),

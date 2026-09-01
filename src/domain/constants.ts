@@ -31,6 +31,17 @@ export const MEDICATION_ADMINISTRATION_GENERATION_WINDOW_DAYS = 7;
  */
 export const CHECK_IN_NOTE_MAX_LENGTH = 400;
 
+/**
+ * Onboarding personalization schema version (Product 2.0 Phase N,
+ * `docs/PRODUCT_2_0_UX_SPECIFICATION.md` §23-B). A row completed before
+ * this migration existed defaults to version 1 (the pre-Phase-N flow); a
+ * row completed through the new personalization onboarding is stamped 2.
+ * Exists so a future phase can distinguish the two without inferring it
+ * from which columns happen to be empty, and without deleting or
+ * resetting any existing row (Furkan's Phase M decision #4).
+ */
+export const CURRENT_ONBOARDING_VERSION = 2;
+
 /** Minimum-data thresholds for Insights (Tech Arch §I) — constants, not
  * user-configurable in V1. */
 export const INSIGHTS_THRESHOLDS = {

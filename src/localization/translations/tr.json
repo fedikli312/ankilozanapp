@@ -36,8 +36,8 @@
     },
     "welcome": {
       "eyebrow": "Ankilozan spondilit için günlük takip",
-      "title": "Sağlığını takip etmek artık daha kolay.",
-      "supporting": "Belirtilerini, tedavilerini ve randevularını tek bir yerde düzenle.",
+      "title": "Ankilozanla geçen günlerini daha net gör.",
+      "supporting": "Belirtilerini, tedavilerini ve randevularını sana uygun bir düzende takip et.",
       "cta": "Başlayalım"
     },
     "privacy": {
@@ -50,27 +50,33 @@
       },
       "moreLink": "Gizlilik hakkında daha fazla"
     },
-    "whatToRemember": {
-      "title": "Neleri takip etmek istersin?",
-      "supporting": "İstediğin zaman değiştirebilirsin.",
-      "medications": "İlaçlar",
-      "injections": "İğneler",
-      "appointments": "Randevular",
-      "symptoms": "Belirtiler"
+    "goals": {
+      "title": "Sana en çok ne konuda yardımcı olalım?",
+      "supporting": "En fazla üç tane seçebilirsin.",
+      "symptoms": "Belirtilerimi takip etmek",
+      "treatment": "İlaçlarımı / tedavimi unutmamak",
+      "trends": "Değişimleri zaman içinde görmek",
+      "appointments": "Randevularıma hazırlanmak",
+      "knowledge": "Ankilozan hakkında daha fazla bilgi edinmek"
     },
-    "checkInPreview": {
-      "title": "Günlük kontrolün bir dakikadan kısa sürer.",
+    "prioritySymptoms": {
+      "title": "En çok neleri takip etmek istiyorsun?",
+      "supporting": "Günlük kontrolünü buna göre düzenleyelim.",
       "pain": "Ağrı",
       "stiffness": "Sabah tutukluğu",
       "fatigue": "Yorgunluk",
-      "minutesUnit": "dk",
-      "supporting": "Zaman içinde nasıl hissettiğini daha kolay hatırlamana yardımcı olur."
+      "wellbeing": "Genel iyi oluş"
     },
-    "addTreatment": {
-      "title": "Şu anda kullandığın bir tedavi var mı?",
-      "supporting": "İstersen ilaç veya iğne planını şimdi ekleyebilirsin.",
-      "addMedication": "İlaç ekle",
-      "addInjection": "İğne ekle"
+    "bodyRegions": {
+      "title": "En sık hangi bölgelerde rahatsızlık hissediyorsun?",
+      "supporting": "İstersen atlayabilirsin — bu bir teşhis değil, sadece takibini kişiselleştirir."
+    },
+    "treatmentContext": {
+      "title": "Tedavini nasıl takip ediyorsun?",
+      "medication": "Düzenli ilaç kullanıyorum",
+      "injection": "Enjeksiyon / biyolojik tedavi kullanıyorum",
+      "both": "İkisini de kullanıyorum",
+      "none": "Şu anda düzenli tedavi takibi yapmıyorum"
     },
     "addMedication": {
       "title": "İlk ilacını ekle"
@@ -79,29 +85,38 @@
       "title": "İlk iğneni ekle"
     },
     "reminders": {
-      "title": "Dozlarını ve randevularını hatırlayabilirsin.",
+      "title": "Nelerde hatırlatılmak istersin?",
       "supporting": "Hatırlatıcıları yalnızca sen açtığında kullanırız.",
-      "examples": {
-        "medicationTimes": "İlaç saatleri",
-        "injectionDates": "İğne tarihleri",
-        "appointments": "Randevular"
-      },
-      "enableCta": "Hatırlatıcıları ayarla"
+      "medications": "İlaç hatırlatıcıları",
+      "injections": "İğne hatırlatıcıları",
+      "appointments": "Randevu hatırlatıcıları",
+      "enableCta": "Devam et"
     },
     "addAppointment": {
       "title": "Yaklaşan bir randevun var mı?",
       "supporting": "Eklediğinde Bugün ekranında ve randevu hazırlığında görebilirsin.",
       "cta": "Randevu ekle"
     },
-    "ready": {
-      "title": "Her şey hazır.",
-      "treatmentCount": "%{count} tedavi",
-      "appointmentCount": "%{count} yaklaşan randevu",
-      "checkInReady": "Günlük takip hazır",
-      "supporting": "İstediğin zaman ilaç, iğne veya randevu ekleyebilirsin.",
+    "personalizedSummary": {
+      "title": "Sana göre ayarladık.",
+      "prioritiesHeading": "ÖNCELİKLERİN",
+      "setupHeading": "TAKİP DÜZENİN",
+      "checkInReady": "Günlük check-in",
+      "treatmentReminders": "Tedavi hatırlatıcıları",
+      "appointmentPrep": "Randevu hazırlığı",
+      "cta": "Devam et"
+    },
+    "valueReveal": {
+      "title": "Takibin hazır.",
+      "outcome": {
+        "checkIn": "Sana göre günlük takip",
+        "treatment": "Tedavilerini tek yerde hatırla",
+        "trends": "Zaman içindeki değişimleri gör",
+        "appointment": "Randevuna hazırlan"
+      },
       "cta": "Bugün'e git"
     },
-    "reminderPrompt": "Zamanı geldiğinde size hatırlatacağız"
+    "reminderPrompt": "Zamanı geldiğinde sana hatırlatacağız"
   },
   "tabs": {
     "today": "Bugün",

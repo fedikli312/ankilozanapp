@@ -57,7 +57,7 @@ export default function PrivacyScreen() {
           </Text>
         </AccessibleTouchable>
       </View>
-      <Button label={t("common.continue")} onPress={() => router.push("/onboarding/what-to-remember")} />
+      <Button label={t("common.continue")} onPress={() => router.push("/onboarding/goals")} />
     </ScreenContainer>
   );
 }

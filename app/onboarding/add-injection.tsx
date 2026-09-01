@@ -1,3 +1,4 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text } from "react-native";
@@ -16,7 +17,9 @@ export default function OnboardingAddInjectionScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [saveError, setSaveError] = useState(false);
 
-  // Same fixed-flow rule as add-medication.tsx: always continue to Reminders next.
+  // Same fixed-flow rule as add-medication.tsx: whether reached directly
+  // (treatmentContext "injection") or chained after Add Medication
+  // (treatmentContext "both"), always continue to Reminders next.
   const proceed = () => {
     router.push("/onboarding/reminders");
   };
@@ -35,7 +38,8 @@ export default function OnboardingAddInjectionScreen() {
 
   return (
     <ScreenContainer scroll>
-      <OnboardingProgress step={5} />
+      <OnboardingProgress step={7} />
+      <Ionicons name="medical-outline" size={22} color={colors.accent} style={{ marginBottom: spacing.xs }} />
       <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("onboarding.addInjection.title")}
       </Text>

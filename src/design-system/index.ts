@@ -7,6 +7,7 @@ export type { ButtonVariant } from "./components/Button";
 export { TextField } from "./components/TextField";
 export { ToggleRow } from "./components/ToggleRow";
 export { Chip } from "./components/Chip";
+export { SelectableCard } from "./components/SelectableCard";
 export { StepperField } from "./components/StepperField";
 export { ListRow } from "./components/ListRow";
 export { ScreenContainer } from "./components/ScreenContainer";

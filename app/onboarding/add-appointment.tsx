@@ -20,11 +20,10 @@ export default function OnboardingAddAppointmentScreen() {
   const [daysFromToday, setDaysFromToday] = useState(14);
   const [submitting, setSubmitting] = useState(false);
 
-  // Redesign Spec §4: this is now the second-to-last onboarding step — it
-  // always continues to the Ready-summary screen next, which is what
-  // actually completes onboarding.
+  // Product 2.0 Phase N: continues to Personalized Summary next, then
+  // Value Reveal — the screen that actually completes onboarding.
   const proceed = () => {
-    router.push("/onboarding/ready");
+    router.push("/onboarding/personalized-summary");
   };
 
   const handleSave = async () => {
@@ -38,7 +37,7 @@ export default function OnboardingAddAppointmentScreen() {
 
   return (
     <ScreenContainer scroll>
-      <OnboardingProgress step={7} />
+      <OnboardingProgress step={9} />
       <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("onboarding.addAppointment.title")}
       </Text>

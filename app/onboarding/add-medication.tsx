@@ -1,3 +1,4 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text } from "react-native";
@@ -7,6 +8,7 @@ import { useTranslation } from "@/localization";
 import { MedicationForm } from "@/features/medications/MedicationForm";
 import { useMedications, type CreateMedicationFormInput } from "@/features/medications/useMedications";
 import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
+import { getOnboardingPersonalization } from "@/features/onboarding/onboardingDraft";
 
 export default function OnboardingAddMedicationScreen() {
   const { t } = useTranslation();
@@ -16,12 +18,13 @@ export default function OnboardingAddMedicationScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [saveError, setSaveError] = useState(false);
 
-  // Redesign Spec §4: the Add-treatment choice screen offers one action at a
-  // time — after adding (or skipping) here, onboarding always continues to
-  // the Reminder-explanation step next, regardless of the earlier
-  // "what to remember" selection.
+  // Product 2.0 Phase N: reached only via /onboarding/treatment-context.
+  // "both" chains on to Add Injection next; every other path (medication
+  // only, or reached after injection in some future reordering) continues
+  // straight to Reminders — same fixed-next-step rule the flow already used.
   const proceed = () => {
-    router.push("/onboarding/reminders");
+    const { treatmentContext } = getOnboardingPersonalization();
+    router.push(treatmentContext === "both" ? "/onboarding/add-injection" : "/onboarding/reminders");
   };
 
   const handleSubmit = async (input: CreateMedicationFormInput) => {
@@ -41,7 +44,8 @@ export default function OnboardingAddMedicationScreen() {
 
   return (
     <ScreenContainer scroll>
-      <OnboardingProgress step={5} />
+      <OnboardingProgress step={7} />
+      <Ionicons name="medical-outline" size={22} color={colors.accent} style={{ marginBottom: spacing.xs }} />
       <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("onboarding.addMedication.title")}
       </Text>

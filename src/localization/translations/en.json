@@ -36,8 +36,8 @@
     },
     "welcome": {
       "eyebrow": "Daily tracking for ankylosing spondylitis",
-      "title": "Tracking your health is now easier.",
-      "supporting": "Organize your symptoms, treatments, and appointments in one place.",
+      "title": "See your days with ankylosing spondylitis more clearly.",
+      "supporting": "Track your symptoms, treatments, and appointments in a way that's built around you.",
       "cta": "Let's get started"
     },
     "privacy": {
@@ -50,27 +50,33 @@
       },
       "moreLink": "More about privacy"
     },
-    "whatToRemember": {
-      "title": "What do you want to track?",
-      "supporting": "You can change this anytime.",
-      "medications": "Medications",
-      "injections": "Injections",
-      "appointments": "Appointments",
-      "symptoms": "Symptoms"
+    "goals": {
+      "title": "What should we help you with most?",
+      "supporting": "Choose up to three.",
+      "symptoms": "Track my symptoms",
+      "treatment": "Stay on top of my medication or treatment",
+      "trends": "See how things change over time",
+      "appointments": "Prepare for my appointments",
+      "knowledge": "Learn more about ankylosing spondylitis"
     },
-    "checkInPreview": {
-      "title": "Your daily check-in takes under a minute.",
+    "prioritySymptoms": {
+      "title": "What matters most to track?",
+      "supporting": "We'll shape your daily check-in around this.",
       "pain": "Pain",
       "stiffness": "Morning stiffness",
       "fatigue": "Fatigue",
-      "minutesUnit": "min",
-      "supporting": "It helps you remember how you've been feeling over time."
+      "wellbeing": "General wellbeing"
     },
-    "addTreatment": {
-      "title": "Are you currently on a treatment?",
-      "supporting": "You can add your medication or injection plan now, if you'd like.",
-      "addMedication": "Add medication",
-      "addInjection": "Add injection"
+    "bodyRegions": {
+      "title": "Where do you usually feel it most?",
+      "supporting": "Skip this if you'd like — it's not a diagnosis, it just personalizes your tracking."
+    },
+    "treatmentContext": {
+      "title": "How are you managing treatment right now?",
+      "medication": "I take regular medication",
+      "injection": "I use injections or biologic treatment",
+      "both": "I use both",
+      "none": "I'm not tracking regular treatment right now"
     },
     "addMedication": {
       "title": "Add your first medication"
@@ -79,26 +85,35 @@
       "title": "Add your first injection"
     },
     "reminders": {
-      "title": "You can be reminded about your doses and appointments.",
+      "title": "What would you like to be reminded about?",
       "supporting": "We only use reminders once you turn them on.",
-      "examples": {
-        "medicationTimes": "Medication times",
-        "injectionDates": "Injection dates",
-        "appointments": "Appointments"
-      },
-      "enableCta": "Set up reminders"
+      "medications": "Medication reminders",
+      "injections": "Injection reminders",
+      "appointments": "Appointment reminders",
+      "enableCta": "Continue"
     },
     "addAppointment": {
       "title": "Add an upcoming appointment",
       "supporting": "You'll see it on Today and in appointment preparation.",
       "cta": "Add appointment"
     },
-    "ready": {
-      "title": "Everything's ready.",
-      "treatmentCount": "%{count} treatments",
-      "appointmentCount": "%{count} upcoming appointments",
-      "checkInReady": "Daily tracking is ready",
-      "supporting": "You can add a medication, injection, or appointment anytime.",
+    "personalizedSummary": {
+      "title": "We've set this up for you.",
+      "prioritiesHeading": "YOUR PRIORITIES",
+      "setupHeading": "YOUR SETUP",
+      "checkInReady": "Daily check-in",
+      "treatmentReminders": "Treatment reminders",
+      "appointmentPrep": "Appointment preparation",
+      "cta": "Continue"
+    },
+    "valueReveal": {
+      "title": "Your tracking is ready.",
+      "outcome": {
+        "checkIn": "Daily tracking, built around you",
+        "treatment": "Keep every treatment in one place",
+        "trends": "See how things change over time",
+        "appointment": "Walk into appointments prepared"
+      },
       "cta": "Go to Today"
     },
     "reminderPrompt": "We'll remind you when it's time"

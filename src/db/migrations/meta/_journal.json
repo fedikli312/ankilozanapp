@@ -15,6 +15,13 @@
       "when": 1787912893287,
       "tag": "0001_same_dazzler",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788245634792,
+      "tag": "0002_reflective_manta",
+      "breakpoints": true
     }
   ]
 }

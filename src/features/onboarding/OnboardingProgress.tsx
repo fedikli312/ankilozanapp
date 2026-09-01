@@ -3,10 +3,10 @@ import { View } from "react-native";
 import { useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 
-const TOTAL_STEPS = 8;
+const TOTAL_STEPS = 11;
 
 export type OnboardingProgressProps = {
-  /** 1-indexed current step, 1-8. */
+  /** 1-indexed current step, 1-11 (Product 2.0 Phase N flow — see PROJECT_MEMORY.md). */
   step: number;
 };
 
