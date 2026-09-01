@@ -9,6 +9,8 @@ export type StiffnessBucket = "none" | "under_15" | "15_30" | "30_60" | "over_60
 export type StiffnessSelectorProps = {
   value: StiffnessBucket;
   onChange: (value: StiffnessBucket) => void;
+  /** True when the user explicitly flagged Stiffness as a priority symptom at onboarding (Phase R brief §11). */
+  priorityIndicator?: boolean;
 };
 
 /** Relative fill width per bucket — ordinal only, never an implied minute count (Product 2.0 spec: "no diagnostic interpretation"). */
@@ -34,15 +36,18 @@ const BUCKETS: StiffnessBucket[] = ["none", "under_15", "15_30", "30_60", "over_
  * visualization." `none` gets a distinct affirming icon rather than an
  * empty clock face.
  */
-export function StiffnessSelector({ value, onChange }: StiffnessSelectorProps) {
+export function StiffnessSelector({ value, onChange, priorityIndicator }: StiffnessSelectorProps) {
   const { colors, typography, spacing, radius } = useTheme();
   const { t } = useTranslation();
 
   return (
     <View>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xs }}>
-        {t("checkIn.stiffnessLabel")}
-      </Text>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xs }}>
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.stiffnessLabel")}</Text>
+        {priorityIndicator ? (
+          <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent }}>· {t("checkIn.priorityIndicator")}</Text>
+        ) : null}
+      </View>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs }}>
         {BUCKETS.map((bucket) => {
           const selected = value === bucket;

@@ -6,6 +6,8 @@ import { useTranslation } from "@/localization";
 export type FatigueSelectorProps = {
   value: number;
   onChange: (value: number) => void;
+  /** True when the user explicitly flagged Fatigue as a priority symptom at onboarding (Phase R brief §11). */
+  priorityIndicator?: boolean;
 };
 
 const BAR_COUNT = 10;
@@ -27,15 +29,18 @@ const MAX_BAR_HEIGHT = 30;
  * hidden from the accessibility tree. Single accent fill color regardless
  * of value — no low-to-high color gradient (Visual Design Spec §3).
  */
-export function FatigueSelector({ value, onChange }: FatigueSelectorProps) {
+export function FatigueSelector({ value, onChange, priorityIndicator }: FatigueSelectorProps) {
   const { colors, typography, spacing, radius } = useTheme();
   const { t } = useTranslation();
 
   return (
     <View style={{ alignItems: "center" }}>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xxs }}>
-        {t("checkIn.fatigue.title")}
-      </Text>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xxs }}>
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.fatigue.title")}</Text>
+        {priorityIndicator ? (
+          <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent }}>· {t("checkIn.priorityIndicator")}</Text>
+        ) : null}
+      </View>
       <Text
         style={{
           fontSize: typography.metricLarge.fontSize,

@@ -1,9 +1,9 @@
+import { buildPersonalizationProfile } from "@/personalization/buildPersonalizationProfile";
+import { ALL_GOALS, orderByGoalPriority } from "@/personalization/goalMapping";
+
 import { db } from "../db";
 import { getOnboardingState } from "../repositories";
 import type { OnboardingGoal } from "../features/onboarding/onboardingDraft";
-
-/** Fixed canonical order — every pillar the paywall can ever show, in a stable order. */
-const ALL_GOALS: OnboardingGoal[] = ["symptoms", "treatment", "trends", "appointments", "knowledge"];
 
 const MAX_PILLARS = 4;
 
@@ -17,17 +17,15 @@ const MAX_PILLARS = 4;
  * (pain/stiffness/fatigue never touch this) — exactly the "deterministic
  * ordering from the selected goals" the brief asks for when true dynamic
  * personalization would add unnecessary complexity.
+ *
+ * As of Phase R, `ALL_GOALS` and the ordering primitive itself are shared
+ * with every other personalization consumer (`src/personalization/goalMapping.ts`)
+ * rather than duplicated here, so a goal ID is interpreted identically on
+ * Today/Track/Knowledge and on this paywall (Phase R brief §25) — the
+ * behavior below is unchanged from before that consolidation.
  */
 export function usePaywallValuePillars(): OnboardingGoal[] {
   const state = getOnboardingState(db);
-  let selected: OnboardingGoal[] = [];
-  try {
-    selected = state ? (JSON.parse(state.goals) as OnboardingGoal[]) : [];
-  } catch {
-    selected = [];
-  }
-
-  const selectedValid = ALL_GOALS.filter((goal) => selected.includes(goal));
-  const unselected = ALL_GOALS.filter((goal) => !selected.includes(goal));
-  return [...selectedValid, ...unselected].slice(0, MAX_PILLARS);
+  const profile = buildPersonalizationProfile(state);
+  return orderByGoalPriority(ALL_GOALS, profile, (goal) => goal).slice(0, MAX_PILLARS);
 }

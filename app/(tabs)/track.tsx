@@ -1,11 +1,13 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactElement } from "react";
 import { Text } from "react-native";
 
 import { GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
 import { formatShortDate, useTranslation } from "@/localization";
 import { useTrackLanding } from "@/features/track/useTrackLanding";
+import { getTrackSupportOrder, type TrackHealthRowId } from "@/personalization/getTrackSupportOrder";
+import { usePersonalizationProfile } from "@/personalization/usePersonalizationProfile";
 import { todayDateOnly } from "@/shared/today";
 
 export default function TrackLandingScreen() {
@@ -20,6 +22,8 @@ export default function TrackLandingScreen() {
     nextInjectionDaysLeft,
     latestLabResult,
   } = useTrackLanding();
+  const profile = usePersonalizationProfile();
+  const { healthOrder, knowledgeEmphasized } = getTrackSupportOrder(profile);
 
   const symptomsCaption = latestCheckInDate
     ? t(
@@ -50,52 +54,75 @@ export default function TrackLandingScreen() {
     <Ionicons name={name} size={20} color={colors.textSecondary} />
   );
 
+  // Phase R (brief §16): each health module's row content, keyed by id so
+  // it can be rendered in `healthOrder` — every module is still always
+  // present, only the order changes. Nutrition/Breathing below are
+  // deliberately NOT part of this reorderable set (brief §16: "avoid
+  // making Track unstable... do not create dramatically different
+  // information architectures per user").
+  const healthRows: Record<TrackHealthRowId, ReactElement> = {
+    symptoms: (
+      <ListRow
+        key="symptoms"
+        leading={icon("pulse-outline")}
+        label={t("track.symptoms")}
+        caption={symptomsCaption}
+        onPress={() => router.push("/symptoms")}
+        chevron
+      />
+    ),
+    medications: (
+      <ListRow
+        key="medications"
+        leading={icon("medkit-outline")}
+        label={t("medications.listTitle")}
+        caption={medicationsCaption}
+        onPress={() => router.push("/medications")}
+        chevron
+      />
+    ),
+    injections: (
+      <ListRow
+        key="injections"
+        leading={icon("medical-outline")}
+        label={t("injections.listTitle")}
+        caption={injectionsCaption}
+        onPress={() => router.push("/injections")}
+        chevron
+      />
+    ),
+    labs: (
+      <ListRow
+        key="labs"
+        leading={icon("flask-outline")}
+        label={t("track.labs")}
+        caption={labsCaption}
+        onPress={() => router.push("/labs")}
+        chevron
+      />
+    ),
+  };
+
   return (
     <ScreenContainer>
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
         {t("track.subtitle")}
       </Text>
 
-      <GroupedList title={t("track.healthGroupTitle")}>
-        <ListRow
-          leading={icon("pulse-outline")}
-          label={t("track.symptoms")}
-          caption={symptomsCaption}
-          onPress={() => router.push("/symptoms")}
-          chevron
-        />
-        <ListRow
-          leading={icon("medkit-outline")}
-          label={t("medications.listTitle")}
-          caption={medicationsCaption}
-          onPress={() => router.push("/medications")}
-          chevron
-        />
-        <ListRow
-          leading={icon("medical-outline")}
-          label={t("injections.listTitle")}
-          caption={injectionsCaption}
-          onPress={() => router.push("/injections")}
-          chevron
-        />
-        <ListRow
-          leading={icon("flask-outline")}
-          label={t("track.labs")}
-          caption={labsCaption}
-          onPress={() => router.push("/labs")}
-          chevron
-        />
-      </GroupedList>
+      <GroupedList title={t("track.healthGroupTitle")}>{healthOrder.map((id) => healthRows[id])}</GroupedList>
 
       {/* Redesign Spec §8/§J: "GÜNLÜK DESTEK" — visually subordinate to
           SAĞLIK TAKİBİ above, never equal weight (product-safety-adjacent
           rule: supportive content must never look as clinically
-          authoritative as the actual health-record features). */}
+          authoritative as the actual health-record features). Order is
+          fixed (brief §16) — only Knowledge's own row gets a restrained
+          "Senin için" cue when the learn-about-AS goal is selected;
+          Nutrition/Breathing never move. */}
       <GroupedList title={t("track.supportGroupTitle")} emphasis="subordinate">
         <ListRow
-          leading={icon("book-outline")}
+          leading={<Ionicons name="book-outline" size={20} color={knowledgeEmphasized ? colors.accent : colors.textSecondary} />}
           label={t("track.knowledge")}
-          caption={t("track.knowledgeCaption")}
+          caption={knowledgeEmphasized ? `${t("personalization.forYou")} · ${t("track.knowledgeCaption")}` : t("track.knowledgeCaption")}
           onPress={() => router.push("/knowledge")}
           chevron
         />

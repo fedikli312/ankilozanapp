@@ -260,6 +260,8 @@
   },
   "checkIn": {
     "title": "Daily Log",
+    "priorityIndicator": "Your priority",
+    "priorityBodyAreasLabel": "Areas you want to track: %{areas}",
     "painLabel": "Pain, %{value} out of 10",
     "pain": {
       "title": "Pain",
@@ -469,6 +471,7 @@
     "metricPain": "Pain",
     "metricFatigue": "Fatigue",
     "viewOrEditCheckIn": "View entry",
+    "viewSymptomHistory": "View symptom history",
     "markTakenShort": "Taken",
     "injectionDaysLeft": "%{count} days left",
     "injectionDueToday": "Today",
@@ -479,7 +482,12 @@
     "previewOnboardingDevOnly": "Preview onboarding (web only)",
     "supportiveTitle": "For today",
     "supportiveBreathing": "Breathing & Posture",
-    "supportiveKnowledge": "%{title} · %{readTime}"
+    "supportiveKnowledge": "%{title} · %{readTime}",
+    "prepareAppointment": "Prepare for this appointment",
+    "emptyActionSymptomHistory": "View symptom history",
+    "emptyActionInsights": "Open Insights",
+    "emptyActionAddAppointment": "Add appointment",
+    "emptyActionKnowledge": "Explore the Knowledge Hub"
   },
   "nutrition": {
     "title": "Nutrition",
@@ -540,6 +548,9 @@
       "dailyLife": "Daily life",
       "appointmentPrep": "Appointment prep"
     }
+  },
+  "personalization": {
+    "forYou": "For you"
   },
   "paywall": {
     "brand": "Ankilozanapp",

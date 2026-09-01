@@ -5,6 +5,8 @@ import { Button, Chip, TextField, useTheme } from "../../design-system";
 import { useTranslation } from "../../localization";
 import { CHECK_IN_NOTE_MAX_LENGTH } from "../../domain/constants";
 import type { BodyAreaRegion } from "../../repositories";
+import { getCheckInPresentation } from "../../personalization/getCheckInPresentation";
+import { usePersonalizationProfile } from "../../personalization/usePersonalizationProfile";
 import { BodyRegionMap } from "./BodyRegionMap";
 import { FatigueSelector } from "./FatigueSelector";
 import { PainScale } from "./PainScale";
@@ -51,11 +53,18 @@ const DEFAULT_VALUE: CheckInFormValue = {
 export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInFormProps) {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
+  const profile = usePersonalizationProfile();
+  const personalization = getCheckInPresentation(profile);
   const [value, setValue] = useState<CheckInFormValue>(initialValue ?? DEFAULT_VALUE);
+  // Auto-expands when editing an existing entry that already used the
+  // secondary section (unchanged behavior), OR when personalization says
+  // Wellbeing/Body Map matter enough to this user to skip the extra tap
+  // (Phase R brief §12/§13) — never auto-fills a value, only visibility.
   const [showMore, setShowMore] = useState(
     initialValue?.wellbeing !== undefined ||
       (initialValue?.bodyAreas.length ?? 0) > 0 ||
-      (initialValue?.notes.length ?? 0) > 0,
+      (initialValue?.notes.length ?? 0) > 0 ||
+      personalization.autoExpandMore,
   );
 
   useEffect(() => {
@@ -76,27 +85,39 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
   return (
     <View>
       <View style={{ marginBottom: spacing.lg }}>
-        <PainScale value={value.pain} onChange={(pain) => setValue((prev) => ({ ...prev, pain }))} />
+        <PainScale
+          value={value.pain}
+          onChange={(pain) => setValue((prev) => ({ ...prev, pain }))}
+          priorityIndicator={personalization.emphasizedCoreSymptoms.includes("pain")}
+        />
       </View>
 
       <View style={{ marginBottom: spacing.lg }}>
         <StiffnessSelector
           value={value.morningStiffnessBucket}
           onChange={(morningStiffnessBucket) => setValue((prev) => ({ ...prev, morningStiffnessBucket }))}
+          priorityIndicator={personalization.emphasizedCoreSymptoms.includes("stiffness")}
         />
       </View>
 
       <View style={{ marginBottom: spacing.lg }}>
-        <FatigueSelector value={value.fatigue} onChange={(fatigue) => setValue((prev) => ({ ...prev, fatigue }))} />
+        <FatigueSelector
+          value={value.fatigue}
+          onChange={(fatigue) => setValue((prev) => ({ ...prev, fatigue }))}
+          priorityIndicator={personalization.emphasizedCoreSymptoms.includes("fatigue")}
+        />
       </View>
 
       {!showMore ? (
         <Button label={t("checkIn.addMore")} onPress={() => setShowMore(true)} variant="secondary" />
       ) : (
         <View style={{ marginBottom: spacing.lg }}>
-          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xs }}>
-            {t("checkIn.wellbeingLabel")}
-          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xs }}>
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.wellbeingLabel")}</Text>
+            {personalization.wellbeingEmphasized ? (
+              <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent }}>· {t("checkIn.priorityIndicator")}</Text>
+            ) : null}
+          </View>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs, marginBottom: spacing.md }}>
             {WELLBEING_LEVELS.map((level) => (
               <Chip
@@ -109,7 +130,7 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
           </View>
 
           <View style={{ marginBottom: spacing.md }}>
-            <BodyRegionMap value={value.bodyAreas} onToggle={toggleBodyArea} />
+            <BodyRegionMap value={value.bodyAreas} onToggle={toggleBodyArea} priorityAreas={personalization.priorityBodyAreas} />
           </View>
 
           <TextField

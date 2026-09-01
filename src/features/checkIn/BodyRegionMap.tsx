@@ -7,6 +7,16 @@ import type { BodyAreaRegion } from "@/repositories";
 export type BodyRegionMapProps = {
   value: BodyAreaRegion[];
   onToggle: (region: BodyAreaRegion) => void;
+  /**
+   * Body areas the user flagged as important at onboarding (Phase R brief
+   * §13/§14) — rendered ONLY as an informational caption below, never
+   * merged into `value`, never pre-checked, and never styled to look like
+   * a chip selection. "These areas matter to me" (onboarding preference)
+   * is not "I have pain there today" (a real check-in selection) — this
+   * prop exists specifically so that distinction can never be blurred by
+   * accident at this component's boundary.
+   */
+  priorityAreas?: BodyAreaRegion[];
 };
 
 /**
@@ -60,7 +70,7 @@ const MAP_HEIGHT = 250;
  * "Where," never "how much": there is no per-region severity here — pain
  * stays one global 0–10 check-in value (Product 2.0 spec §13).
  */
-export function BodyRegionMap({ value, onToggle }: BodyRegionMapProps) {
+export function BodyRegionMap({ value, onToggle, priorityAreas = [] }: BodyRegionMapProps) {
   const { colors, typography, spacing, radius } = useTheme();
   const { t } = useTranslation();
 
@@ -78,6 +88,13 @@ export function BodyRegionMap({ value, onToggle }: BodyRegionMapProps) {
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.sm }}>
         {t("checkIn.bodyAreaLabel")}
       </Text>
+
+      {/* Informational only — never affects `value`/selection state (see the `priorityAreas` prop doc comment above). */}
+      {priorityAreas.length > 0 ? (
+        <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent, marginBottom: spacing.sm }}>
+          {t("checkIn.priorityBodyAreasLabel", { areas: priorityAreas.map((area) => t(`checkIn.bodyArea.${area}`)).join(", ") })}
+        </Text>
+      ) : null}
 
       <View style={{ width: MAP_WIDTH, height: MAP_HEIGHT, alignSelf: "center", marginBottom: spacing.md }}>
         {/* Decorative-only silhouette parts — head, arms, legs. Not tappable, no health meaning. */}

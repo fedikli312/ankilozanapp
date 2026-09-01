@@ -260,6 +260,8 @@
   },
   "checkIn": {
     "title": "Günlük Kayıt",
+    "priorityIndicator": "Önceliğin",
+    "priorityBodyAreasLabel": "Takip etmek istediğin bölgeler: %{areas}",
     "painLabel": "Ağrı, 10 üzerinden %{value}",
     "pain": {
       "title": "Ağrı",
@@ -469,6 +471,7 @@
     "metricPain": "Ağrı",
     "metricFatigue": "Yorgunluk",
     "viewOrEditCheckIn": "Kaydı görüntüle",
+    "viewSymptomHistory": "Semptom geçmişini görüntüle",
     "markTakenShort": "Alındı",
     "injectionDaysLeft": "%{count} gün kaldı",
     "injectionDueToday": "Bugün",
@@ -479,7 +482,12 @@
     "previewOnboardingDevOnly": "Onboarding'i önizle (yalnızca web)",
     "supportiveTitle": "Bugün için",
     "supportiveBreathing": "Nefes & Postür",
-    "supportiveKnowledge": "%{title} · %{readTime}"
+    "supportiveKnowledge": "%{title} · %{readTime}",
+    "prepareAppointment": "Bu randevuya hazırlan",
+    "emptyActionSymptomHistory": "Semptom geçmişini görüntüle",
+    "emptyActionInsights": "Analizleri aç",
+    "emptyActionAddAppointment": "Randevu ekle",
+    "emptyActionKnowledge": "Bilgi Merkezi'ni keşfet"
   },
   "nutrition": {
     "title": "Beslenme",
@@ -540,6 +548,9 @@
       "dailyLife": "Günlük yaşam",
       "appointmentPrep": "Randevuya hazırlık"
     }
+  },
+  "personalization": {
+    "forYou": "Senin için"
   },
   "paywall": {
     "brand": "Ankilozanapp",

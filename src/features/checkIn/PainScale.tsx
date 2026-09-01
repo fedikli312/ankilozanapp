@@ -6,6 +6,8 @@ import { useTranslation } from "@/localization";
 export type PainScaleProps = {
   value: number;
   onChange: (value: number) => void;
+  /** True when the user explicitly flagged Pain as a priority symptom at onboarding (Phase R brief §11) — a restrained text-only indicator next to the title, never a reorder or a hidden/changed field. */
+  priorityIndicator?: boolean;
 };
 
 const POSITIONS = Array.from({ length: 11 }, (_, i) => i);
@@ -31,7 +33,7 @@ const POSITIONS = Array.from({ length: 11 }, (_, i) => i);
  * every value (Visual Design Spec §3: pain is never color-coded by
  * severity).
  */
-export function PainScale({ value, onChange }: PainScaleProps) {
+export function PainScale({ value, onChange, priorityIndicator }: PainScaleProps) {
   const { colors, typography, spacing, radius } = useTheme();
   const { t } = useTranslation();
 
@@ -39,9 +41,12 @@ export function PainScale({ value, onChange }: PainScaleProps) {
 
   return (
     <View style={{ alignItems: "center" }}>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xxs }}>
-        {t("checkIn.pain.title")}
-      </Text>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xxs }}>
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.pain.title")}</Text>
+        {priorityIndicator ? (
+          <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent }}>· {t("checkIn.priorityIndicator")}</Text>
+        ) : null}
+      </View>
       <Text
         style={{
           fontSize: typography.metricLarge.fontSize,
