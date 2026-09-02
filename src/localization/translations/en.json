@@ -292,7 +292,10 @@
       "4": "Good",
       "5": "Very good"
     },
-    "bodyAreaLabel": "Affected areas",
+    "bodyAreaLabel": "Areas you'd like to track",
+    "bodyMapEmptyHint": "You can select the areas where you feel pain today.",
+    "bodyRegionSelectedLabel": "%{region} selected.",
+    "bodyRegionUnselectedLabel": "%{region} not selected.",
     "bodyArea": {
       "neck": "Neck",
       "upper_back": "Upper back",

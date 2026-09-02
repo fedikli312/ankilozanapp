@@ -292,7 +292,10 @@
       "4": "İyi",
       "5": "Çok iyi"
     },
-    "bodyAreaLabel": "Etkilenen bölgeler",
+    "bodyAreaLabel": "Takip etmek istediğin bölgeler",
+    "bodyMapEmptyHint": "Bugün ağrı hissettiğin bölgeleri seçebilirsin.",
+    "bodyRegionSelectedLabel": "%{region} seçili.",
+    "bodyRegionUnselectedLabel": "%{region} seçili değil.",
     "bodyArea": {
       "neck": "Boyun",
       "upper_back": "Üst sırt",
