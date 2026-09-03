@@ -7,6 +7,8 @@ Status: **Specification only — nothing in this document has been implemented.*
 - **Amendment 1 (AI architecture):** the AI data flow is `mobile client → server-side AI gateway → LLM provider`, never `mobile client → LLM provider` directly. See §14/§16/§23.
 - **Amendment 2 (High-Symptom Day persistence):** `daily_check_in.flagged_important` is **not** approved for reuse. Phase W must investigate its original semantics and every existing reference before any persistence decision is made. See §19/§25.
 
+**Phase W complete** (architecture + data contracts + Amendment 2's investigation) — the deterministic aggregation layer (`src/domain/healthSummary/`, `src/domain/timeline/`), Amendment 2's resolved decision (a new `is_high_symptom_day` column, `flagged_important` untouched), and their feature-layer DB wiring all exist and are tested (250/250 tests). No UI, no HealthKit, no AI — see §12/§19 for what changed and §23 for what remains. Nothing from this phase is committed yet.
+
 ---
 
 ## 0. Context recovery — confirmed
@@ -15,7 +17,7 @@ Grounded in the current codebase, not assumed:
 
 - **Local-first, no backend.** Every table lives in on-device SQLite via Drizzle (`src/db/schema`), read/written through a typed repository layer (`src/repositories`). There is no server, no account, no sync today. AI is the first feature in this app's history that requires data to leave the device at all — treated throughout this document as a first-of-its-kind architectural boundary, not a routine addition.
 - **A deterministic aggregation layer already exists** (`src/domain/insights/`): `computePainHistory`, `computeStiffnessHistory`, `computeFatigueHistory`, `computeMedicationAdherence`, `computeInjectionHistory`, `computeLabHistory`, each a pure function over repository rows and a date range, unit-tested independently of React. Doctor Visit Report, My AS Timeline, and the AI layer are designed here to **extend this existing layer**, not create a parallel one.
-- **A dormant, unused schema column exists and is a *candidate*, not a decision.** `daily_check_in.flagged_important` (`src/db/schema/checkIn.ts`) has existed since early Phase 12 with no approved UX to ever set it — `PROJECT_MEMORY.md` explicitly records it as "an unused, always-false schema column" and Appointment Preparation's notes filter was deliberately changed in Phase 12 to stop gating on it for exactly that reason. **Amendment 2 explicitly withdraws this document's earlier "recommended: reuse" stance** — its original semantics and every existing reference must be investigated in Phase W before any persistence decision for **High-Symptom Day** is made; see §19/§25.
+- **The High-Symptom Day persistence question is resolved (Phase W).** `daily_check_in.flagged_important` — dormant since the schema's first commit, Phase 3, not Phase 12 as first assumed — turned out to have a real, documented, historically unrelated meaning ("surface this note in Appointment Preparation," `docs/TECHNICAL_ARCHITECTURE.md`), so Phase W added a new, separate column instead: `daily_check_in.is_high_symptom_day`. Full investigation and decision in §19/§25.
 - **RevenueCat currently receives zero health content** (Phase Q, reconfirmed in Phase S). Every new data flow proposed here is designed to preserve that, not just avoid regressing it.
 - **AI never talks to a provider directly from the mobile client (Amendment 1).** A minimal server-side gateway sits between the app and any LLM provider — the only place a provider API key ever lives. This is a correction to this document's own first draft, not a reinterpretation of the brief: shipping a provider secret inside a distributed mobile binary is a real, well-known exposure (any user can extract a bundled API key from the app package), and the brief's own architecture principle ("local structured health data → deterministic aggregation → strict structured AI input → LLM → validated response") already implied a boundary layer between the app and the provider — Amendment 1 makes that boundary an explicit, separately-owned service rather than logic embedded in the client. See §14/§16.
 - **The hard paywall gates the entire app**, not individual features (`docs/PAYWALL_AND_ENTITLEMENT_SPECIFICATION.md`) — a completed-onboarding, non-entitled user cannot reach any screen. §18 evaluates whether Product 2.1 changes that model.
@@ -73,7 +75,7 @@ High-Symptom Day  ──┐
 Apple Health data ──┘
 ```
 
-Practical consequence for sequencing (see §23): the Timeline and the deterministic aggregation engine are the true foundation. High-Symptom Day is mostly UI, but its persistence decision (§19, Amendment 2) is explicitly investigated in Phase W before any of that UI is built — it is not assumed to be a free reuse of an existing column. HealthKit is native-only and gated behind a dev-client/device QA cycle this session cannot run. AI is deliberately last — it is a narrator over data that must already be correct, it is the only piece that opens a new privacy boundary (data leaving the device, through the Amendment 1 gateway, never directly to a provider), and it needs its own review gate.
+Practical consequence for sequencing (see §23): the Timeline and the deterministic aggregation engine are the true foundation, and both now exist (Phase W). High-Symptom Day's persistence decision is resolved (§19, Amendment 2 — a new `is_high_symptom_day` column, not a reuse) with repository plumbing already in place; only its UI (Phase Y) remains. HealthKit is native-only and gated behind a dev-client/device QA cycle this session cannot run. AI is deliberately last — it is a narrator over data that must already be correct, it is the only piece that opens a new privacy boundary (data leaving the device, through the Amendment 1 gateway, never directly to a provider), and it needs its own review gate.
 
 ## 4. Navigation / IA
 
@@ -205,20 +207,34 @@ Scoped now so later phases build toward it rather than away from it, per the bri
 
 **Principle, restated as an architecture rule:** every number that appears anywhere in Doctor Visit Report, the Timeline, or any AI-surfaced text is computed by plain TypeScript against repository data — the LLM is never asked to count, average, or compare. This is a direct extension of a pattern that already exists and is already tested (`src/domain/insights/`), not a new pattern.
 
-**Proposed module: `src/domain/reporting/`** (new directory, sibling to `src/domain/insights/` and `src/domain/scheduling/` — matches the existing domain-layer convention of one directory per bounded concern):
+**Built in Phase W as two modules, not one `src/domain/reporting/`** (this document's original sketch) — investigation during implementation found the aggregated-statistics contract (`HealthSummary`) and the derived-event-list contract (`TimelineEvent`) have different enough shapes and consumers to warrant separate, more precisely-named directories, matching Phase W's own brief (§12: "or whether Product 2.1 deserves something like `src/domain/healthSummary`, `src/domain/timeline`"):
 
 ```
-src/domain/reporting/
-  buildDoctorVisitReport.ts   → (range) => DoctorVisitReport   [composes existing insights/* functions + new small ones below]
-  computeBodyAreaFrequency.ts → (checkIns, range) => { region, count }[]   [new — same shape as computeStiffnessHistory]
-  computeHighSymptomDays.ts   → (checkIns, range) => { date, pain, stiffness, fatigue, regions, note }[]  [new — filters on the §19 marker]
-  buildTimelineEvents.ts      → (range?) => TimelineEvent[]     [new — merges all six event sources into one sorted array, §7]
-  types.ts                    → DoctorVisitReport, TimelineEvent, and related shapes
+src/domain/healthSummary/
+  types.ts                    → HealthDateRange (= domain/insights' own DateRange, re-exported), HealthSummary,
+                                 SymptomSummary, TreatmentSummary, LabSummary, AppointmentSummary,
+                                 HighSymptomDaySummary, BodyAreaFrequency, HealthKitContext (reserved,
+                                 intentionally provisional — its real shape awaits Phase AA's HealthKit
+                                 API/device research; never populated or fabricated before then, §11/§15)
+  resolveHealthDateRange.ts   → (days, today) => HealthDateRange, + HEALTH_SUMMARY_RANGE_DAYS (7/30/90)
+  computeBodyAreaFrequency.ts → (entries, range) => BodyAreaFrequency[]
+  computeCheckInCoverage.ts   → (checkIns, range) => CheckInCoverage
+  computeHighSymptomDays.ts   → (checkIns, range) => HighSymptomDaySummary   [reads the §19 marker, never infers it]
+  buildTreatmentSummary.ts / buildLabSummary.ts / buildAppointmentSummary.ts → the per-section composers
+  buildHealthSummary.ts       → (sources, range) => HealthSummary            [the top-level pure composer]
+  buildDoctorReportInput.ts   → (sources, 30|90, today) => DoctorReportInput  [= HealthSummary, range-constrained]
+  aiSafePayload.ts            → (summary) => AiSafeHealthSummaryPayload      [the §10/§14 whitelist boundary — no network code]
+
+src/domain/timeline/
+  types.ts                    → TimelineEvent (discriminated union), TimelineEventType
+  buildTimelineEvents.ts      → (sources, range?) => TimelineEvent[]         [merges all event sources, sorted + tie-broken]
 ```
 
-**`DoctorVisitReport` as the AI's actual input contract:** the object `buildDoctorVisitReport()` returns is *also* the exact, complete structured payload sent to the LLM in §14 — there is no separate "AI data shape." This guarantees the AI can never see a number the on-screen report doesn't also show, and that a fix to the Report's math is automatically a fix to the AI's math.
+Both are pure — no repository or database import anywhere in either directory (Tech Arch's own domain-layer rule). The one place repository functions and these pure modules meet is a new, matching feature-layer pair: `src/features/healthSummary/getHealthSummary.ts` (+ `getDoctorReportInput.ts`) and `src/features/timeline/getTimelineEvents.ts` — plain functions, not React hooks (Phase W builds no UI); a future Phase X/Y/Z hook wraps these rather than duplicating them.
 
-**Testing bar:** every new function in this module ships with the same unit-test discipline already established for `domain/insights` and `domain/scheduling` — pure-function tests, no React, no I/O, run in the existing Jest suite. This is the layer where correctness actually matters most (it's the one place the app states a specific number about a specific person's health), so it is treated as the highest-test-priority code in Product 2.1, not an afterthought.
+**`DoctorReportInput` as the AI's actual input contract:** it is a type alias for `HealthSummary`, not a parallel shape — the object `buildHealthSummary()`/`buildDoctorReportInput()` returns is the same object `buildAiSafeHealthSummaryPayload()` strips down for the future AI layer in §14. This guarantees the AI can never see a number the on-screen report doesn't also show, and that a fix to the Report's math is automatically a fix to the AI's math.
+
+**Testing bar — met:** every new function ships with the same unit-test discipline already established for `domain/insights` and `domain/scheduling` — pure-function tests (`domain/healthSummary/__tests__`, `domain/timeline/__tests__`) plus real-database integration tests for the feature-layer wiring (`features/healthSummary/__tests__`, `features/timeline/__tests__`, using the same `createTestDatabase` harness `migrations.test.ts` already established). 53 new tests, full suite green (§16).
 
 ## 13. AI safety contract
 
@@ -240,7 +256,7 @@ This is the section the brief explicitly says must be resolved *before* any AI A
 
 **What leaves the device:** only the structured `DoctorVisitReport`/`TimelineEvent`/weekly-aggregate objects from §12 — numeric and categorical fields only (pain values, stiffness buckets, counts, dates, medication/injection names, lab values, Apple Health averages). **Free-text notes are excluded from every AI request in the first slice** — this is a deliberate, conservative default: notes are the one field a user might write anything into, including information they would not want summarized by a third-party model, and the brief's example outputs never require note content to work. Revisiting this is a distinct, later, explicitly-scoped decision, not a default to relax quietly.
 
-**What never leaves the device:** anything RevenueCat-adjacent (entitlement status, purchase history — already excluded, this document changes nothing there), the user's name/email (this app has no account system to begin with), free-text check-in/appointment notes (see above), any HealthKit data type not already listed in §8's authorized set.
+**What never leaves the device:** anything RevenueCat-adjacent (entitlement status, purchase history — already excluded, this document changes nothing there), the user's name/email (this app has no account system to begin with), free-text check-in/appointment notes (see above), any HealthKit data type not already listed in §8's authorized set — **and, as of Phase W's approval, doctor and institution/clinic names.** They are not necessary for the Weekly Summary or Appointment Copilot (the AI's job is noting *that* an appointment exists, not *with whom*) and must not leave the device in the first AI slice. Implemented and tested in `src/domain/healthSummary/aiSafePayload.ts`'s whitelist stripper (Phase W) — a pure type + function, no network code, no provider SDK; the internal appointment/medication/injection IDs those same records carry are excluded for the same "not necessary for this job" reason.
 
 **Provider/API architecture — Amendment 1 (approved, supersedes this document's original "direct client → provider" draft):**
 
@@ -294,7 +310,7 @@ A single explicit boundary diagram, because this document is the first in this a
 │  daily_check_in · check_in_body_area · medication* · injection* · lab_result ·             │
 │  appointment · user_preferences · onboarding_state          [existing, Product 2.0]         │
 │                                                                                              │
-│  + high-symptom-day marker — column TBD, decided in Phase W per Amendment 2 (§19) [Phase Y]  │
+│  + is_high_symptom_day marker — resolved in Phase W per Amendment 2 (§19)      [Phase W/Y]  │
 │  + hasRequestedHealthKitAuthorization flag (§8)                [new, Phase AA]              │
 │  + Apple Health samples, read live from HealthKit on demand — never persisted into           │
 │    this app's own SQLite (avoids a second, staler copy of Apple's own data)  [Phase AA]      │
@@ -351,16 +367,16 @@ Everything above the "on-device" boundary line is unchanged by this specificatio
 
 Every schema change below is additive — no existing column removed or repurposed, matching the same rule Product 2.0's `onboardingVersion` migration already established (`src/db/schema/preferences.ts`'s own doc comment) and Tech Arch's own additive-migration principle.
 
-**High-Symptom Day — NOT DECIDED. Amendment 2 explicitly withdraws this document's earlier "recommended: reuse `flagged_important`" stance.** No persistence decision is approved yet; the migration is **not** performed in Phase W or any phase covered by this document. What Phase W must do instead, as a recorded architecture-decision deliverable (not a UI task):
+**High-Symptom Day — RESOLVED in Phase W. A new column, `daily_check_in.is_high_symptom_day`, not a reuse of `flagged_important`.**
 
-1. **Investigate `flagged_important`'s original semantics.** It exists (`src/db/schema/checkIn.ts`, added early Phase 12), is `NOT NULL DEFAULT false`, and is confirmed unused today with "no approved UX to set it" (`PROJECT_MEMORY.md`, `useAppointmentPreparation.ts`) — but "unused" is not the same as "semantically equivalent to high-symptom day." Phase W must recover, as far as the historical record allows, what "important" was originally meant to flag (a plausible alternate reading: an *arbitrary user-flagged note of interest*, independent of symptom intensity — e.g. "remember to ask about this" — which is a different concept from "my symptoms were worse today").
-2. **Enumerate every existing reference**, not just the one already known (`useAppointmentPreparation.ts`'s comment explaining why it deliberately does *not* gate on this column) — a full-repo search for `flaggedImportant`/`flagged_important` before any decision, so nothing is missed.
-3. **Decide, explicitly, one of two outcomes** — this decision itself, once made, becomes a `PROJECT_MEMORY.md` architecture entry the same way every other schema decision in this codebase already is:
-   - **Reuse**, only if investigation confirms the original semantics are genuinely "this record deserves elevated attention" in a way High-Symptom Day is simply the first concrete instance of, with no plausible independent future meaning worth protecting; **or**
-   - **A new, explicit column** (e.g. `is_high_symptom_day`, `NOT NULL DEFAULT false`) if `flagged_important` is ambiguous, has a plausible independent future meaning, or investigation is inconclusive — the default posture under Amendment 2 is to prefer this option whenever there is real doubt, since the migration cost of a fresh boolean column is nearly identical to repurposing an existing one, while the cost of overloading a column with two unrelated meanings later is not.
-4. **Either way, the invariant does not change:** the marker is set only by explicit user action (§6), never inferred, and is never conflated with any other "important" concept a future feature might independently want.
+The Phase W investigation this section originally required is complete:
 
-No migration, reuse, or new-column work happens until this decision is recorded — Phase Y (the High-Symptom Day UI) does not start until Phase W's decision exists.
+1. **`flagged_important`'s original semantics, recovered from the historical record.** It has existed since the very first schema commit (Phase 3, `9114f45`) — not "added in Phase 12" as this document first assumed — and `docs/TECHNICAL_ARCHITECTURE.md` documents its intended meaning explicitly and unambiguously: *"surfaces this check-in's note in Appointment Preparation"* (§"DailyCheckIn"), added specifically because "the already-approved UX spec requires Appointment Preparation to surface 'relevant user notes'" (same section), with its intended query pattern spelled out in §J step 7 ("Query `DailyCheckIn` rows in range where `flaggedImportant = true` for their notes"). This is a **note-curation flag** — "I want this note shown to my doctor" — a concept that has nothing to do with symptom intensity. A mild day with a noteworthy comment ("started a new supplement") and a severe day with no note at all are both coherent, common states under this real meaning; neither is coherent under "high-symptom day."
+2. **Every existing reference enumerated** (full-repo search, not just the one already-known comment): `src/db/schema/checkIn.ts` (declaration), `src/db/migrations/0000_initial_schema.sql` (original migration), `src/repositories/checkInRepository.ts` / `.web.ts` (plumbing), `src/repositories/web/store.ts` (mock seed), `src/features/appointmentPreparation/useAppointmentPreparation.ts` (the one call site that discusses it, explaining why it deliberately does *not* gate on it today), `docs/TECHNICAL_ARCHITECTURE.md`, and `PROJECT_MEMORY.md`. No reference contradicts the note-curation reading above; none suggests it was ever intended as a symptom-intensity marker.
+3. **Decision: a new column.** Given (1), this is squarely the "historically unrelated" case Amendment 2's decision rule names, not an ambiguous one — reuse would conflate two real, distinct, independently-useful concepts (a still-unbuilt "surface this note to my doctor" feature, and High-Symptom Day) under one boolean, with no way to later tell them apart. `daily_check_in.is_high_symptom_day` (boolean, `NOT NULL DEFAULT false`) was added via an additive migration (`0003_daily_prism.sql`, Phase W) — `flagged_important` is untouched and remains reserved for its own original, still-unbuilt purpose.
+4. **The invariant holds exactly as specified:** the new column is set only by explicit user action, wired only as far as repository plumbing in Phase W (no UI) — no part of the system infers it from `pain`/`fatigue`/`morningStiffnessBucket`, and the domain layer's own `computeHighSymptomDays` reads the marker as recorded, never derives it.
+
+Phase Y (the High-Symptom Day UI) is unblocked by this decision and may proceed when scheduled.
 
 **My AS Timeline — no schema change.** Purely a derived, read-only presentation over six existing repositories (§7/§12) plus the new High-Symptom Day marker. This is the single largest confirmation in this document that the brief's own instinct ("investigate architecture before proposing persistence... should preferably be a derived presentation") was correct for this codebase specifically — every event type it needs already has a queryable date and a stable identity.
 
@@ -395,7 +411,7 @@ No migration, reuse, or new-column work happens until this decision is recorded 
 | HealthKit denial-ambiguity mishandled, app implies it knows a user declined access | Medium-high (a real privacy leak pattern, not just a UX rough edge) | §8/§15's explicit "never say 'denied,' only 'not connected' or 'no data'" rule, verified in code review before Phase AA ships |
 | "Flare" language creeps back in (EN or TR) via a future contributor unaware of this document's framing | Medium | Content-QA step explicitly checking both locales' High-Symptom Day and Timeline copy against the brief's exact language rule, each time that copy changes |
 | AI provider cost scales unexpectedly with usage | Medium | §18's rate-limit requirement, specified before Phase AC's provider selection, not after |
-| High-Symptom Day persistence decision (§19, Amendment 2) is skipped or rushed, and a future column ends up overloaded with two unrelated meanings | Low-medium | §19's investigation is a required, recorded Phase W deliverable gating Phase Y — not an assumption baked into this document (this is the risk Amendment 2 exists specifically to close) |
+| ~~High-Symptom Day persistence decision skipped or rushed~~ — **closed in Phase W** | — | §19's investigation is complete and recorded; `is_high_symptom_day` is a new, separate column, `flagged_important` untouched |
 | HealthKit cannot be validated in this project's usual dev-web-preview workflow | Medium (process risk, not a product risk) | §23 explicitly schedules Phase AA around native dev-client + physical-device QA, not this session's browser-only tooling — flagged now so it isn't discovered as a surprise mid-phase |
 | AI feature is the first to send any user content off-device — a scope users may not expect from a "local-first" app | Medium | §9's visible "What data is used for this?" explanation at the point of first use, plus §14's minimized payload, so the actual scope is small and disclosed at the moment it matters |
 | Doctor Visit Report or Timeline is misread as a clinical/diagnostic document despite its framing | Medium | §5's explicit non-goal list enforced as UI constraints (no scores, no color zones, no trend arrows) rather than relying on a disclaimer alone |
@@ -434,7 +450,7 @@ Broadly the brief's own suggested ordering, adjusted where this session's resear
 
 | # | Decision | Recommendation | Owner |
 |---|---|---|---|
-| 1 | Does `daily_check_in.flagged_important` semantically match "high-symptom day," or does it need a fresh column? | **Not decided (Amendment 2).** Phase W investigates original semantics + every reference and records an explicit decision; default posture under doubt is a new column, not reuse (§19) | Furkan, decided *in* Phase W, before Phase Y starts |
+| 1 | ~~Does `daily_check_in.flagged_important` semantically match "high-symptom day," or does it need a fresh column?~~ | **Resolved in Phase W: a new column, `is_high_symptom_day`.** Investigation found `flagged_important`'s real, documented meaning is unrelated note-curation, not symptom intensity (§19) | Closed |
 | 2 | LLM provider selection | Deferred to Phase AC against §14's retention-terms criterion — not a decision for this document | Furkan, at Phase AC |
 | 3 | Whether free-text notes are ever included in AI input | Excluded by default in this document (§14); revisit only as its own explicitly-scoped decision | Furkan, post-launch at earliest |
 | 4 | PDF export timing | Build only on real post-launch demand signal, not speculatively (§5) | Furkan, post-Phase Z |

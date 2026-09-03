@@ -21,6 +21,8 @@ export type UpsertCheckInInput = {
   wellbeing?: number;
   notes?: string;
   flaggedImportant?: boolean;
+  /** Product 2.1 Phase W — the High-Symptom Day marker (`src/db/schema/checkIn.ts`'s own doc comment has the full decision). Set only by explicit user action. */
+  isHighSymptomDay?: boolean;
   bodyAreas?: BodyAreaRegion[];
 };
 
@@ -43,6 +45,7 @@ export function upsertCheckIn(db: AppDatabase, input: UpsertCheckInInput): void 
       wellbeing: input.wellbeing,
       notes: input.notes ?? null,
       flaggedImportant: input.flaggedImportant ?? false,
+      isHighSymptomDay: input.isHighSymptomDay ?? false,
     })
     .onConflictDoUpdate({
       target: dailyCheckIn.date,
@@ -56,6 +59,7 @@ export function upsertCheckIn(db: AppDatabase, input: UpsertCheckInInput): void 
         // re-saves the same day, not silently retain the old value.
         notes: input.notes ?? null,
         flaggedImportant: input.flaggedImportant ?? false,
+        isHighSymptomDay: input.isHighSymptomDay ?? false,
         updatedAt: new Date().toISOString(),
       },
     })
@@ -92,4 +96,22 @@ export function getCheckInsInRange(
     .from(dailyCheckIn)
     .where(and(gte(dailyCheckIn.date, rangeStartInclusive), lt(dailyCheckIn.date, rangeEndExclusive)))
     .all();
+}
+
+/**
+ * Product 2.1 Phase W — every recorded body area across every check-in,
+ * with each row's own check-in date attached, so a range-scoped frequency
+ * count (`computeBodyAreaFrequency`) never has to N+1-query
+ * `getBodyAreasForCheckIn` once per check-in. A genuinely new capability
+ * (no existing repository function joins body areas to a date), not a
+ * duplicate of anything above.
+ */
+export function getAllCheckInBodyAreasWithDates(
+  db: AppDatabase,
+): { date: string; region: BodyAreaRegion }[] {
+  return db
+    .select({ date: dailyCheckIn.date, region: checkInBodyArea.region })
+    .from(checkInBodyArea)
+    .innerJoin(dailyCheckIn, eq(checkInBodyArea.checkInId, dailyCheckIn.id))
+    .all() as { date: string; region: BodyAreaRegion }[];
 }

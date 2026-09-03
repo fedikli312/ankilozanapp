@@ -1,5 +1,5 @@
 import { createTestDatabase } from "../../db/testUtils/testDatabase";
-import { getCheckInByDate, upsertCheckIn } from "../checkInRepository";
+import { getAllCheckInBodyAreasWithDates, getCheckInByDate, upsertCheckIn } from "../checkInRepository";
 
 describe("check-in repository", () => {
   it("is editable same-day: a second upsert for the same date updates rather than duplicates", () => {
@@ -88,5 +88,79 @@ describe("check-in repository", () => {
     });
 
     expect(getCheckInByDate(db, "2026-08-29")?.notes).toBeNull();
+  });
+
+  it("defaults isHighSymptomDay to false via the migration's own DEFAULT clause when not specified", () => {
+    const { db } = createTestDatabase();
+
+    upsertCheckIn(db, {
+      id: "check-in-5",
+      date: "2026-08-30",
+      pain: 5,
+      fatigue: 5,
+      morningStiffnessBucket: "30_60",
+    });
+
+    expect(getCheckInByDate(db, "2026-08-30")?.isHighSymptomDay).toBe(false);
+  });
+
+  it("persists an explicit isHighSymptomDay marker and updates it via a same-day upsert, independently of flaggedImportant", () => {
+    const { db } = createTestDatabase();
+
+    upsertCheckIn(db, {
+      id: "check-in-6",
+      date: "2026-08-31",
+      pain: 8,
+      fatigue: 7,
+      morningStiffnessBucket: "over_60",
+      isHighSymptomDay: true,
+    });
+
+    const stored = getCheckInByDate(db, "2026-08-31");
+    expect(stored?.isHighSymptomDay).toBe(true);
+    expect(stored?.flaggedImportant).toBe(false); // the two columns never move together
+
+    upsertCheckIn(db, {
+      id: "check-in-6-retry",
+      date: "2026-08-31",
+      pain: 3,
+      fatigue: 3,
+      morningStiffnessBucket: "15_30",
+      isHighSymptomDay: false,
+    });
+
+    expect(getCheckInByDate(db, "2026-08-31")?.isHighSymptomDay).toBe(false);
+  });
+
+  it("getAllCheckInBodyAreasWithDates joins each recorded region to its check-in's own date", () => {
+    const { db } = createTestDatabase();
+
+    upsertCheckIn(db, {
+      id: "check-in-7",
+      date: "2026-09-01",
+      pain: 4,
+      fatigue: 4,
+      morningStiffnessBucket: "15_30",
+      bodyAreas: ["hips", "lower_back"],
+    });
+    upsertCheckIn(db, {
+      id: "check-in-8",
+      date: "2026-09-02",
+      pain: 2,
+      fatigue: 2,
+      morningStiffnessBucket: "none",
+      bodyAreas: ["hips"],
+    });
+
+    const rows = getAllCheckInBodyAreasWithDates(db);
+    expect(rows).toHaveLength(3);
+    expect(rows.filter((r) => r.region === "hips")).toHaveLength(2);
+    expect(rows).toEqual(
+      expect.arrayContaining([
+        { date: "2026-09-01", region: "hips" },
+        { date: "2026-09-01", region: "lower_back" },
+        { date: "2026-09-02", region: "hips" },
+      ]),
+    );
   });
 });

@@ -1,0 +1,1 @@
+ALTER TABLE `daily_check_in` ADD `is_high_symptom_day` integer DEFAULT false NOT NULL;

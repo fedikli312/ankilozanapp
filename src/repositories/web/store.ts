@@ -153,6 +153,8 @@ export type DailyCheckInRow = {
   wellbeing: number | null;
   notes: string | null;
   flaggedImportant: boolean;
+  /** Product 2.1 Phase W — see `src/db/schema/checkIn.ts`'s doc comment. */
+  isHighSymptomDay: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -315,6 +317,7 @@ function buildSeedCheckIns(): { rows: DailyCheckInRow[]; bodyAreas: CheckInBodyA
       wellbeing: i % 3 === 0 ? 3 : null,
       notes: offset === -3 ? "Felt noticeably better after physio stretches." : null,
       flaggedImportant: false,
+      isHighSymptomDay: false,
       createdAt: isoDaysFromToday(offset),
       updatedAt: isoDaysFromToday(offset),
     });

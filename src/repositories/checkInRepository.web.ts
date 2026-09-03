@@ -16,6 +16,8 @@ export type UpsertCheckInInput = {
   wellbeing?: number;
   notes?: string;
   flaggedImportant?: boolean;
+  /** Product 2.1 Phase W — the High-Symptom Day marker. See `checkInRepository.ts`. */
+  isHighSymptomDay?: boolean;
   bodyAreas?: BodyAreaRegion[];
 };
 
@@ -31,6 +33,7 @@ export function upsertCheckIn(_db: unknown, input: UpsertCheckInInput): void {
     existing.wellbeing = input.wellbeing ?? null;
     existing.notes = input.notes ?? null;
     existing.flaggedImportant = input.flaggedImportant ?? false;
+    existing.isHighSymptomDay = input.isHighSymptomDay ?? false;
     existing.updatedAt = now;
   } else {
     webPreviewStore.dailyCheckIns.push({
@@ -42,6 +45,7 @@ export function upsertCheckIn(_db: unknown, input: UpsertCheckInInput): void {
       wellbeing: input.wellbeing ?? null,
       notes: input.notes ?? null,
       flaggedImportant: input.flaggedImportant ?? false,
+      isHighSymptomDay: input.isHighSymptomDay ?? false,
       createdAt: now,
       updatedAt: now,
     });
@@ -75,4 +79,16 @@ export function getCheckInsInRange(
   return webPreviewStore.dailyCheckIns.filter(
     (c) => c.date >= rangeStartInclusive && c.date < rangeEndExclusive,
   );
+}
+
+/** Mirrors `checkInRepository.ts`'s join, over the in-memory mock store. */
+export function getAllCheckInBodyAreasWithDates(
+  _db: unknown,
+): { date: string; region: BodyAreaRegion }[] {
+  return webPreviewStore.checkInBodyAreas
+    .map((b) => {
+      const checkIn = webPreviewStore.dailyCheckIns.find((c) => c.id === b.checkInId);
+      return checkIn ? { date: checkIn.date, region: b.region } : null;
+    })
+    .filter((row): row is { date: string; region: BodyAreaRegion } => row !== null);
 }
