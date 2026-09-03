@@ -96,13 +96,13 @@ export default function AppointmentDetailScreen() {
         {appointment.doctorOrInstitution ? (
           <ListRow label={t("appointments.form.doctorOrInstitution")} caption={appointment.doctorOrInstitution} />
         ) : null}
+        {/* Phase S fix: the user's own free-text note was rendered as a
+            bare, unlabeled paragraph — easy to mistake for an app-generated
+            instruction rather than something they wrote themselves. Same
+            ListRow treatment as every other detail here, with the existing
+            "Notes"/"Notlar" label. */}
+        {appointment.notes ? <ListRow label={t("appointments.form.notes")} caption={appointment.notes} /> : null}
       </GroupedList>
-
-      {appointment.notes ? (
-        <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, marginBottom: spacing.md }}>
-          {appointment.notes}
-        </Text>
-      ) : null}
 
       {appointment.type === "rheumatology" ? (
         <View style={{ marginBottom: spacing.md }}>

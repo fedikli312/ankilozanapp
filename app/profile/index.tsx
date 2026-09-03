@@ -14,6 +14,20 @@ export default function ProfileScreen() {
 
   return (
     <ScreenContainer scroll>
+      {/* Phase S fix: every other pushed screen (Today, Check-in, …) opens
+          with its own bold title — `profile.title` already existed in both
+          locales but was never rendered, leaving Profile the one screen
+          with no visible heading. */}
+      <Text
+        style={{
+          fontSize: typography.title.fontSize,
+          fontWeight: typography.title.fontWeight,
+          color: colors.textPrimary,
+          marginBottom: spacing.xxs,
+        }}
+      >
+        {t("profile.title")}
+      </Text>
       {/* Redesign Spec §I.11: one restrained local-first trust signal, not
           repeated on every settings screen, and no absolute security claim. */}
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>

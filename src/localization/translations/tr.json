@@ -284,6 +284,13 @@
       "30_60": "30–60 dakika",
       "over_60": "60 dakikadan fazla"
     },
+    "stiffnessCompact": {
+      "none": "Yok",
+      "under_15": "<15 dk",
+      "15_30": "15–30 dk",
+      "30_60": "30–60 dk",
+      "over_60": "60+ dk"
+    },
     "wellbeingLabel": "Genel iyi oluş",
     "wellbeing": {
       "1": "Çok kötü",

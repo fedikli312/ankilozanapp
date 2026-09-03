@@ -130,9 +130,13 @@ function TodayContent() {
             {t("today.checkInSectionTitle")}
           </Text>
           <View style={{ flexDirection: "row", gap: spacing.xs, marginBottom: spacing.xs }}>
-            <MetricCard label={t("today.metricPain")} value={String(todaysCheckIn.pain)} unit="/10" />
-            <MetricCard label={t("checkIn.stiffnessLabel")} value={t(`checkIn.stiffness.${todaysCheckIn.morningStiffnessBucket}`)} />
-            <MetricCard label={t("today.metricFatigue")} value={String(todaysCheckIn.fatigue)} unit="/10" />
+            <MetricCard compact label={t("today.metricPain")} value={String(todaysCheckIn.pain)} unit="/10" />
+            <MetricCard
+              compact
+              label={t("checkIn.stiffnessLabel")}
+              value={t(`checkIn.stiffnessCompact.${todaysCheckIn.morningStiffnessBucket}`)}
+            />
+            <MetricCard compact label={t("today.metricFatigue")} value={String(todaysCheckIn.fatigue)} unit="/10" />
           </View>
           {/* Phase O: compact body-area line, only when real — never a placeholder row (Product 2.0 spec §17/§18). */}
           {todaysBodyAreas.length > 0 ? (

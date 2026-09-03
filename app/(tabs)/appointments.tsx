@@ -46,6 +46,13 @@ export default function AppointmentsListScreen() {
 
   return (
     <ScreenContainer scroll>
+      {/* Phase S: an earlier pass in this same phase added an in-content
+          title to both states of this screen, believing it had none — it
+          was wrong. This is a tab screen; `app/(tabs)/_layout.tsx` already
+          renders `appointments.listTitle` as the native tab header (with the
+          gear icon). Adding it again here produced a duplicated heading,
+          caught in this phase's own live QA and reverted before it ever
+          shipped — same fix applied to the empty-state branch above. */}
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
         {t("appointments.subtitle")}
       </Text>

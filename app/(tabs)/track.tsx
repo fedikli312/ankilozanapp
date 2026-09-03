@@ -105,6 +105,12 @@ export default function TrackLandingScreen() {
 
   return (
     <ScreenContainer>
+      {/* Phase S: an earlier pass in this same phase added an in-content
+          title here, believing the screen had none — it was wrong. This is
+          a tab screen; `app/(tabs)/_layout.tsx` already renders `track.title`
+          as the native tab header (with the gear icon). Adding it again here
+          produced a duplicated heading, caught in this phase's own live QA
+          and reverted before it ever shipped. */}
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
         {t("track.subtitle")}
       </Text>

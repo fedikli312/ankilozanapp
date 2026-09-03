@@ -284,6 +284,13 @@
       "30_60": "30–60 min",
       "over_60": "Over 60 min"
     },
+    "stiffnessCompact": {
+      "none": "None",
+      "under_15": "<15 min",
+      "15_30": "15–30 min",
+      "30_60": "30–60 min",
+      "over_60": "60+ min"
+    },
     "wellbeingLabel": "General wellbeing",
     "wellbeing": {
       "1": "Very poor",
