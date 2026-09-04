@@ -411,6 +411,13 @@
     "rowLabel": "Pain %{pain} · Fatigue %{fatigue}",
     "todayCaption": "Today · Stiffness: %{stiffness}"
   },
+  "timeline": {
+    "title": "My AS Timeline",
+    "trackCaption": "Your recorded history over time",
+    "emptyTitle": "Your timeline will appear here as you record check-ins, treatments, labs and appointments.",
+    "highSymptomDay": "High-symptom day",
+    "painOutOfTen": "Pain %{pain}/10"
+  },
   "profile": {
     "title": "Profile",
     "localFirstTrust": "Your health records are stored on this device.",

@@ -411,6 +411,13 @@
     "rowLabel": "Ağrı %{pain} · Yorgunluk %{fatigue}",
     "todayCaption": "Bugün · Tutukluk: %{stiffness}"
   },
+  "timeline": {
+    "title": "AS Zaman Çizelgem",
+    "trackCaption": "Kayıtlı geçmişin zaman içinde",
+    "emptyTitle": "Kontrol kayıtları, tedaviler, tahliller ve randevular ekledikçe zaman çizelgen burada görünecek.",
+    "highSymptomDay": "Yoğun belirti günü",
+    "painOutOfTen": "Ağrı %{pain}/10"
+  },
   "profile": {
     "title": "Profil",
     "localFirstTrust": "Sağlık kayıtların bu cihazda saklanır.",

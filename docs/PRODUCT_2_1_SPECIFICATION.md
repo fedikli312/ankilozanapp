@@ -7,7 +7,9 @@ Status: **Specification only — nothing in this document has been implemented.*
 - **Amendment 1 (AI architecture):** the AI data flow is `mobile client → server-side AI gateway → LLM provider`, never `mobile client → LLM provider` directly. See §14/§16/§23.
 - **Amendment 2 (High-Symptom Day persistence):** `daily_check_in.flagged_important` is **not** approved for reuse. Phase W must investigate its original semantics and every existing reference before any persistence decision is made. See §19/§25.
 
-**Phase W complete** (architecture + data contracts + Amendment 2's investigation) — the deterministic aggregation layer (`src/domain/healthSummary/`, `src/domain/timeline/`), Amendment 2's resolved decision (a new `is_high_symptom_day` column, `flagged_important` untouched), and their feature-layer DB wiring all exist and are tested (250/250 tests). No UI, no HealthKit, no AI — see §12/§19 for what changed and §23 for what remains. Nothing from this phase is committed yet.
+**Phase W complete** (architecture + data contracts + Amendment 2's investigation) — the deterministic aggregation layer (`src/domain/healthSummary/`, `src/domain/timeline/`), Amendment 2's resolved decision (a new `is_high_symptom_day` column, `flagged_important` untouched), and their feature-layer DB wiring all exist and are tested. Committed (`9b22edf`).
+
+**Phase X complete** — My AS Timeline (`/timeline`, entered from Track) is built on Phase W's contracts unchanged, with a working empty state, 90-day range, and the narrower navigation rule described in §7. 270/270 tests. No HealthKit, no AI, no other Product 2.1 feature. Not yet committed.
 
 ---
 
@@ -149,9 +151,11 @@ Internal code/data may use `highSymptomDay`/`isHighSymptomDay` naming; the strin
 | Lab result (CRP/ESR) | `lab_result` | Marker + value |
 | Appointment | `appointment` | Type + doctor/institution |
 
-**Interaction:** tapping any entry navigates to that record's existing detail screen (`/appointments/[id]`, `/labs/[marker]`, etc.) — the Timeline is a *lens*, not a new destination with its own detail views. This is the direct UI expression of §12's "derived presentation, not a second source of truth" rule.
+**Interaction — narrower than first drafted, resolved in Phase X:** only an appointment row (always) and a check-in/high-symptom-day row *dated today* (the only date `/check-in` can actually edit, matching `useSymptomsHistory`'s own established rule) are navigable. Medication, injection, and lab rows stay read-only — this document's original "tapping any entry navigates to that record's existing detail screen" assumed a per-record detail route exists for every type; it doesn't (no per-administration or per-lab-result screen exists to link to), and Phase X's own brief was explicit that ambiguous navigation should stay read-only rather than invent a broken deep link. The Timeline remains a *lens*, never a new destination with its own detail views, for the types that are navigable — this is the direct UI expression of §12's "derived presentation, not a second source of truth" rule.
 
-**Empty/sparse states:** for a user with very little history, the Timeline reads naturally short (a handful of entries) rather than showing an empty-state message where a message isn't needed — consistent with how Insights already treats sparse data (`insights.notEnoughData`) only where a *computation* (not a list) genuinely has nothing to show.
+**Empty state — a real one exists, correcting this document's original assumption:** Phase X's brief required a calm, explicit empty state ("Your timeline will appear here as you record check-ins, treatments, labs and appointments." / TR equivalent) rather than this section's original "reads naturally short... a message isn't needed" — built as `timeline.emptyTitle`, same restrained tone as every other empty state in the app (Symptoms, Labs), never framed as an error.
+
+**Range (not specified in this document's first draft, resolved in Phase X):** the most recent 90 days (`HEALTH_SUMMARY_RANGE_DAYS.last90`, reused from §12's own aggregation layer), not yet paginated — a deliberate V1 scope, not a limitation the underlying contracts impose. `getTimelineEvents`'s `range` parameter was left optional in Phase W specifically so a future paginated Timeline changes only the feature-layer caller, not `domain/timeline` itself.
 
 **Filtering:** out of scope for the first slice (Phase X) — a single unified chronological feed is the whole point of the feature; per-type filtering is a plausible fast-follow if usage data shows people want to isolate one event type, not a v1 requirement.
 

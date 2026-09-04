@@ -115,7 +115,22 @@ export default function TrackLandingScreen() {
         {t("track.subtitle")}
       </Text>
 
-      <GroupedList title={t("track.healthGroupTitle")}>{healthOrder.map((id) => healthRows[id])}</GroupedList>
+      <GroupedList title={t("track.healthGroupTitle")}>
+        {healthOrder.map((id) => healthRows[id])}
+        {/* Phase X — always last, never part of `healthOrder`/personalization
+            (Product 2.1 spec brief §20: "do not personalize the Timeline
+            order/content" — this row's position is fixed by not touching
+            `getTrackSupportOrder`/`TrackHealthRowId` at all, the same way
+            Nutrition/Breathing below stay outside that reorderable set). */}
+        <ListRow
+          key="timeline"
+          leading={icon("time-outline")}
+          label={t("timeline.title")}
+          caption={t("timeline.trackCaption")}
+          onPress={() => router.push("/timeline")}
+          chevron
+        />
+      </GroupedList>
 
       {/* Redesign Spec §8/§J: "GÜNLÜK DESTEK" — visually subordinate to
           SAĞLIK TAKİBİ above, never equal weight (product-safety-adjacent
