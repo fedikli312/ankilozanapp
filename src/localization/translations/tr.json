@@ -316,6 +316,10 @@
     "noteLabel": "Not",
     "notePrompt": "Bugün hatırlamak istediğin bir şey var mı?",
     "noteCounter": "%{count}/%{max} karakter",
+    "highSymptomDay": {
+      "label": "Yoğun belirti günü",
+      "description": "Belirtilerim bugün normalden daha yoğun."
+    },
     "save": "Kaydet"
   },
   "labs": {
@@ -485,6 +489,8 @@
     "checkInPrompt": "Bugün henüz kayıt yapmadın.",
     "checkInYesterdayContext": "Dün: Ağrı %{pain}/10",
     "checkInCta": "Kontrolü başlat",
+    "highSymptomDayCta": "Belirtilerin bugün daha mı yoğun?",
+    "highSymptomDayRecorded": "Yoğun belirti günü kaydedildi",
     "metricPain": "Ağrı",
     "metricFatigue": "Yorgunluk",
     "viewOrEditCheckIn": "Kaydı görüntüle",

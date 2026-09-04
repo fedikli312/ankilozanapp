@@ -123,6 +123,22 @@ function TodayContent() {
             </Text>
           ) : null}
           <Button label={t("today.checkInCta")} onPress={() => router.push("/check-in")} />
+          {/* Product 2.1 Phase Y (brief §1): visually secondary — a plain
+              text link, same restrained treatment as `viewOrEditCheckIn`
+              below, never a second filled button competing with the
+              primary CTA above it. Opens the same Check-in 2.0 flow
+              (brief §3), just with the High-Symptom Day toggle defaulted
+              on and still fully visible/changeable (brief §2). */}
+          <AccessibleTouchable
+            onPress={() => router.push(`/check-in?highSymptomDay=1`)}
+            accessibilityRole="button"
+            accessibilityLabel={t("today.highSymptomDayCta")}
+            style={{ marginTop: spacing.sm, alignSelf: "flex-start" }}
+          >
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>
+              {t("today.highSymptomDayCta")}
+            </Text>
+          </AccessibleTouchable>
         </View>
       ) : (
         <View style={{ marginBottom: spacing.lg }}>
@@ -142,6 +158,14 @@ function TodayContent() {
           {todaysBodyAreas.length > 0 ? (
             <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xxs }}>
               {todaysBodyAreas.map((area) => t(`checkIn.bodyArea.${area}`)).join(" · ")}
+            </Text>
+          ) : null}
+          {/* Product 2.1 Phase Y (brief §7): a compact factual marker only —
+              no interpretation, no severity styling, a subtle accent is
+              enough (brief §6). Existing metrics above stay unchanged. */}
+          {todaysCheckIn.isHighSymptomDay ? (
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent, marginBottom: spacing.xxs }}>
+              {t("today.highSymptomDayRecorded")}
             </Text>
           ) : null}
           <AccessibleTouchable onPress={() => router.push("/check-in")} accessibilityRole="button" accessibilityLabel={t("today.viewOrEditCheckIn")}>

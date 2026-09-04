@@ -316,6 +316,10 @@
     "noteLabel": "Note",
     "notePrompt": "Anything you want to remember today?",
     "noteCounter": "%{count}/%{max} characters",
+    "highSymptomDay": {
+      "label": "High-symptom day",
+      "description": "My symptoms feel more intense than usual today."
+    },
     "save": "Save"
   },
   "labs": {
@@ -485,6 +489,8 @@
     "checkInPrompt": "You haven't checked in yet today.",
     "checkInYesterdayContext": "Yesterday: Pain %{pain}/10",
     "checkInCta": "Start check-in",
+    "highSymptomDayCta": "Symptoms more intense today?",
+    "highSymptomDayRecorded": "High-symptom day recorded",
     "metricPain": "Pain",
     "metricFatigue": "Fatigue",
     "viewOrEditCheckIn": "View entry",

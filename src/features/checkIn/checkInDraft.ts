@@ -19,6 +19,8 @@ export type CheckInDraft = {
   wellbeing?: number;
   bodyAreas: BodyAreaRegion[];
   notes: string;
+  /** Product 2.1 Phase Y — kept in the draft like every other field, so a same-session dismiss+reopen doesn't silently lose the user's toggle choice. */
+  isHighSymptomDay: boolean;
 };
 
 let draft: CheckInDraft | null = null;

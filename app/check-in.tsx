@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Text } from "react-native";
 
 import { ScreenContainer, useTheme } from "@/design-system";
@@ -12,7 +12,13 @@ export default function CheckInScreen() {
   const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
-  const { today, initialValue, save } = useCheckIn();
+  // Product 2.1 Phase Y — Today's "Symptoms more intense today?" secondary
+  // CTA links here with ?highSymptomDay=1 (brief §2). Purely a starting
+  // signal for the toggle's default; see `useCheckIn`'s own doc comment.
+  const { highSymptomDay } = useLocalSearchParams<{ highSymptomDay?: string }>();
+  const { today, initialValue, defaultHighSymptomDay, save } = useCheckIn({
+    highSymptomDayEntry: highSymptomDay === "1",
+  });
 
   return (
     <ScreenContainer scroll>
@@ -24,6 +30,7 @@ export default function CheckInScreen() {
       </Text>
       <CheckInForm
         initialValue={initialValue}
+        defaultHighSymptomDay={defaultHighSymptomDay}
         onChangeDraft={(value) => setCheckInDraft({ date: today, ...value })}
         onSave={(input) => {
           save(input);

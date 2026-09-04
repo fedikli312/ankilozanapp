@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, Chip, TextField, useTheme } from "../../design-system";
+import { Button, Chip, TextField, ToggleRow, useTheme } from "../../design-system";
 import { useTranslation } from "../../localization";
 import { CHECK_IN_NOTE_MAX_LENGTH } from "../../domain/constants";
 import type { BodyAreaRegion } from "../../repositories";
@@ -20,12 +20,23 @@ export type CheckInFormValue = {
   wellbeing?: number;
   bodyAreas: BodyAreaRegion[];
   notes: string;
+  /** Product 2.1 Phase Y — user-declared only, see `CheckInForm`'s own doc comment. */
+  isHighSymptomDay: boolean;
 };
 
 export type CheckInFormProps = {
   initialValue?: CheckInFormValue;
   onSave: (input: SaveCheckInInput) => void;
   onChangeDraft?: (value: CheckInFormValue) => void;
+  /**
+   * Phase Y: true only when the user arrived via Today's explicit
+   * "Symptoms more intense today?" entry point (brief §2) — used solely to
+   * seed the toggle's starting position on a *fresh* entry (no draft, no
+   * existing today's check-in already covers this via `initialValue`,
+   * which always wins). The user can still review and change it before
+   * saving; nothing is forced silently.
+   */
+  defaultHighSymptomDay?: boolean;
 };
 
 const WELLBEING_LEVELS = [1, 2, 3, 4, 5];
@@ -36,6 +47,7 @@ const DEFAULT_VALUE: CheckInFormValue = {
   morningStiffnessBucket: "none",
   bodyAreas: [],
   notes: "",
+  isHighSymptomDay: false,
 };
 
 /**
@@ -49,13 +61,24 @@ const DEFAULT_VALUE: CheckInFormValue = {
  * already visually lighter than the new controls — no bespoke component
  * needed for something that already works and is already appropriately
  * lightweight). Body Map is new (§ BodyRegionMap); Note is unchanged.
+ *
+ * Product 2.1 Phase Y — High-Symptom Day: a user-declared-only marker
+ * ("Symptoms feel more intense than usual today"). It is never inferred
+ * from pain/fatigue/stiffness/body-area values — no threshold anywhere in
+ * this file sets it. It defaults to false on every normal check-in, and
+ * to true only when the caller passes `defaultHighSymptomDay` (Today's
+ * explicit secondary entry point) on a fresh entry with no existing
+ * value to preserve — and even then it's just the toggle's starting
+ * position, fully visible and changeable before save (brief §2/§4/§11).
  */
-export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInFormProps) {
+export function CheckInForm({ initialValue, onSave, onChangeDraft, defaultHighSymptomDay }: CheckInFormProps) {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const profile = usePersonalizationProfile();
   const personalization = getCheckInPresentation(profile);
-  const [value, setValue] = useState<CheckInFormValue>(initialValue ?? DEFAULT_VALUE);
+  const [value, setValue] = useState<CheckInFormValue>(
+    initialValue ?? { ...DEFAULT_VALUE, isHighSymptomDay: defaultHighSymptomDay ?? false },
+  );
   // Auto-expands when editing an existing entry that already used the
   // secondary section (unchanged behavior), OR when personalization says
   // Wellbeing/Body Map matter enough to this user to skip the extra tap
@@ -108,6 +131,20 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
         />
       </View>
 
+      {/* Product 2.1 Phase Y — always visible (never behind "+ More"): a
+          user-declared-only marker, so it must stay reviewable/changeable
+          before every save, not buried behind a disclosure (brief §2/§13).
+          `ToggleRow`'s native Switch already exposes on/off to screen
+          readers and isn't color-only (brief §13). */}
+      <View style={{ marginBottom: spacing.lg }}>
+        <ToggleRow
+          label={t("checkIn.highSymptomDay.label")}
+          description={t("checkIn.highSymptomDay.description")}
+          value={value.isHighSymptomDay}
+          onValueChange={(isHighSymptomDay) => setValue((prev) => ({ ...prev, isHighSymptomDay }))}
+        />
+      </View>
+
       {!showMore ? (
         <Button label={t("checkIn.addMore")} onPress={() => setShowMore(true)} variant="secondary" />
       ) : (
@@ -154,6 +191,7 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft }: CheckInForm
             fatigue: value.fatigue,
             morningStiffnessBucket: value.morningStiffnessBucket,
             wellbeing: value.wellbeing,
+            isHighSymptomDay: value.isHighSymptomDay,
             bodyAreas: value.bodyAreas,
             notes: value.notes.trim() ? value.notes.trim() : undefined,
           })
