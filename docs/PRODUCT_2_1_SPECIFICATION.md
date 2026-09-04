@@ -9,7 +9,7 @@ Status: **Specification only — nothing in this document has been implemented.*
 
 **Phase W complete** (architecture + data contracts + Amendment 2's investigation) — the deterministic aggregation layer (`src/domain/healthSummary/`, `src/domain/timeline/`), Amendment 2's resolved decision (a new `is_high_symptom_day` column, `flagged_important` untouched), and their feature-layer DB wiring all exist and are tested. Committed (`9b22edf`).
 
-**Phase X complete** — My AS Timeline (`/timeline`, entered from Track) is built on Phase W's contracts unchanged, with a working empty state, 90-day range, and the narrower navigation rule described in §7. 270/270 tests. No HealthKit, no AI, no other Product 2.1 feature. Not yet committed.
+**Phase X complete** — My AS Timeline (`/timeline`, entered from Track) is built on Phase W's contracts unchanged, with a working empty state, 90-day range, and the narrower navigation rule described in §7. 270/270 tests. No HealthKit, no AI, no other Product 2.1 feature. Committed (`86d5914`).
 
 ---
 
