@@ -11,6 +11,8 @@ Status: **Specification only — nothing in this document has been implemented.*
 
 **Phase X complete** — My AS Timeline (`/timeline`, entered from Track) is built on Phase W's contracts unchanged, with a working empty state, 90-day range, and the narrower navigation rule described in §7. 270/270 tests. No HealthKit, no AI, no other Product 2.1 feature. Committed (`86d5914`).
 
+**Phase Z complete, renamed and corrected from this document's original roadmap sketch (§25's phase list)** — user-facing name is **Appointment Summary**/**Randevu Özeti**, not "Doctor Visit Report"; there is no `buildDoctorVisitReport` function — the screen is built on the real Phase W entry point, `getDoctorReportInput`/`DoctorReportInput` (`= HealthSummary`). No "copy-as-text" action and no disabled "Coming soon" PDF-export placeholder were built — share/export was investigated and explicitly deferred (no trivial dependency-free path exists yet; see PROJECT_MEMORY.md's Phase Z entry). New route `/appointments/[id]/summary`, reached from the existing `/appointments/[id]/prepare` screen, which it complements rather than replaces. 313/313 tests. No HealthKit, no AI, no other Product 2.1 feature. Not yet committed.
+
 ---
 
 ## 0. Context recovery — confirmed

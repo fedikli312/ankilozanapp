@@ -1,7 +1,7 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
-import { GroupedList, ListRow, ScreenContainer, SectionLabel, useTheme } from "@/design-system";
+import { AccessibleTouchable, GroupedList, ListRow, ScreenContainer, SectionLabel, useTheme } from "@/design-system";
 import { formatDate, formatShortDate, useTranslation } from "@/localization";
 import { useAppointmentPreparation } from "@/features/appointmentPreparation/useAppointmentPreparation";
 import { parseDateOnly } from "@/domain/dateUtils";
@@ -10,6 +10,7 @@ export default function AppointmentPreparationScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
+  const router = useRouter();
   const data = useAppointmentPreparation(id);
 
   if (!data.appointment) {
@@ -75,6 +76,21 @@ export default function AppointmentPreparationScreen() {
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.xxs, fontStyle: "italic" }}>
         {t("appointmentPreparation.disclaimer")}
       </Text>
+
+      {/* Product 2.1 Phase Z (brief §2's IA): the entry point into the new,
+          Phase W-backed Appointment Summary — a distinct, richer,
+          range-selectable deterministic summary, reached from here rather
+          than replacing this screen's own appointment-relative view. */}
+      <AccessibleTouchable
+        onPress={() => router.push(`/appointments/${id}/summary`)}
+        accessibilityRole="button"
+        accessibilityLabel={t("appointmentSummary.title")}
+        style={{ marginTop: spacing.sm, marginBottom: spacing.xs, alignSelf: "flex-start" }}
+      >
+        <Text style={{ fontSize: typography.body.fontSize, color: colors.accent, fontWeight: "600" }}>
+          {t("appointmentSummary.title")} →
+        </Text>
+      </AccessibleTouchable>
 
       {/* Redesign Spec §G.7-11: BELİRTİLER / TEDAVİLER / TAHLİLLER / NOTLAR,
           in that order — compact grouped rows, not one card per datapoint. */}

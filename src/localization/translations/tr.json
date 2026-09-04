@@ -258,6 +258,42 @@
     "notes": "Notlar",
     "noneRecorded": "Bu dönemde bir kayıt yok."
   },
+  "appointmentSummary": {
+    "title": "Randevu Özeti",
+    "subtitle": "Uygulamaya kaydettiğin sağlık bilgilerine dayanır.",
+    "range": {
+      "30": "Son 30 gün",
+      "90": "Son 90 gün"
+    },
+    "coverage": "%{count}/%{total} gün kaydedildi",
+    "symptomsTitle": "Belirtiler",
+    "noCheckIns": "Bu dönemde kayıt yok.",
+    "sampleCount": "%{count} kayıt",
+    "painAverage": "Ortalama ağrı 10 üzerinden %{average}",
+    "fatigueAverage": "Ortalama yorgunluk 10 üzerinden %{average}",
+    "notEnoughForAverage": "Kaydedildi, ancak ortalama için yeterli kayıt yok.",
+    "stiffnessTitle": "Kaydedilen sabah tutukluğu",
+    "bodyAreasTitle": "Kaydedilen bölgeler",
+    "highSymptomDaysTitle": "Yoğun belirti günleri",
+    "highSymptomDaysCount": "%{count} kayıt",
+    "treatmentTitle": "Tedaviler",
+    "noTreatmentRecorded": "Bu dönemde tedavi kaydı yok.",
+    "medicationDoses": "%{taken} alındı, %{missed} kaçırıldı",
+    "injectionCounts": "%{completed} yapıldı, %{missed} kaçırıldı",
+    "lastInjection": "Son kayıt: %{date}",
+    "labsTitle": "Tahliller",
+    "noLabsRecorded": "Bu dönemde tahlil sonucu yok.",
+    "labLatest": "%{value} %{unit} · %{date}",
+    "labPrevious": "Önceki: %{list}",
+    "appointmentContextTitle": "Bu randevu",
+    "thingsToReviewTitle": "Gözden geçirilebilecekler",
+    "thingsToReview": {
+      "highSymptomDays": "Bu dönemde %{count} yoğun belirti günü kaydettin.",
+      "bodyArea": "%{region} bölgesini %{count} kontrolde kaydettin.",
+      "latestLab": "En son kaydettiğin %{marker} sonucu %{date} tarihinden."
+    },
+    "viewTimeline": "Zaman çizelgesini görüntüle"
+  },
   "checkIn": {
     "title": "Günlük Kayıt",
     "priorityIndicator": "Önceliğin",

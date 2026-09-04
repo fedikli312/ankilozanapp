@@ -258,6 +258,42 @@
     "notes": "Notes",
     "noneRecorded": "Nothing recorded in this period."
   },
+  "appointmentSummary": {
+    "title": "Appointment Summary",
+    "subtitle": "Based on the health information you've recorded in the app.",
+    "range": {
+      "30": "Last 30 days",
+      "90": "Last 90 days"
+    },
+    "coverage": "%{count} of %{total} days recorded",
+    "symptomsTitle": "Symptoms",
+    "noCheckIns": "No entries in this period.",
+    "sampleCount": "%{count} entries",
+    "painAverage": "Average pain %{average} out of 10",
+    "fatigueAverage": "Average fatigue %{average} out of 10",
+    "notEnoughForAverage": "Recorded, but not enough entries yet for an average.",
+    "stiffnessTitle": "Morning stiffness recorded",
+    "bodyAreasTitle": "Body areas recorded",
+    "highSymptomDaysTitle": "High-symptom days",
+    "highSymptomDaysCount": "%{count} recorded",
+    "treatmentTitle": "Treatments",
+    "noTreatmentRecorded": "No treatment activity recorded in this period.",
+    "medicationDoses": "%{taken} taken, %{missed} missed",
+    "injectionCounts": "%{completed} completed, %{missed} missed",
+    "lastInjection": "Last recorded: %{date}",
+    "labsTitle": "Labs",
+    "noLabsRecorded": "No lab results recorded in this period.",
+    "labLatest": "%{value} %{unit} · %{date}",
+    "labPrevious": "Previous: %{list}",
+    "appointmentContextTitle": "This appointment",
+    "thingsToReviewTitle": "Things to review",
+    "thingsToReview": {
+      "highSymptomDays": "You recorded %{count} high-symptom days in this period.",
+      "bodyArea": "You recorded %{region} on %{count} check-ins.",
+      "latestLab": "Your latest recorded %{marker} result is from %{date}."
+    },
+    "viewTimeline": "View timeline"
+  },
   "checkIn": {
     "title": "Daily Log",
     "priorityIndicator": "Your priority",
