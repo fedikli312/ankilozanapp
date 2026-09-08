@@ -7,7 +7,7 @@ const TODAY = "2026-09-03";
 const t: Translate = (key, options) => (options ? `${key}(${JSON.stringify(options)})` : key);
 
 describe("presentTimelineEvent", () => {
-  it("check_in: uses the existing symptoms.rowLabel key and never mentions a note (the type carries none)", () => {
+  it("check_in: uses the Timeline-specific natural-language event key, never mentions a note (the type carries none)", () => {
     const event: TimelineEvent = {
       type: "check_in",
       id: "check_in:c1",
@@ -19,7 +19,7 @@ describe("presentTimelineEvent", () => {
       bodyAreas: ["hips"],
     };
     const result = presentTimelineEvent(event, t, TODAY);
-    expect(result.label).toContain("symptoms.rowLabel");
+    expect(result.label).toContain("timeline.checkInEvent");
     expect(result.caption).toContain("checkIn.stiffnessCompact.15_30");
     expect(result.caption).toContain("checkIn.bodyArea.hips");
     expect(result.route).toBeNull(); // not today's date
@@ -107,7 +107,7 @@ describe("presentTimelineEvent", () => {
     expect(result.route).toBeNull();
   });
 
-  it("lab: shows the marker as the label and the raw recorded value+unit as the caption, no interpretation", () => {
+  it("lab: wraps the marker in the natural-language 'added' phrasing, and the caption is the raw recorded value+unit, no interpretation", () => {
     const event: TimelineEvent = {
       type: "lab",
       id: "lab:l1",
@@ -118,7 +118,7 @@ describe("presentTimelineEvent", () => {
       unit: "mg/L",
     };
     const result = presentTimelineEvent(event, t, TODAY);
-    expect(result.label).toBe("labs.marker.CRP");
+    expect(result.label).toBe('timeline.labEvent({"marker":"labs.marker.CRP"})');
     expect(result.caption).toBe("12.4 mg/L");
     expect(result.route).toBeNull();
   });
@@ -168,6 +168,8 @@ describe("presentTimelineEvent", () => {
       value: 5,
       unit: "mg/L",
     };
-    expect(presentTimelineEvent(withCaption, t, TODAY).accessibilityLabel).toBe("labs.marker.CRP. 5 mg/L");
+    expect(presentTimelineEvent(withCaption, t, TODAY).accessibilityLabel).toBe(
+      'timeline.labEvent({"marker":"labs.marker.CRP"}). 5 mg/L',
+    );
   });
 });

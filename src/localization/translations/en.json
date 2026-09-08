@@ -428,9 +428,12 @@
   "track": {
     "title": "Track",
     "subtitle": "Your health history",
-    "healthGroupTitle": "Health tracking",
+    "recentHistoryTitle": "Recent history",
+    "recentHistoryEmpty": "No recent activity.",
+    "viewFullTimeline": "View full timeline",
     "symptoms": "Symptoms",
     "labs": "Labs",
+    "trendsCaption": "Patterns across your recorded data",
     "noneYet": "Nothing yet",
     "countActive": "%{count} active",
     "latestCheckInToday": "Latest entry: today",
@@ -439,8 +442,6 @@
     "injectionsNextIn": "Next: in %{count} days",
     "labsLatestResult": "Latest result: %{date}",
     "supportGroupTitle": "Daily support",
-    "knowledge": "Understand Your AS",
-    "knowledgeCaption": "Short, trustworthy information about AS",
     "nutrition": "Nutrition",
     "nutritionCaption": "General information for daily nutrition",
     "breathing": "Breathing & Posture",
@@ -456,9 +457,12 @@
   "timeline": {
     "title": "My AS Timeline",
     "trackCaption": "Your recorded history over time",
-    "emptyTitle": "Your timeline will appear here as you record check-ins, treatments, labs and appointments.",
-    "highSymptomDay": "High-symptom day",
-    "painOutOfTen": "Pain %{pain}/10"
+    "emptyTitle": "No recorded events yet.",
+    "emptySubtitle": "Your check-ins, treatments, labs and visits will appear here.",
+    "highSymptomDay": "Marked as a high-symptom day",
+    "painOutOfTen": "Pain %{pain}/10",
+    "checkInEvent": "Pain %{pain}, fatigue %{fatigue} recorded",
+    "labEvent": "%{marker} added"
   },
   "profile": {
     "title": "Profile",

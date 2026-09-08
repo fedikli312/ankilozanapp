@@ -428,9 +428,12 @@
   "track": {
     "title": "Takip",
     "subtitle": "Sağlık geçmişin",
-    "healthGroupTitle": "Sağlık takibi",
+    "recentHistoryTitle": "Son geçmiş",
+    "recentHistoryEmpty": "Yakın zamanda kayıt yok.",
+    "viewFullTimeline": "Tüm zaman çizelgesini görüntüle",
     "symptoms": "Belirtiler",
     "labs": "Tahliller",
+    "trendsCaption": "Kayıtlarındaki eğilimler",
     "noneYet": "Henüz bir şey yok",
     "countActive": "%{count} aktif",
     "latestCheckInToday": "Son kayıt: bugün",
@@ -439,8 +442,6 @@
     "injectionsNextIn": "Sonraki: %{count} gün sonra",
     "labsLatestResult": "Son sonuç: %{date}",
     "supportGroupTitle": "Günlük destek",
-    "knowledge": "Ankilozanı Anla",
-    "knowledgeCaption": "AS hakkında kısa, güvenilir bilgiler",
     "nutrition": "Beslenme",
     "nutritionCaption": "Günlük beslenme için genel bilgiler",
     "breathing": "Nefes & Postür",
@@ -456,9 +457,12 @@
   "timeline": {
     "title": "AS Zaman Çizelgem",
     "trackCaption": "Kayıtlı geçmişin zaman içinde",
-    "emptyTitle": "Kontrol kayıtları, tedaviler, tahliller ve randevular ekledikçe zaman çizelgen burada görünecek.",
-    "highSymptomDay": "Yoğun belirti günü",
-    "painOutOfTen": "Ağrı %{pain}/10"
+    "emptyTitle": "Henüz kayıtlı bir olay yok.",
+    "emptySubtitle": "Kontrollerin, tedavilerin, tahlillerin ve randevuların burada görünecek.",
+    "highSymptomDay": "Yoğun belirti günü olarak işaretlendi",
+    "painOutOfTen": "Ağrı %{pain}/10",
+    "checkInEvent": "Ağrı %{pain}, yorgunluk %{fatigue} kaydedildi",
+    "labEvent": "%{marker} eklendi"
   },
   "profile": {
     "title": "Profil",

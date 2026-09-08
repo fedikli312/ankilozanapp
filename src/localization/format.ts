@@ -43,6 +43,11 @@ export function formatMonthYear(date: Date, locale: SupportedLocale): string {
   return new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { month: "long", year: "numeric" }).format(date);
 }
 
+/** Weekday name only, e.g. "Tuesday" — Timeline's compact day-marker row (Phase Design-E), paired beside the day-of-month numeral rather than repeating the full `formatHeadingDate` sentence for every day group. */
+export function formatWeekday(date: Date, locale: SupportedLocale): string {
+  return new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { weekday: "long" }).format(date);
+}
+
 /** Compact day/month for the appointment date-block (Visual Design Spec §26's date pill), e.g. { day: "07", month: "EYL" }. */
 export function formatDateBlock(date: Date, locale: SupportedLocale): { day: string; month: string } {
   const day = new Intl.DateTimeFormat(INTL_LOCALE_TAG[locale], { day: "2-digit" }).format(date);

@@ -1,15 +1,33 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import type { ComponentProps, ReactElement } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
-import { GroupedList, InlineAction, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { InlineAction, ListRow, Section, SectionLabel, ScreenContainer, useTheme } from "@/design-system";
 import { formatShortDate, useTranslation } from "@/localization";
+import { presentTimelineEvent } from "@/features/timeline/presentTimelineEvent";
+import { TimelineEventRow } from "@/features/timeline/TimelineEventRow";
+import { TimelineRailLine } from "@/features/timeline/TimelineRailLine";
+import { useTimeline } from "@/features/timeline/useTimeline";
 import { useTrackLanding } from "@/features/track/useTrackLanding";
-import { getTrackSupportOrder, type TrackHealthRowId } from "@/personalization/getTrackSupportOrder";
+import { getTrackSupportOrder } from "@/personalization/getTrackSupportOrder";
 import { usePersonalizationProfile } from "@/personalization/usePersonalizationProfile";
 import { todayDateOnly } from "@/shared/today";
 
+const RECENT_HISTORY_PREVIEW_LIMIT = 3;
+
+/**
+ * Health Record landing — Design System 2.0, Phase Design-E. Answers "what
+ * has been happening with my AS?" via a fixed hierarchy (brief §2): a
+ * context line, a compact Timeline preview as the primary anchor, the
+ * recording categories as one continuous list (not six feature cards),
+ * a Trends/Insights entry folded into that same list, and — clearly
+ * subordinate, last — Nutrition/Breathing as supporting record utilities.
+ *
+ * Knowledge is deliberately no longer part of this hierarchy (brief §16):
+ * its route (`/knowledge`) and content are untouched, just not linked
+ * from here anymore. Its eventual home (most likely Profile) is not
+ * decided or built in this phase — see `docs/DESIGN_E_HEALTH_RECORD_TIMELINE.md`
+ * for that flagged-not-solved note (a Design-H task).
+ */
 export default function TrackLandingScreen() {
   const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
@@ -22,8 +40,14 @@ export default function TrackLandingScreen() {
     nextInjectionDaysLeft,
     latestLabResult,
   } = useTrackLanding();
+  const { months, today, isEmpty } = useTimeline();
   const profile = usePersonalizationProfile();
-  const { healthOrder, knowledgeEmphasized } = getTrackSupportOrder(profile);
+  // Only `healthOrder` still applies here — see the doc's "what changed"
+  // section for why `knowledgeEmphasized` has no consumer on this screen
+  // anymore (Knowledge itself was removed from the hierarchy, not just
+  // its emphasis cue).
+  const { healthOrder } = getTrackSupportOrder(profile);
+  const symptomsFirst = healthOrder.indexOf("symptoms") < healthOrder.indexOf("medications");
 
   const symptomsCaption = latestCheckInDate
     ? t(
@@ -50,135 +74,72 @@ export default function TrackLandingScreen() {
     ? t("track.labsLatestResult", { date: formatShortDate(new Date(latestLabResult.recordedDate), locale) })
     : t("track.noneYet");
 
-  const icon = (name: ComponentProps<typeof Ionicons>["name"]) => (
-    <Ionicons name={name} size={20} color={colors.textSecondary} />
+  const symptomsRow = (
+    <ListRow key="symptoms" label={t("track.symptoms")} caption={symptomsCaption} onPress={() => router.push("/symptoms")} chevron />
+  );
+  const treatmentRows = [
+    <SectionLabel key="treatment-label">{t("today.treatmentTitle")}</SectionLabel>,
+    <ListRow key="medications" label={t("medications.listTitle")} caption={medicationsCaption} onPress={() => router.push("/medications")} chevron />,
+    <ListRow key="injections" label={t("injections.listTitle")} caption={injectionsCaption} onPress={() => router.push("/injections")} chevron />,
+  ];
+  const labsRow = <ListRow key="labs" label={t("track.labs")} caption={labsCaption} onPress={() => router.push("/labs")} chevron />;
+  const trendsRow = (
+    <ListRow key="trends" label={t("insights.title")} caption={t("track.trendsCaption")} onPress={() => router.push("/insights")} chevron />
   );
 
-  // Phase R (brief §16): each health module's row content, keyed by id so
-  // it can be rendered in `healthOrder` — every module is still always
-  // present, only the order changes. Nutrition/Breathing below are
-  // deliberately NOT part of this reorderable set (brief §16: "avoid
-  // making Track unstable... do not create dramatically different
-  // information architectures per user").
-  const healthRows: Record<TrackHealthRowId, ReactElement> = {
-    symptoms: (
-      <ListRow
-        key="symptoms"
-        leading={icon("pulse-outline")}
-        label={t("track.symptoms")}
-        caption={symptomsCaption}
-        onPress={() => router.push("/symptoms")}
-        chevron
-      />
-    ),
-    medications: (
-      <ListRow
-        key="medications"
-        leading={icon("medkit-outline")}
-        label={t("medications.listTitle")}
-        caption={medicationsCaption}
-        onPress={() => router.push("/medications")}
-        chevron
-      />
-    ),
-    injections: (
-      <ListRow
-        key="injections"
-        leading={icon("medical-outline")}
-        label={t("injections.listTitle")}
-        caption={injectionsCaption}
-        onPress={() => router.push("/injections")}
-        chevron
-      />
-    ),
-    labs: (
-      <ListRow
-        key="labs"
-        leading={icon("flask-outline")}
-        label={t("track.labs")}
-        caption={labsCaption}
-        onPress={() => router.push("/labs")}
-        chevron
-      />
-    ),
-  };
+  const previewEvents = months
+    .flatMap((month) => month.days.flatMap((day) => day.events))
+    .slice(0, RECENT_HISTORY_PREVIEW_LIMIT);
 
   return (
     <ScreenContainer scroll>
-      {/* Design-B live QA finding: this screen's content (2 groups, up to
-          8 rows, plus the InlineAction below) already exceeded a typical
-          viewport's height, and `ScreenContainer` without `scroll` renders
-          a plain non-scrolling View — every other tab (`index.tsx`,
-          `appointments.tsx`) already passes `scroll`; this one didn't, so
-          overflowing content was silently unreachable (confirmed via the
-          accessibility tree: the new "View insights" link below was
-          entirely absent from it before this fix). Mechanical prop flip
-          only — no layout/content change. */}
-      {/* Phase S: an earlier pass in this same phase added an in-content
-          title here, believing the screen had none — it was wrong. This is
-          a tab screen; `app/(tabs)/_layout.tsx` already renders `track.title`
-          as the native tab header (with the gear icon). Adding it again here
-          produced a duplicated heading, caught in this phase's own live QA
-          and reverted before it ever shipped. */}
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
+      {/* 1. Heading/context — the native tab header already renders "Health
+          Record" (Design-B); this line is the only in-content context,
+          never a duplicate title (the exact anti-pattern this screen was
+          previously corrected for). */}
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.lg }}>
         {t("track.subtitle")}
       </Text>
 
-      <GroupedList title={t("track.healthGroupTitle")}>
-        {healthOrder.map((id) => healthRows[id])}
-        {/* Phase X — always last, never part of `healthOrder`/personalization
-            (Product 2.1 spec brief §20: "do not personalize the Timeline
-            order/content" — this row's position is fixed by not touching
-            `getTrackSupportOrder`/`TrackHealthRowId` at all, the same way
-            Nutrition/Breathing below stay outside that reorderable set). */}
-        <ListRow
-          key="timeline"
-          leading={icon("time-outline")}
-          label={t("timeline.title")}
-          caption={t("timeline.trackCaption")}
-          onPress={() => router.push("/timeline")}
-          chevron
-        />
-      </GroupedList>
+      {/* 2. Timeline anchor — a compact preview of the same rail/marker
+          language the full Timeline uses (brief §10), not a duplicate of
+          the whole screen. */}
+      <View style={{ marginBottom: spacing.xl }}>
+        <SectionLabel>{t("track.recentHistoryTitle")}</SectionLabel>
+        {isEmpty ? (
+          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.sm }}>
+            {t("track.recentHistoryEmpty")}
+          </Text>
+        ) : (
+          <View style={{ position: "relative", marginBottom: spacing.xs }}>
+            <TimelineRailLine />
+            {previewEvents.map((event) => {
+              const { label, caption, accessibilityLabel } = presentTimelineEvent(event, t, today);
+              return <TimelineEventRow key={event.id} type={event.type} label={label} caption={caption} accessibilityLabel={accessibilityLabel} />;
+            })}
+          </View>
+        )}
+        <InlineAction label={t("track.viewFullTimeline")} onPress={() => router.push("/timeline")} tone="quiet" />
+      </View>
 
-      {/* Redesign Spec §8/§J: "GÜNLÜK DESTEK" — visually subordinate to
-          SAĞLIK TAKİBİ above, never equal weight (product-safety-adjacent
-          rule: supportive content must never look as clinically
-          authoritative as the actual health-record features). Order is
-          fixed (brief §16) — only Knowledge's own row gets a restrained
-          "Senin için" cue when the learn-about-AS goal is selected;
-          Nutrition/Breathing never move. */}
-      <GroupedList title={t("track.supportGroupTitle")} emphasis="subordinate">
-        <ListRow
-          leading={<Ionicons name="book-outline" size={20} color={knowledgeEmphasized ? colors.accent : colors.textSecondary} />}
-          label={t("track.knowledge")}
-          caption={knowledgeEmphasized ? `${t("personalization.forYou")} · ${t("track.knowledgeCaption")}` : t("track.knowledgeCaption")}
-          onPress={() => router.push("/knowledge")}
-          chevron
-        />
-        <ListRow
-          leading={icon("nutrition-outline")}
-          label={t("track.nutrition")}
-          caption={t("track.nutritionCaption")}
-          onPress={() => router.push("/nutrition")}
-          chevron
-        />
-        <ListRow
-          leading={icon("leaf-outline")}
-          label={t("track.breathing")}
-          caption={t("track.breathingCaption")}
-          onPress={() => router.push("/breathing")}
-          chevron
-        />
-      </GroupedList>
+      {/* 3+4. Recording categories, plus the Trends/Insights entry folded
+          into the same continuous list (brief §2's own worked example) —
+          one hairline-separated `Section`, never six feature cards.
+          Symptoms and the Treatment pair (Medications+Injections) swap
+          relative order per the existing, unchanged Phase R personalization
+          rule; Labs and Trends always come last. */}
+      <Section>
+        {symptomsFirst ? [symptomsRow, ...treatmentRows, labsRow, trendsRow] : [...treatmentRows, symptomsRow, labsRow, trendsRow]}
+      </Section>
 
-      {/* Phase Design-B (navigation-shell only): Insights is no longer a
-          visible tab (`app/(tabs)/_layout.tsx`'s `href: null`) — this is
-          the temporary access point that keeps it reachable without
-          losing the deep link, ahead of Design-E folding it in properly
-          as a real mode of this tab. Mechanical navigation addition only,
-          not a content redesign of this screen. */}
-      <InlineAction label={t("track.viewInsights")} onPress={() => router.push("/insights")} tone="quiet" />
+      {/* 5. Supporting record utilities — clearly subordinate, last.
+          Knowledge is intentionally not here (brief §16). */}
+      <View style={{ marginTop: spacing.md }}>
+        <Section title={t("track.supportGroupTitle")}>
+          <ListRow label={t("track.nutrition")} caption={t("track.nutritionCaption")} onPress={() => router.push("/nutrition")} chevron />
+          <ListRow label={t("track.breathing")} caption={t("track.breathingCaption")} onPress={() => router.push("/breathing")} chevron />
+        </Section>
+      </View>
     </ScreenContainer>
   );
 }

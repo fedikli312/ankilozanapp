@@ -12,15 +12,21 @@ export type TimelineEventPresentation = {
 };
 
 /**
- * Phase X — turns one Phase W `TimelineEvent` into exactly the two lines a
- * `ListRow` shows, reusing existing translation keys wherever one already
- * fits (`symptoms.rowLabel`, `checkIn.stiffnessCompact.*`,
+ * Phase X — turns one Phase W `TimelineEvent` into exactly the label +
+ * caption a Timeline row shows. Reuses existing translation vocabulary
+ * wherever one already fits (`checkIn.stiffnessCompact.*`,
  * `checkIn.bodyArea.*`, `medications.status.*`, `injections.status.*`,
  * `appointments.type.*`/`status.*`, `labs.marker.*`) rather than
- * duplicating that vocabulary. Free-text notes are never read here — the
- * underlying `CheckInTimelineEvent` type doesn't even carry one (Phase W),
- * so there is structurally nothing to accidentally surface (brief §8).
- * Pure: takes `t` and `today` as parameters rather than importing
+ * duplicating it. Check-in and lab labels use their own `timeline.*`
+ * phrasing (`timeline.checkInEvent`, `timeline.labEvent`) — Design-E brief
+ * §6's natural-record-language pass — deliberately not the Symptoms
+ * History screen's `symptoms.rowLabel`, so that screen's own copy stays
+ * untouched (out of Design-E's scope) while Timeline reads as "Pain 4,
+ * fatigue 3 recorded" rather than a bare "Pain 4 · Fatigue 3" data pair.
+ * Free-text notes are never read here — the underlying
+ * `CheckInTimelineEvent` type doesn't even carry one (Phase W), so there
+ * is structurally nothing to accidentally surface (brief §8). Pure: takes
+ * `t` and `today` as parameters rather than importing
  * `useTranslation`/`todayDateOnly` itself, so it's testable without a
  * component or a database.
  */
@@ -56,7 +62,7 @@ function buildContent(
         };
       }
       return {
-        label: t("symptoms.rowLabel", { pain: event.pain, fatigue: event.fatigue }),
+        label: t("timeline.checkInEvent", { pain: event.pain, fatigue: event.fatigue }),
         caption: [stiffness, bodyAreas].filter(Boolean).join(" · "),
         route,
       };
@@ -78,7 +84,7 @@ function buildContent(
 
     case "lab":
       return {
-        label: t(`labs.marker.${event.marker}`),
+        label: t("timeline.labEvent", { marker: t(`labs.marker.${event.marker}`) }),
         caption: `${event.value} ${event.unit}`,
         route: null,
       };

@@ -1,34 +1,33 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import type { ComponentProps } from "react";
 import { Text, View } from "react-native";
 
-import { GroupedList, ListRow, ScreenContainer, SectionLabel, useTheme } from "@/design-system";
-import { formatMonthYear, formatShortDate, useTranslation } from "@/localization";
+import { ScreenContainer, useTheme } from "@/design-system";
+import { formatDateBlock, formatMonthYear, formatWeekday, useTranslation } from "@/localization";
 import { presentTimelineEvent } from "@/features/timeline/presentTimelineEvent";
+import { TimelineEventRow } from "@/features/timeline/TimelineEventRow";
+import { TimelineRailLine } from "@/features/timeline/TimelineRailLine";
 import { useTimeline } from "@/features/timeline/useTimeline";
-import type { TimelineEventType } from "@/domain/timeline";
+import { RAIL_GUTTER_WIDTH } from "@/features/timeline/railLayout";
 
-type IoniconName = ComponentProps<typeof Ionicons>["name"];
+const DAY_MARKER_SIZE = 26;
 
 /**
- * Phase X §6/§17 — the event's icon is *supplemental*, never the only
- * signal: the label text itself already says "High-symptom day" /
- * "Yoğun belirti günü" for that one case, and every other event type's
- * label is already a factual name (a medication, a marker, a doctor).
- * `high_symptom_day` gets the filled variant + the accent color; every
- * other type shares the same calm, muted outline treatment already used
- * elsewhere in the app (Track's own health-tracking rows, Today).
+ * My AS Timeline — Design System 2.0, Phase Design-E. Ilium's signature
+ * surface (brief §3): one continuous vertical rail per month, event
+ * markers as small shapes (never per-event/per-day cards — see
+ * `TimelineMarker`/`timelineMarkers.ts` for the taxonomy), day markers as
+ * bold tabular numerals sitting on the same rail, and a distinct,
+ * non-uppercase month heading treatment so this screen reads as an
+ * editorial record rather than another settings-style grouped list (brief
+ * §30's self-critique question 8: recognizable even with the logo/tab bar
+ * hidden).
+ *
+ * The rail line is scoped to one month at a time (`TimelineRailLine`
+ * inside each month's own `position: "relative"` block) rather than one
+ * line spanning the entire scroll — genuinely continuous within each
+ * month's reading unit, and correctly bounded so it never runs behind the
+ * month heading itself (which sits outside that relative block).
  */
-const EVENT_ICON: Record<TimelineEventType, IoniconName> = {
-  check_in: "pulse-outline",
-  high_symptom_day: "pulse",
-  medication: "medkit-outline",
-  injection: "medical-outline",
-  lab: "flask-outline",
-  appointment: "calendar-outline",
-};
-
 export default function TimelineScreen() {
   const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
@@ -41,7 +40,7 @@ export default function TimelineScreen() {
         fontSize: typography.title.fontSize,
         fontWeight: typography.title.fontWeight,
         color: colors.textPrimary,
-        marginBottom: spacing.md,
+        marginBottom: spacing.lg,
       }}
     >
       {t("timeline.title")}
@@ -52,9 +51,12 @@ export default function TimelineScreen() {
     return (
       <ScreenContainer>
         {title}
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary, textAlign: "center" }}>
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: spacing.lg }}>
+          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, textAlign: "center", marginBottom: spacing.xs }}>
             {t("timeline.emptyTitle")}
+          </Text>
+          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, textAlign: "center" }}>
+            {t("timeline.emptySubtitle")}
           </Text>
         </View>
       </ScreenContainer>
@@ -66,48 +68,77 @@ export default function TimelineScreen() {
       {title}
 
       {months.map((month) => (
-        <View key={month.monthStart}>
-          <SectionLabel>{formatMonthYear(new Date(month.monthStart), locale)}</SectionLabel>
+        <View key={month.monthStart} style={{ marginBottom: spacing.xl }}>
+          {/* Month heading — deliberately NOT the uppercase `SectionLabel`
+              treatment used for settings-style grouped lists elsewhere;
+              natural case, real weight/size contrast, the one place this
+              screen's editorial character shows most plainly. */}
+          <Text
+            style={{
+              fontSize: typography.headline.fontSize,
+              fontWeight: "700",
+              color: colors.textPrimary,
+              marginBottom: spacing.sm,
+            }}
+          >
+            {formatMonthYear(new Date(month.monthStart), locale)}
+          </Text>
 
-          {month.days.map((day) => (
-            <View key={day.date} style={{ marginBottom: spacing.sm }}>
-              <Text
-                style={{
-                  fontSize: typography.caption.fontSize,
-                  fontWeight: "600",
-                  color: colors.textPrimary,
-                  marginBottom: spacing.xxs,
-                }}
-              >
-                {formatShortDate(new Date(day.date), locale)}
-              </Text>
+          <View style={{ position: "relative" }}>
+            <TimelineRailLine />
 
-              <GroupedList>
-                {day.events.map((event) => {
-                  const { label, caption, accessibilityLabel, route } = presentTimelineEvent(event, t, today);
-                  const highlighted = event.type === "high_symptom_day";
+            {month.days.map((day) => {
+              const dayDate = new Date(day.date);
+              const { day: dayNumber } = formatDateBlock(dayDate, locale);
 
-                  return (
-                    <ListRow
-                      key={event.id}
-                      leading={
-                        <Ionicons
-                          name={EVENT_ICON[event.type]}
-                          size={20}
-                          color={highlighted ? colors.accent : colors.textSecondary}
-                        />
-                      }
-                      label={label}
-                      caption={caption}
-                      accessibilityLabel={accessibilityLabel}
-                      onPress={route ? () => router.push(route) : undefined}
-                      chevron={!!route}
-                    />
-                  );
-                })}
-              </GroupedList>
-            </View>
-          ))}
+              return (
+                <View key={day.date}>
+                  <View style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.xxs }}>
+                    <View style={{ width: RAIL_GUTTER_WIDTH, alignItems: "center" }}>
+                      <View
+                        style={{
+                          width: DAY_MARKER_SIZE,
+                          height: DAY_MARKER_SIZE,
+                          borderRadius: DAY_MARKER_SIZE / 2,
+                          backgroundColor: colors.background,
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: typography.callout.fontSize,
+                            fontWeight: "700",
+                            fontVariant: ["tabular-nums"],
+                            color: colors.textPrimary,
+                          }}
+                        >
+                          {dayNumber}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginLeft: spacing.xs }}>
+                      {formatWeekday(dayDate, locale)}
+                    </Text>
+                  </View>
+
+                  {day.events.map((event) => {
+                    const { label, caption, accessibilityLabel, route } = presentTimelineEvent(event, t, today);
+                    return (
+                      <TimelineEventRow
+                        key={event.id}
+                        type={event.type}
+                        label={label}
+                        caption={caption}
+                        accessibilityLabel={accessibilityLabel}
+                        onPress={route ? () => router.push(route) : undefined}
+                      />
+                    );
+                  })}
+                </View>
+              );
+            })}
+          </View>
         </View>
       ))}
     </ScreenContainer>
