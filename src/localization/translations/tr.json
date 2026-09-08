@@ -122,7 +122,8 @@
     "today": "Bugün",
     "track": "Takip",
     "appointments": "Randevular",
-    "insights": "Analiz"
+    "insights": "Analiz",
+    "healthRecord": "Sağlık Kaydım"
   },
   "medications": {
     "listTitle": "İlaçlar",
@@ -443,7 +444,8 @@
     "nutrition": "Beslenme",
     "nutritionCaption": "Günlük beslenme için genel bilgiler",
     "breathing": "Nefes & Postür",
-    "breathingCaption": "Kısa nefes ve postür uygulamaları"
+    "breathingCaption": "Kısa nefes ve postür uygulamaları",
+    "viewInsights": "Analizleri görüntüle"
   },
   "symptoms": {
     "title": "Belirtiler",

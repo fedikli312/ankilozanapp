@@ -1,0 +1,92 @@
+<!--
+  App icon vector source — "The Margin Mark" at icon scale.
+  Design System 2.0, Phase Design-B §15 (docs/DESIGN_SYSTEM_2_0_IMPLEMENTATION.md).
+
+  Replaces the previous `assets/icon.png`, `assets/android-icon-*.png` and
+  `assets/splash-icon.png` CONCEPTUALLY — this is the source of truth those
+  files should be re-exported from. This phase implements the vector
+  foundation only; see the "Raster export — NOT done yet" note below and
+  docs/DESIGN_SYSTEM_2_0_IMPLEMENTATION.md's "App icon status" section for
+  exactly what remains.
+
+  Why the previous PNGs are not touched by this phase: this environment
+  has no SVG rasterizer available (no rsvg-convert/inkscape/imagemagick,
+  no `sharp` in node_modules) and installing one solely to export a handful
+  of PNGs is outside this phase's scope. Per the Design-B brief's explicit
+  instruction ("document what raster-generation work remains rather than
+  faking a low-quality placeholder as final"), the old unfinished
+  blue/Figma-construction-guide icon.png is left in place rather than
+  replaced with a naive, unverified raster.
+
+  Design rationale:
+  - Solid `brandPrimary` (terracotta, #AD5335) field, not white/cream —
+    home-screen icons live in a grid of colorful competitors; a confident
+    saturated field reads better at a glance than a pale one, and
+    terracotta itself is the point (`docs/DESIGN_RESEARCH_2_0.md` §3's
+    "not generic-healthcare-looking" finding — this is deliberately NOT
+    the blue/teal/green of every other health app).
+  - The mark rendered in the paper cream (`background`, #FAF7F2), the
+    same "ink on paper" relationship the in-app `MarginMark` component
+    uses in reverse (ink mark, paper ground) — inverted here (paper mark,
+    ink ground) is the correct choice for an icon specifically, where
+    maximum silhouette contrast at very small sizes matters more than
+    matching the in-app mark's polarity exactly.
+  - Single color mark, thick strokes, no gradient/shadow/bevel (unlike the
+    retired icon.png's 3D glossy chevron) — legible at every OS-mandated
+    size down to a 29x29pt Settings-row icon.
+  - Generous safe-area padding: the glyph's own bounding box (including
+    stroke caps) sits within the centered ~55% of the 1024x1024 canvas,
+    comfortably inside both iOS's continuous-corner mask and Android's
+    adaptive-icon safe zone (which crops roughly the outer 33% on some
+    launchers).
+  - Coordinates are a direct proportional scale-up of
+    `src/design-system/components/MarginMark.tsx`'s path data
+    (`M7 5 L7 17 L17 17` + `M10.5 9.5 L15.5 9.5` in a 24x24 viewBox) to a
+    1024x1024 canvas, not a redrawn/reinterpreted shape — the icon is
+    provably the same mark as the in-app logo, not a lookalike.
+
+  Raster export — NOT done yet. To finish the app-icon rollout:
+  1. Export this SVG at 1024x1024 PNG (no alpha needed; the terracotta
+     field is full-bleed) -> replaces `assets/icon.png` and
+     `assets/favicon.png` (favicon can reuse the same flat export, resized).
+  2. Android adaptive icon needs 2 additional exports at the SAME mark
+     scale/position, per Android's foreground/background layer split:
+     - `android-icon-background.png`: this file's `<rect>` alone (solid
+       #AD5335, 1024x1024).
+     - `android-icon-foreground.png`: the two `<path>` strokes ONLY, on a
+       transparent background, 1024x1024 — Android scales/crops this layer
+       independently, so keep the mark closer to canvas center than this
+       source file's own margins to survive that crop (tighten padding
+       ~15% further than the flat icon export).
+     - `android-icon-monochrome.png`: same foreground silhouette,
+       single-alpha white-on-transparent (Android 13+ themed-icon mode
+       recolors it entirely, so exact color doesn't matter, only alpha
+       shape).
+  3. `assets/splash-icon.png` is a separate design decision (splash screens
+     often use just the mark, no background field, on `app.json`'s
+     `splash.backgroundColor`) — not addressed by this file; needs its own
+     export once a splash treatment is chosen (Design-C+ scope, not
+     required for Design-B).
+  4. None of steps 1-3 require design changes — they are mechanical
+     exports of this already-finished vector, using any SVG-to-PNG tool
+     (Figma, Inkscape, `npx sharp-cli`, an online exporter). No further
+     design work is blocking this.
+-->
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="1024" fill="#AD5335" />
+  <path
+    d="M298.7 213.3 L298.7 725.3 L725.3 725.3"
+    fill="none"
+    stroke="#FAF7F2"
+    stroke-width="96"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M448 405.3 L661.3 405.3"
+    fill="none"
+    stroke="#FAF7F2"
+    stroke-width="96"
+    stroke-linecap="round"
+  />
+</svg>

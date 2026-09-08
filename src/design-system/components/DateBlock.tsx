@@ -28,13 +28,27 @@ export function DateBlock({ day, month, emphasis = "quiet" }: DateBlockProps) {
         justifyContent: "center",
         paddingVertical: 6,
         borderRadius: radius.small,
-        backgroundColor: strong ? colors.surfaceHighlight : "transparent",
+        backgroundColor: strong ? colors.selected : "transparent",
       }}
     >
-      <Text style={{ fontSize: 17, fontWeight: "600", color: strong ? colors.accent : colors.textPrimary }}>
+      <Text
+        style={{
+          fontSize: 17,
+          fontWeight: "600",
+          fontVariant: ["tabular-nums"],
+          color: strong ? colors.brandPrimary : colors.textPrimary,
+        }}
+      >
         {day}
       </Text>
-      <Text style={{ fontSize: 11, fontWeight: "600", letterSpacing: 0.3, color: strong ? colors.accent : colors.textSecondary }}>
+      <Text
+        style={{
+          fontSize: 11,
+          fontWeight: "600",
+          letterSpacing: 0.3,
+          color: strong ? colors.brandPrimary : colors.textSecondary,
+        }}
+      >
         {month}
       </Text>
     </View>

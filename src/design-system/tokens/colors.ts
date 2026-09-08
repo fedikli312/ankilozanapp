@@ -1,36 +1,122 @@
 /**
- * Color tokens — docs/REDESIGN_SPECIFICATION.md §2.2 (supersedes the
- * original VISUAL_DESIGN_SPECIFICATION.md §2-5 warm-cream/muted-teal
- * palette as of the 2026-08-31 redesign approval).
+ * Color tokens — Design System 2.0, "Paper & Ink" (Product Design Reset,
+ * Phase Design-B). Supersedes the Product 2.0 warm-cream/deep-green
+ * palette (`docs/REDESIGN_SPECIFICATION.md` §2.2) as the token layer's
+ * primary vocabulary, per `docs/DESIGN_DIRECTION_2_0.md` §5 and
+ * `docs/DESIGN_DIRECTION_VALIDATION_2_0.md` §11's dark-mode specification.
  *
- * Three light-mode surface concepts, semantically distinct:
- *   backgroundWarm    — the overall screen canvas.
- *   surface            — true/near-white elevated content (cards, grouped
- *                         sections that need to read as "important container").
- *   surfaceSecondary   — light neutral gray for secondary grouped controls
- *                         (segmented-control track, input fill).
- *   surfaceHighlight   — pale mint, reserved for the ONE highlighted element
- *                         per screen (spec §2.2) — never a general card fill.
+ * NEW semantic roles (use these in all new code):
+ *   background       — the overall screen canvas ("paper").
+ *   surfaceSecondary — secondary grouped-content fill (segmented-control
+ *                       track, input fill) — one step off background.
+ *   surfaceElevated  — true elevated content, reserved for genuinely
+ *                       distinct moments (a hero metric, one highlighted
+ *                       card) — never the default container.
  *
- * `accentOnDark` was dropped: the redesign's accent value is identical
- * whether used as a fill or as foreground-on-background in both light and
- * dark mode, so the old fill/foreground split token has no purpose here
- * (it also had zero consumers under the previous palette).
+ *   NOTE — `surface` is deliberately NOT reused as a new-role name here.
+ *   Under the committed pre-Design-B palette, `surface` meant "true/near-
+ *   white elevated container" (`#FFFFFF` light) — exactly what this system
+ *   now calls `surfaceElevated`. Several existing screens/components
+ *   (`BodyRegionMap`, `StiffnessSelector`, `PainScale`, `paywall`,
+ *   `SelectableCard`, `breathing/index`, `MetricCard`) still read
+ *   `colors.surface` directly and were not touched by this pass; reusing
+ *   the bare key for the different "secondary fill" role (as an earlier
+ *   draft of this file did) would have silently swapped their background
+ *   to the wrong color with no type error. `surface` is kept below as a
+ *   LEGACY alias pointing at the same value as `surfaceElevated`, so those
+ *   untouched consumers keep rendering exactly as before. This mirrors the
+ *   `accent`/`accentRare` precedent below — never repoint a bare existing
+ *   key to a new meaning; give the new role its own name instead.
+ *   textPrimary/Secondary/Tertiary — three-tier text hierarchy; tertiary
+ *                       is for metadata (dates, counts) and is real,
+ *                       WCAG-AA-verified body text, not decoration.
+ *   hairline         — divider lines between rows/sections.
+ *   borderStrong     — a more visible border (inputs, selected-state
+ *                       outlines) — WCAG 1.4.11 non-text 3:1 verified.
+ *   brandPrimary     — the one reserved action/emphasis color (muted
+ *                       terracotta) — at most one action per screen.
+ *   brandSecondary   — a quieter secondary-emphasis tone (deep warm
+ *                       brown), for secondary buttons/less-prominent
+ *                       brand moments.
+ *   accentRare       — the rare dusty-gold milestone accent (Design
+ *                       Direction §5) — genuine-milestone moments only,
+ *                       never routine UI. (Named `accentRare`, not
+ *                       `accent`, specifically so the legacy `accent`
+ *                       alias below — which ~70 existing screens already
+ *                       use for the one-reserved-action-color role — can
+ *                       keep meaning what it always meant, now pointing
+ *                       at `brandPrimary`, without colliding with this
+ *                       new, much rarer gold token.)
+ *   positive/attention/critical — status roles, reserved for their named
+ *                       purpose only. `critical` is reserved for real
+ *                       safety alerts (a missed-dose reminder, an overdue
+ *                       lab) — NEVER for color-coding a symptom value.
+ *                       Pain 9 does not become `critical` red; a recorded
+ *                       number is always neutral `textPrimary`.
+ *   dataPrimary/Secondary/Tertiary — a restrained 3-color family for the
+ *                       rare cases a chart needs more than one series
+ *                       (e.g. a lab reference-range band) — never a
+ *                       per-tracked-variable rainbow.
+ *   selected/pressed/disabled — interactive-state fills. Every selected
+ *                       state in this system pairs a fill/border change
+ *                       WITH a shape/icon/text signal — never color alone
+ *                       (`ToggleRow`'s native Switch, `Chip`'s checkmark).
+ *
+ * LEGACY aliases (`accent`, `backgroundWarm`, `surfaceSecondary`,
+ * `surfaceHighlight`, `borderHairline`, `statusSuccess/Warning/Danger/
+ * Neutral`) are kept, mapped onto the new values, so the ~70 existing
+ * screens consuming the old names keep rendering correctly during the
+ * phased Design-B→I rollout (`docs/DESIGN_REDESIGN_PLAN_2_0.md` §26,
+ * "temporary legacy compatibility... do not contort the new system to
+ * preserve the old look, but do preserve functionality"). New code should
+ * use the new names; the aliases exist for migration safety, not as the
+ * system's real vocabulary, and should be removed once every screen has
+ * migrated (tracked in `docs/DESIGN_SYSTEM_2_0_IMPLEMENTATION.md`).
+ *
+ * Every text/background pairing below is WCAG AA-verified (4.5:1 normal
+ * text, 3:1 large text/non-text UI boundaries) — see that same
+ * implementation doc for the verification method and full results table.
+ * Values were adjusted from `docs/DESIGN_DIRECTION_2_0.md`'s original
+ * proposal wherever verification failed (e.g. the originally-proposed
+ * dusty-gold accent measured 2.72:1 as text and was darkened to 4.68:1) —
+ * the implemented, verified system wins over the earlier research-doc hex
+ * values, per the Design-A2 approval's explicit instruction.
  *
  * Status colors are reserved for their named purpose only — never used to
- * color-code symptom severity or medical values (spec §2.3).
+ * color-code symptom severity or medical values (unchanged rule, restated
+ * for Design System 2.0).
  */
 
 export type ColorTokens = {
-  backgroundWarm: string;
-  surface: string;
+  // New semantic roles
+  background: string;
   surfaceSecondary: string;
-  surfaceHighlight: string;
+  surfaceElevated: string;
   textPrimary: string;
   textSecondary: string;
-  borderHairline: string;
-  accent: string;
+  textTertiary: string;
+  hairline: string;
+  borderStrong: string;
+  brandPrimary: string;
+  brandSecondary: string;
+  accentRare: string;
+  positive: string;
+  attention: string;
+  critical: string;
+  dataPrimary: string;
+  dataSecondary: string;
+  dataTertiary: string;
+  selected: string;
+  pressed: string;
+  disabled: string;
   accentForeground: string;
+
+  // Legacy aliases — see file-level doc comment. Do not add new consumers.
+  accent: string;
+  backgroundWarm: string;
+  surface: string;
+  surfaceHighlight: string;
+  borderHairline: string;
   statusSuccess: string;
   statusWarning: string;
   statusDanger: string;
@@ -38,33 +124,71 @@ export type ColorTokens = {
 };
 
 export const lightColors: ColorTokens = {
-  backgroundWarm: "#FBFAF8",
-  surface: "#FFFFFF",
-  surfaceSecondary: "#F5F4F1",
-  surfaceHighlight: "#E8F5EF",
-  textPrimary: "#1C1C1E",
-  textSecondary: "#6E6E73",
-  borderHairline: "#E5E3DF",
-  accent: "#0A8F68",
+  background: "#FAF7F2",
+  surfaceSecondary: "#F5F1EB",
+  surfaceElevated: "#FFFFFF",
+  textPrimary: "#1C1917",
+  textSecondary: "#6B6560",
+  textTertiary: "#786F66",
+  hairline: "#E8E2D8",
+  borderStrong: "#93887A",
+  brandPrimary: "#AD5335",
+  brandSecondary: "#6B4A3A",
+  accentRare: "#8C6A1F",
+  positive: "#557259",
+  attention: "#8F6222",
+  critical: "#C0392B",
+  dataPrimary: "#AD5335",
+  dataSecondary: "#557259",
+  dataTertiary: "#8C6A1F",
+  selected: "#F3E4DC",
+  pressed: "#EFE8DE",
+  disabled: "#948A7C",
   accentForeground: "#FFFFFF",
-  statusSuccess: "#0A8F68",
-  statusWarning: "#B7791F",
+
+  // Legacy aliases
+  accent: "#AD5335",
+  backgroundWarm: "#FAF7F2",
+  surface: "#FFFFFF",
+  surfaceHighlight: "#F3E4DC",
+  borderHairline: "#E8E2D8",
+  statusSuccess: "#557259",
+  statusWarning: "#8F6222",
   statusDanger: "#C0392B",
-  statusNeutral: "#8E8E93",
+  statusNeutral: "#786F66",
 };
 
 export const darkColors: ColorTokens = {
-  backgroundWarm: "#1C1E1F",
-  surface: "#202223",
-  surfaceSecondary: "#232527",
-  surfaceHighlight: "#16332A",
-  textPrimary: "#F2F2F2",
-  textSecondary: "#98999B",
-  borderHairline: "#303233",
-  accent: "#34C28C",
-  accentForeground: "#0A2A1E",
-  statusSuccess: "#34C28C",
-  statusWarning: "#D9A441",
-  statusDanger: "#E0685A",
-  statusNeutral: "#8E8E93",
+  background: "#1A1714",
+  surfaceSecondary: "#211D19",
+  surfaceElevated: "#28231E",
+  textPrimary: "#EDE6DC",
+  textSecondary: "#A89E92",
+  textTertiary: "#8B8175",
+  hairline: "#332D26",
+  borderStrong: "#736958",
+  brandPrimary: "#D97B5C",
+  brandSecondary: "#B08567",
+  accentRare: "#D4AF5D",
+  positive: "#7FA382",
+  attention: "#C99A4A",
+  critical: "#D9695C",
+  dataPrimary: "#D97B5C",
+  dataSecondary: "#7FA382",
+  dataTertiary: "#D4AF5D",
+  selected: "#3D2A22",
+  pressed: "#2C2620",
+  disabled: "#736958",
+  accentForeground: "#1A1714",
+
+  // Legacy aliases
+  accent: "#D97B5C",
+  backgroundWarm: "#1A1714",
+  surface: "#28231E",
+  surfaceHighlight: "#3D2A22",
+  borderHairline: "#332D26",
+  statusSuccess: "#7FA382",
+  statusWarning: "#C99A4A",
+  statusDanger: "#D9695C",
+  statusNeutral: "#8B8175",
 };

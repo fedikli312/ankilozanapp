@@ -29,8 +29,21 @@ export type MetricCardProps = {
  * Compact metric card (Redesign Spec §2.4/§2.5) for a single large number —
  * Today's check-in summary, Insights metric rows, a lab's latest value.
  * Deliberately minimal: one number, one optional unit, one optional caption.
- * Not wired into any screen yet (Phase B is design-system only); later
- * phases (D, H) are expected to be the first real consumers.
+ *
+ * **No longer the default health-number presentation for new screens
+ * (Design System 2.0, Phase Design-B §11).** Its bordered/filled box is
+ * the same "card for everything" pattern `Section`/`GroupedList` moved
+ * away from, and a boxed number reads as less confident than the new
+ * "oversized tabular numeral, minimal chrome" signature
+ * (`docs/DESIGN_DIRECTION_VALIDATION_2_0.md` §9). New code should reach
+ * for `HeroMetric` (the single largest number on a screen) or `MetricLine`
+ * (a row of smaller recorded values) instead — see
+ * `src/design-system/components/HeroMetric.tsx` /
+ * `MetricLine.tsx`. `MetricCard` is NOT removed: it is not yet wired into
+ * any screen (Phase B is design-system only), so there are no existing
+ * callers to preserve, but the type stays available for a genuine
+ * multi-card grid layout where a bounded box is the deliberate choice,
+ * not a default.
  */
 export function MetricCard({ label, value, unit, caption, emphasis = "surface", compact = false }: MetricCardProps) {
   const { colors, typography, radius, spacing } = useTheme();
@@ -46,10 +59,10 @@ export function MetricCard({ label, value, unit, caption, emphasis = "surface", 
     <View
       style={{
         flex: 1,
-        backgroundColor: highlighted ? colors.surfaceHighlight : colors.surface,
+        backgroundColor: highlighted ? colors.selected : colors.surfaceElevated,
         borderRadius: radius.standard,
         borderWidth: highlighted ? 0 : 1,
-        borderColor: colors.borderHairline,
+        borderColor: colors.hairline,
         paddingVertical: compact ? spacing.sm : spacing.md,
         paddingHorizontal: compact ? spacing.sm : spacing.md,
         minWidth: compact ? 0 : 120,
@@ -72,7 +85,8 @@ export function MetricCard({ label, value, unit, caption, emphasis = "surface", 
             fontSize: valueTypography.fontSize,
             lineHeight: valueTypography.lineHeight,
             fontWeight: valueTypography.fontWeight,
-            color: highlighted ? colors.accent : colors.textPrimary,
+            fontVariant: ["tabular-nums"],
+            color: highlighted ? colors.brandPrimary : colors.textPrimary,
           }}
         >
           {value}

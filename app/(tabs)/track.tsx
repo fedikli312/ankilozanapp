@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import type { ComponentProps, ReactElement } from "react";
 import { Text } from "react-native";
 
-import { GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { GroupedList, InlineAction, ListRow, ScreenContainer, useTheme } from "@/design-system";
 import { formatShortDate, useTranslation } from "@/localization";
 import { useTrackLanding } from "@/features/track/useTrackLanding";
 import { getTrackSupportOrder, type TrackHealthRowId } from "@/personalization/getTrackSupportOrder";
@@ -104,7 +104,16 @@ export default function TrackLandingScreen() {
   };
 
   return (
-    <ScreenContainer>
+    <ScreenContainer scroll>
+      {/* Design-B live QA finding: this screen's content (2 groups, up to
+          8 rows, plus the InlineAction below) already exceeded a typical
+          viewport's height, and `ScreenContainer` without `scroll` renders
+          a plain non-scrolling View — every other tab (`index.tsx`,
+          `appointments.tsx`) already passes `scroll`; this one didn't, so
+          overflowing content was silently unreachable (confirmed via the
+          accessibility tree: the new "View insights" link below was
+          entirely absent from it before this fix). Mechanical prop flip
+          only — no layout/content change. */}
       {/* Phase S: an earlier pass in this same phase added an in-content
           title here, believing the screen had none — it was wrong. This is
           a tab screen; `app/(tabs)/_layout.tsx` already renders `track.title`
@@ -162,6 +171,14 @@ export default function TrackLandingScreen() {
           chevron
         />
       </GroupedList>
+
+      {/* Phase Design-B (navigation-shell only): Insights is no longer a
+          visible tab (`app/(tabs)/_layout.tsx`'s `href: null`) — this is
+          the temporary access point that keeps it reachable without
+          losing the deep link, ahead of Design-E folding it in properly
+          as a real mode of this tab. Mechanical navigation addition only,
+          not a content redesign of this screen. */}
+      <InlineAction label={t("track.viewInsights")} onPress={() => router.push("/insights")} tone="quiet" />
     </ScreenContainer>
   );
 }

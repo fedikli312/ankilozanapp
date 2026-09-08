@@ -18,7 +18,18 @@ export type TextFieldProps = {
   helperText?: string;
 };
 
-/** Visual Design Spec §11 — persistent label above the field, never placeholder-only. */
+/**
+ * Visual Design Spec §11 — persistent label above the field, never
+ * placeholder-only.
+ *
+ * Design-B audit fix (§12): the input fill previously used
+ * `colors.borderHairline` — a border token borrowed for a fill role purely
+ * because its old value happened to work as a subtle neutral tint. The new
+ * token vocabulary has a real name for that role — `surfaceSecondary`
+ * ("segmented-control track, input fill" per `colors.ts`'s own doc
+ * comment) — so the field now uses that plus an explicit `hairline` border
+ * for definition, instead of a border-token-as-fill workaround.
+ */
 export function TextField({
   label,
   value,
@@ -55,7 +66,9 @@ export function TextField({
         accessibilityLabel={label}
         accessibilityHint={accessibilityHint}
         style={{
-          backgroundColor: colors.borderHairline,
+          backgroundColor: colors.surfaceSecondary,
+          borderWidth: 1,
+          borderColor: colors.hairline,
           borderRadius: radius.small,
           paddingHorizontal: spacing.md,
           paddingVertical: spacing.sm,
@@ -65,7 +78,7 @@ export function TextField({
         }}
       />
       {errorMessage ? (
-        <Text style={{ color: colors.statusDanger, fontSize: typography.caption.fontSize, marginTop: 4 }}>
+        <Text style={{ color: colors.critical, fontSize: typography.caption.fontSize, marginTop: 4 }}>
           {errorMessage}
         </Text>
       ) : helperText ? (

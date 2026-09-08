@@ -122,7 +122,8 @@
     "today": "Today",
     "track": "Track",
     "appointments": "Appointments",
-    "insights": "Insights"
+    "insights": "Insights",
+    "healthRecord": "Health Record"
   },
   "medications": {
     "listTitle": "Medications",
@@ -443,7 +444,8 @@
     "nutrition": "Nutrition",
     "nutritionCaption": "General information for daily nutrition",
     "breathing": "Breathing & Posture",
-    "breathingCaption": "Short breathing and posture practices"
+    "breathingCaption": "Short breathing and posture practices",
+    "viewInsights": "View insights"
   },
   "symptoms": {
     "title": "Symptoms",

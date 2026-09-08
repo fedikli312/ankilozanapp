@@ -44,17 +44,18 @@ export function StepperField({ label, value, min, max, onChange, formatValue }: 
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
           style={{
-            backgroundColor: colors.borderHairline,
+            backgroundColor: colors.surfaceSecondary,
             borderRadius: radius.small,
             paddingHorizontal: spacing.sm,
           }}
         >
-          <Text style={{ fontSize: typography.headline.fontSize, color: colors.accent }}>{"–"}</Text>
+          <Text style={{ fontSize: typography.headline.fontSize, color: colors.brandPrimary }}>{"–"}</Text>
         </AccessibleTouchable>
         <Text
           style={{
             fontSize: typography.headline.fontSize,
             color: colors.textPrimary,
+            fontVariant: ["tabular-nums"],
             marginHorizontal: spacing.md,
             minWidth: 40,
             textAlign: "center",
@@ -67,12 +68,12 @@ export function StepperField({ label, value, min, max, onChange, formatValue }: 
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants"
           style={{
-            backgroundColor: colors.borderHairline,
+            backgroundColor: colors.surfaceSecondary,
             borderRadius: radius.small,
             paddingHorizontal: spacing.sm,
           }}
         >
-          <Text style={{ fontSize: typography.headline.fontSize, color: colors.accent }}>{"+"}</Text>
+          <Text style={{ fontSize: typography.headline.fontSize, color: colors.brandPrimary }}>{"+"}</Text>
         </AccessibleTouchable>
       </View>
     </View>

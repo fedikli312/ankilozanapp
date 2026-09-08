@@ -26,6 +26,11 @@ const STROKE_WIDTH = 3;
  * SVG, consistent with the minimal-dependency approach used throughout V1 —
  * each segment is a thin rotated rounded rect between two points, joined by
  * a small dot at each vertex so corners read as one unbroken stroke.
+ *
+ * Uses `colors.dataPrimary` (Design System 2.0, Phase Design-B §12) rather
+ * than `brandPrimary`/`accent` — the restrained data-series color, distinct
+ * from the one-reserved-action-color role, per `colors.ts`'s token-role doc
+ * comment. No visual/behavioral change otherwise.
  */
 export function TrendChart({ points, accessibilityLabel }: TrendChartProps) {
   const { colors, spacing } = useTheme();
@@ -57,7 +62,7 @@ export function TrendChart({ points, accessibilityLabel }: TrendChartProps) {
               const next = coords[index + 1];
               return (
                 <View key={index}>
-                  {next ? <ThreadSegment from={point} to={next} color={colors.accent} /> : null}
+                  {next ? <ThreadSegment from={point} to={next} color={colors.dataPrimary} /> : null}
                   <View
                     style={{
                       position: "absolute",
@@ -66,7 +71,7 @@ export function TrendChart({ points, accessibilityLabel }: TrendChartProps) {
                       width: STROKE_WIDTH * 2,
                       height: STROKE_WIDTH * 2,
                       borderRadius: STROKE_WIDTH,
-                      backgroundColor: colors.accent,
+                      backgroundColor: colors.dataPrimary,
                     }}
                   />
                 </View>

@@ -17,11 +17,27 @@ export type SelectableCardProps = {
  * Goals, Priority symptoms, and Treatment context (`docs/PRODUCT_2_0_UX_SPECIFICATION.md`
  * §5, "one consistent visual selection pattern"). Icon + short label +
  * optional one-line caption, selected state shown via border/fill AND an
- * explicit checkmark glyph — never color alone (UX Spec §O). Mirrors
- * `Chip`'s selected-state treatment (`surfaceHighlight` fill, accent
- * border) rather than inventing a new one — multiple simultaneously-
- * selected cards in a multi-select screen is the same established pattern
- * `Chip` already uses throughout the app (e.g. check-in's body-area chips).
+ * explicit checkmark glyph — never color alone (UX Spec §O).
+ *
+ * **Selection-role note (Design System 2.0, Phase Design-B §12 audit):**
+ * `SelectableCard` is the **form-selection** role — a full-width row-shaped
+ * option in a vertical list (onboarding Goals, Priority symptoms), where
+ * the icon and optional caption carry real meaning. `Chip` is the
+ * **filter/multi-select-pill** role — compact, horizontally-flowing,
+ * label-only (check-in's body-area/symptom chips). They intentionally
+ * share the same selected-state grammar (border + fill + explicit
+ * checkmark, never color alone) so the app has one selection language, not
+ * two — but they are not interchangeable: a `SelectableCard` in a pill
+ * flow would be too wide, and a `Chip` in a vertical options list would
+ * lose the icon/caption a form choice often needs. Neither is a
+ * "segmented control" (a single mutually-exclusive range picker, e.g. a
+ * 30/90-day toggle) — that role has no shared component yet and should
+ * not silently adopt this file's look without a real audit of its own.
+ *
+ * Token names updated to Design System 2.0 vocabulary; touch-target,
+ * non-color-only, and Dynamic-Type behavior already satisfied `AccessibleTouchable`'s
+ * 44pt floor and intrinsic (non-fixed-height) row layout — no layout
+ * changes needed here, unlike `Chip`'s fixed-height fix.
  */
 export function SelectableCard({ icon, label, caption, selected, onPress }: SelectableCardProps) {
   const { colors, typography, spacing, radius } = useTheme();
@@ -39,17 +55,17 @@ export function SelectableCard({ icon, label, caption, selected, onPress }: Sele
         paddingHorizontal: spacing.md,
         borderRadius: radius.standard,
         borderWidth: 1,
-        borderColor: selected ? colors.accent : colors.borderHairline,
-        backgroundColor: selected ? colors.surfaceHighlight : colors.surface,
+        borderColor: selected ? colors.brandPrimary : colors.hairline,
+        backgroundColor: selected ? colors.selected : colors.surfaceElevated,
       }}
     >
-      <Ionicons name={icon} size={22} color={selected ? colors.accent : colors.textSecondary} />
+      <Ionicons name={icon} size={22} color={selected ? colors.brandPrimary : colors.textSecondary} />
       <View style={{ flex: 1 }}>
         <Text
           style={{
             fontSize: typography.body.fontSize,
             fontWeight: selected ? "600" : "400",
-            color: selected ? colors.accent : colors.textPrimary,
+            color: selected ? colors.brandPrimary : colors.textPrimary,
           }}
         >
           {label}
@@ -61,7 +77,7 @@ export function SelectableCard({ icon, label, caption, selected, onPress }: Sele
         ) : null}
       </View>
       {selected ? (
-        <Ionicons name="checkmark-circle" size={20} color={colors.accent} accessibilityElementsHidden />
+        <Ionicons name="checkmark-circle" size={20} color={colors.brandPrimary} accessibilityElementsHidden />
       ) : null}
     </AccessibleTouchable>
   );
