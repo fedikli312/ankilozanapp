@@ -1,4 +1,3 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text, View } from "react-native";
 
 import { AccessibleTouchable, useTheme } from "@/design-system";
@@ -13,28 +12,29 @@ export type StiffnessSelectorProps = {
   priorityIndicator?: boolean;
 };
 
-/** Relative fill width per bucket — ordinal only, never an implied minute count (Product 2.0 spec: "no diagnostic interpretation"). */
-const FILL_PERCENT: Record<StiffnessBucket, number> = {
-  none: 0,
-  under_15: 25,
-  "15_30": 50,
-  "30_60": 75,
-  over_60: 100,
-};
-
 const BUCKETS: StiffnessBucket[] = ["none", "under_15", "15_30", "30_60", "over_60"];
 
 /**
- * Phase O — visual segmented stiffness selector, replacing the plain Chip
- * row. Preserves the exact existing 5-value categorical enum
- * (`morning_stiffness_bucket`) verbatim — never converted to minutes; the
- * database stores a bucket, not a duration.
+ * Morning stiffness selector — preserves the exact existing 5-value
+ * categorical enum (`morning_stiffness_bucket`) verbatim; never converted
+ * to minutes or a continuous scale, the database stores a bucket, not a
+ * duration.
  *
- * Each segment: a clock-style icon, the existing `checkIn.stiffness.*`
- * label, and a small relative fill bar (ordinal position within the 5
- * buckets, not a literal duration render) as the "compact duration
- * visualization." `none` gets a distinct affirming icon rather than an
- * empty clock face.
+ * Phase Design-D: visually joins the `NumericScale` family Pain/Fatigue
+ * use (same cell shape, same selected-state language — filled brand color
+ * + bold text, not color alone) while respecting that this is a category
+ * picker, not a number (brief §13) — cells carry a label, not a digit, and
+ * selection stays individually-accessible buttons rather than the
+ * numeric family's single "adjustable" element, since VoiceOver users
+ * navigating five named categories is more direct than adjusting a
+ * slider through unclear category names. The previous per-cell icon and
+ * ordinal fill-bar are retired — the cell's own fill/border/weight change
+ * already carries the selected signal, and a decorative clock glyph
+ * doesn't aid recognition here (Design-B icon rules §23).
+ *
+ * Cells wrap and allow their label to run to two lines rather than
+ * truncate — required for the longer Turkish bucket labels ("15–30
+ * dakika", "60 dakikadan fazla").
  */
 export function StiffnessSelector({ value, onChange, priorityIndicator }: StiffnessSelectorProps) {
   const { colors, typography, spacing, radius } = useTheme();
@@ -42,13 +42,13 @@ export function StiffnessSelector({ value, onChange, priorityIndicator }: Stiffn
 
   return (
     <View>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xs }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.sm }}>
         <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.stiffnessLabel")}</Text>
         {priorityIndicator ? (
-          <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent }}>· {t("checkIn.priorityIndicator")}</Text>
+          <Text style={{ fontSize: typography.micro.fontSize, color: colors.brandPrimary }}>· {t("checkIn.priorityIndicator")}</Text>
         ) : null}
       </View>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: spacing.xs }}>
         {BUCKETS.map((bucket) => {
           const selected = value === bucket;
           return (
@@ -59,34 +59,29 @@ export function StiffnessSelector({ value, onChange, priorityIndicator }: Stiffn
               accessibilityState={{ selected }}
               accessibilityLabel={t(`checkIn.stiffness.${bucket}`)}
               style={{
-                width: 82,
-                alignItems: "center",
+                minWidth: 64,
+                minHeight: 48,
+                paddingHorizontal: spacing.xs,
                 paddingVertical: spacing.xs,
-                borderRadius: radius.small,
-                borderWidth: 1,
-                borderColor: selected ? colors.accent : colors.borderHairline,
-                backgroundColor: selected ? colors.surfaceHighlight : colors.surface,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: radius.standard,
+                backgroundColor: selected ? colors.brandPrimary : "transparent",
+                borderWidth: selected ? 0 : 1.5,
+                borderColor: colors.hairline,
               }}
             >
-              <Ionicons
-                name={bucket === "none" ? "checkmark-circle-outline" : "time-outline"}
-                size={18}
-                color={selected ? colors.accent : colors.textSecondary}
-              />
               <Text
+                numberOfLines={2}
                 style={{
-                  fontSize: typography.micro.fontSize,
-                  color: selected ? colors.accent : colors.textPrimary,
-                  fontWeight: selected ? "600" : "400",
+                  fontSize: typography.caption.fontSize,
+                  color: selected ? colors.accentForeground : colors.textPrimary,
+                  fontWeight: selected ? "700" : "400",
                   textAlign: "center",
-                  marginTop: 2,
                 }}
               >
                 {t(`checkIn.stiffness.${bucket}`)}
               </Text>
-              <View style={{ width: "80%", height: 3, borderRadius: 2, backgroundColor: colors.borderHairline, marginTop: spacing.xxs, overflow: "hidden" }}>
-                <View style={{ width: `${FILL_PERCENT[bucket]}%`, height: "100%", backgroundColor: selected ? colors.accent : colors.borderHairline }} />
-              </View>
             </AccessibleTouchable>
           );
         })}

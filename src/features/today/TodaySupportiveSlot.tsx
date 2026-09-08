@@ -1,4 +1,3 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
@@ -23,14 +22,20 @@ const FEATURED_KNOWLEDGE_ARTICLE_ID = "morning-stiffness";
  * with a genuinely matching article (stiffness/pain/fatigue) is shown
  * instead of the fixed featured one. With no goals or priority symptoms at
  * all, behavior is byte-identical to before Phase R — still exactly one
- * quiet row, still no AI/health-record inference, still positioned below
- * every core action and still on `surfaceSecondary`, never the dominant
- * highlight card.
+ * quiet row.
+ *
+ * Design System 2.0, Phase Design-D §7/§23: no filled/bordered box, no
+ * decorative icon (the previous `leaf-outline` was exactly the generic
+ * wellness glyph the icon rules retire) — a plain text row, subordinate by
+ * typography weight/color alone, matching Today's card-free composition.
+ * Article-specific icons (`knowledgeArticle.icon`) are also dropped here
+ * for the same reason: this row's job is a single subordinate suggestion,
+ * not a second icon-menu entry.
  */
 export function TodaySupportiveSlot() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { colors, radius, spacing, typography } = useTheme();
+  const { colors, spacing, typography } = useTheme();
   const profile = usePersonalizationProfile();
   const dateRotationPrefersKnowledge = parseDateOnly(todayDateOnly()).getUTCDate() % 2 === 0;
   const recommendation = getKnowledgeRecommendation(profile, {
@@ -41,7 +46,6 @@ export function TodaySupportiveSlot() {
 
   const showKnowledge = recommendation.kind === "knowledge" && !!knowledgeArticle;
 
-  const icon = showKnowledge ? knowledgeArticle!.icon : "leaf-outline";
   const title = showKnowledge
     ? t("today.supportiveKnowledge", { title: knowledgeArticle!.title, readTime: knowledgeArticle!.readTime })
     : t("today.supportiveBreathing");
@@ -52,26 +56,9 @@ export function TodaySupportiveSlot() {
       accessibilityRole="button"
       accessibilityLabel={`${t("today.supportiveTitle")}, ${title}`}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          backgroundColor: colors.surfaceSecondary,
-          borderRadius: radius.standard,
-          paddingVertical: spacing.sm,
-          paddingHorizontal: spacing.md,
-          marginBottom: spacing.md,
-          gap: spacing.sm,
-        }}
-      >
-        <Ionicons name={icon} size={18} color={colors.textSecondary} />
-        <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("today.supportiveTitle")}</Text>
-          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary }}>{title}</Text>
-        </View>
-        <Text style={{ fontSize: 18, color: colors.textSecondary }} accessibilityElementsHidden>
-          {"›"}
-        </Text>
+      <View style={{ paddingVertical: spacing.xs }}>
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("today.supportiveTitle")}</Text>
+        <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary }}>{title}</Text>
       </View>
     </AccessibleTouchable>
   );

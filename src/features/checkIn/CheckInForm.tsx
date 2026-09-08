@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, Chip, TextField, ToggleRow, useTheme } from "../../design-system";
+import { Button, Chip, Section, TextField, ToggleRow, useTheme } from "../../design-system";
 import { useTranslation } from "../../localization";
 import { CHECK_IN_NOTE_MAX_LENGTH } from "../../domain/constants";
 import type { BodyAreaRegion } from "../../repositories";
@@ -51,16 +51,17 @@ const DEFAULT_VALUE: CheckInFormValue = {
 };
 
 /**
- * Phase O — Daily Check-in 2.0 (Product 2.0 spec). Same one-sheet
- * experience, same default/optional field split as before (UX spec §E:
- * default fields always visible, optional fields behind a single
- * "+ Add more" disclosure) — this is a visual/interaction upgrade of the
- * existing hierarchy, not a restructure of it. Pain/Stiffness/Fatigue keep
- * their exact stored semantics (0–10 int / 5-value enum / 0–10 int);
- * Wellbeing's existing Chip row is kept as-is (already exactly 5 states,
- * already visually lighter than the new controls — no bespoke component
- * needed for something that already works and is already appropriately
- * lightweight). Body Map is new (§ BodyRegionMap); Note is unchanged.
+ * Daily Check-in — one continuous interaction (Design System 2.0, Phase
+ * Design-D §9/§10). Pain, Morning stiffness, Fatigue, and High-Symptom Day
+ * are composed as one hairline-separated flow (`Section`, no card/border
+ * per member) rather than four independently-boxed modules, so the whole
+ * primary sequence reads as one interaction family: label, choice, next.
+ * Pain/Stiffness/Fatigue keep their exact stored semantics (0–10 int /
+ * 5-value enum / 0–10 int) — this is a visual/interaction upgrade of the
+ * existing hierarchy, not a restructure of it. Optional fields
+ * (Wellbeing/Body Map/Note) stay behind the single "More" disclosure,
+ * unchanged in content and semantics — the Body Map itself is intentionally
+ * NOT redesigned this phase (brief §17); its own doc comment records why.
  *
  * Product 2.1 Phase Y — High-Symptom Day: a user-declared-only marker
  * ("Symptoms feel more intense than usual today"). It is never inferred
@@ -107,43 +108,45 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft, defaultHighSy
 
   return (
     <View>
-      <View style={{ marginBottom: spacing.lg }}>
-        <PainScale
-          value={value.pain}
-          onChange={(pain) => setValue((prev) => ({ ...prev, pain }))}
-          priorityIndicator={personalization.emphasizedCoreSymptoms.includes("pain")}
-        />
-      </View>
-
-      <View style={{ marginBottom: spacing.lg }}>
-        <StiffnessSelector
-          value={value.morningStiffnessBucket}
-          onChange={(morningStiffnessBucket) => setValue((prev) => ({ ...prev, morningStiffnessBucket }))}
-          priorityIndicator={personalization.emphasizedCoreSymptoms.includes("stiffness")}
-        />
-      </View>
-
-      <View style={{ marginBottom: spacing.lg }}>
-        <FatigueSelector
-          value={value.fatigue}
-          onChange={(fatigue) => setValue((prev) => ({ ...prev, fatigue }))}
-          priorityIndicator={personalization.emphasizedCoreSymptoms.includes("fatigue")}
-        />
-      </View>
-
-      {/* Product 2.1 Phase Y — always visible (never behind "+ More"): a
-          user-declared-only marker, so it must stay reviewable/changeable
-          before every save, not buried behind a disclosure (brief §2/§13).
-          `ToggleRow`'s native Switch already exposes on/off to screen
-          readers and isn't color-only (brief §13). */}
-      <View style={{ marginBottom: spacing.lg }}>
-        <ToggleRow
-          label={t("checkIn.highSymptomDay.label")}
-          description={t("checkIn.highSymptomDay.description")}
-          value={value.isHighSymptomDay}
-          onValueChange={(isHighSymptomDay) => setValue((prev) => ({ ...prev, isHighSymptomDay }))}
-        />
-      </View>
+      {/* One continuous interaction (brief §9/§10) — Pain, Morning
+          stiffness, Fatigue, and High-Symptom Day as hairline-separated
+          members of the same `Section`, not four separately boxed
+          modules. High-Symptom Day stays in this always-visible primary
+          sequence (never behind "+ More") since a user-declared-only
+          marker must stay reviewable/changeable before every save (brief
+          §2/§13/§14) — `ToggleRow`'s native Switch already exposes on/off
+          to screen readers and isn't color-only. */}
+      <Section>
+        <View style={{ paddingVertical: spacing.md }}>
+          <PainScale
+            value={value.pain}
+            onChange={(pain) => setValue((prev) => ({ ...prev, pain }))}
+            priorityIndicator={personalization.emphasizedCoreSymptoms.includes("pain")}
+          />
+        </View>
+        <View style={{ paddingVertical: spacing.md }}>
+          <StiffnessSelector
+            value={value.morningStiffnessBucket}
+            onChange={(morningStiffnessBucket) => setValue((prev) => ({ ...prev, morningStiffnessBucket }))}
+            priorityIndicator={personalization.emphasizedCoreSymptoms.includes("stiffness")}
+          />
+        </View>
+        <View style={{ paddingVertical: spacing.md }}>
+          <FatigueSelector
+            value={value.fatigue}
+            onChange={(fatigue) => setValue((prev) => ({ ...prev, fatigue }))}
+            priorityIndicator={personalization.emphasizedCoreSymptoms.includes("fatigue")}
+          />
+        </View>
+        <View style={{ paddingVertical: spacing.md }}>
+          <ToggleRow
+            label={t("checkIn.highSymptomDay.label")}
+            description={t("checkIn.highSymptomDay.description")}
+            value={value.isHighSymptomDay}
+            onValueChange={(isHighSymptomDay) => setValue((prev) => ({ ...prev, isHighSymptomDay }))}
+          />
+        </View>
+      </Section>
 
       {!showMore ? (
         <Button label={t("checkIn.addMore")} onPress={() => setShowMore(true)} variant="secondary" />
@@ -152,7 +155,7 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft, defaultHighSy
           <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xs }}>
             <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.wellbeingLabel")}</Text>
             {personalization.wellbeingEmphasized ? (
-              <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent }}>· {t("checkIn.priorityIndicator")}</Text>
+              <Text style={{ fontSize: typography.micro.fontSize, color: colors.brandPrimary }}>· {t("checkIn.priorityIndicator")}</Text>
             ) : null}
           </View>
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs, marginBottom: spacing.md }}>
@@ -183,20 +186,22 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft, defaultHighSy
         </View>
       )}
 
-      <Button
-        label={t("checkIn.save")}
-        onPress={() =>
-          onSave({
-            pain: value.pain,
-            fatigue: value.fatigue,
-            morningStiffnessBucket: value.morningStiffnessBucket,
-            wellbeing: value.wellbeing,
-            isHighSymptomDay: value.isHighSymptomDay,
-            bodyAreas: value.bodyAreas,
-            notes: value.notes.trim() ? value.notes.trim() : undefined,
-          })
-        }
-      />
+      <View style={{ marginTop: spacing.sm }}>
+        <Button
+          label={t("checkIn.save")}
+          onPress={() =>
+            onSave({
+              pain: value.pain,
+              fatigue: value.fatigue,
+              morningStiffnessBucket: value.morningStiffnessBucket,
+              wellbeing: value.wellbeing,
+              isHighSymptomDay: value.isHighSymptomDay,
+              bodyAreas: value.bodyAreas,
+              notes: value.notes.trim() ? value.notes.trim() : undefined,
+            })
+          }
+        />
+      </View>
     </View>
   );
 }

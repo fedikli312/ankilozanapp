@@ -1,26 +1,27 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Redirect, useRouter } from "expo-router";
-import type { ReactNode } from "react";
 import { Platform, Text, View } from "react-native";
 
 import {
   AccessibleTouchable,
   Button,
   DateBlock,
-  GroupedList,
   ListRow,
-  MetricCard,
-  SectionLabel,
+  MetricLine,
+  QuietSurface,
+  Section,
   ScreenContainer,
   useTheme,
 } from "@/design-system";
-import { formatDateBlock, formatHeadingDate, formatShortDate, useTranslation } from "@/localization";
+import { DOMAIN_ICONS } from "@/design-system/icons";
+import { formatDateBlock, formatHeadingDate, useTranslation } from "@/localization";
 import { diffInDays } from "@/domain/dateUtils";
 import { useOnboardingState } from "@/features/onboarding/useOnboardingState";
+import { presentTodayCheckIn } from "@/features/today/presentTodayCheckIn";
 import { useTodayData } from "@/features/today/useTodayData";
 import { TodaySupportiveSlot } from "@/features/today/TodaySupportiveSlot";
+import { hasGoal } from "@/personalization/goalMapping";
 import { getEmptyStateAction } from "@/personalization/getEmptyStateAction";
-import { getTodayPriorityOrder, type TodayTier2SectionId } from "@/personalization/getTodayPriorityOrder";
 import { resolveHasTreatment } from "@/personalization/resolveHasTreatment";
 import { usePersonalizationProfile } from "@/personalization/usePersonalizationProfile";
 import { todayDateOnly } from "@/shared/today";
@@ -35,6 +36,18 @@ export default function TodayScreen() {
   return <TodayContent />;
 }
 
+/**
+ * Today — Design System 2.0, Phase Design-D. Answers one question ("what
+ * matters today?") via a fixed hierarchy, not a menu of every available
+ * module (brief §2): date/context, the one dominant check-in state,
+ * today's treatment, the next meaningful appointment if any, and at most
+ * one subordinate support item. The previous "Last 7 days" 2-metric-card
+ * block and the Phase R goal-based tier2 reordering of
+ * treatment/appointment/support against each other are deliberately not
+ * carried into this render — see `docs/DESIGN_D_TODAY_CHECKIN.md` for the
+ * full reasoning; `getTodayPriorityOrder`/`recentSummary` themselves are
+ * untouched and still exist, just not consumed by this screen anymore.
+ */
 function TodayContent() {
   const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
@@ -45,90 +58,60 @@ function TodayContent() {
     nextMedication,
     nextInjection,
     todaysCheckIn,
-    todaysBodyAreas,
     yesterdayCheckIn,
-    recentSummary,
     upcomingAppointment,
     markTaken,
   } = useTodayData();
   const profile = usePersonalizationProfile();
-  const personalization = getTodayPriorityOrder(profile);
   // Real repository state (`hasAnyTreatment`) is always authoritative over
   // onboarding's `treatmentContext` — see `resolveHasTreatment`'s own doc
-  // comment (Phase R brief §15). Functionally identical to `hasAnyTreatment`
-  // today; this makes that rule an explicit, auditable call site rather
-  // than an implicit omission.
+  // comment (Phase R brief §15).
   const hasTreatment = resolveHasTreatment(hasAnyTreatment, profile.treatmentContext);
-  // The narrower low-signal state (brief §9): no treatment, no appointment,
-  // check-in already done — additive to (never a replacement for) the
-  // existing "add your first medication" prompt below.
   const emptyStateAction =
     !hasTreatment && !upcomingAppointment && todaysCheckIn ? getEmptyStateAction(profile) : null;
+  // Still-applicable Phase R personalization signals (brief §21 "preserve
+  // existing product logic where applicable") — plain text links, not a
+  // reordering of the fixed hierarchy below.
+  const showSymptomHistoryShortcut = hasGoal(profile, "symptoms");
+  const emphasizeAppointmentPrep = hasGoal(profile, "appointments");
 
+  const checkInState = presentTodayCheckIn(todaysCheckIn, yesterdayCheckIn);
   const appointmentDateBlock = upcomingAppointment ? formatDateBlock(new Date(upcomingAppointment.date), locale) : null;
   const today = new Date();
   const todayOnly = todayDateOnly();
 
   const injectionDaysLeft = nextInjection ? diffInDays(todayOnly, nextInjection.scheduledFor.slice(0, 10)) : null;
-  const injectionDateLabel = nextInjection ? formatShortDate(new Date(nextInjection.scheduledFor.slice(0, 10)), locale) : "";
   const injectionCaption = nextInjection
     ? injectionDaysLeft !== null && injectionDaysLeft <= 0
-      ? `${t("today.injectionDueToday")} · ${injectionDateLabel}`
-      : `${t("today.injectionDaysLeft", { count: injectionDaysLeft })} · ${injectionDateLabel}`
+      ? t("today.injectionDueToday")
+      : t("today.injectionDaysLeft", { count: injectionDaysLeft })
     : undefined;
+
+  const hasTreatmentRows = dueToday.length > 0 || !!nextMedication || !!nextInjection;
 
   return (
     <ScreenContainer scroll>
-      {/* Redesign Spec §9 header: greeting + strong question + one supporting line. */}
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: 2 }}>
-        {t("today.greeting")}
-      </Text>
-      <Text
-        style={{
-          fontSize: typography.title.fontSize,
-          fontWeight: typography.title.fontWeight,
-          color: colors.textPrimary,
-          marginBottom: spacing.xxs,
-        }}
-      >
-        {t("today.headerTitle")}
-      </Text>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: 2 }}>
-        {t("today.headerSubtitle")}
-      </Text>
-      <Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
+      {/* 1. Lightweight date/context — no greeting, no restated question,
+          no subtitle explaining what the app does (brief §3/§8). */}
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.lg }}>
         {formatHeadingDate(today, locale)}
       </Text>
 
-      {/* Priority 1 (UX spec §D): the one dominant action while incomplete, a quiet completed summary once done — the app's single `surfaceHighlight` moment per Visual Design Spec §13. */}
-      {!todaysCheckIn ? (
-        <View
-          style={{
-            backgroundColor: colors.surfaceHighlight,
-            borderRadius: 16,
-            padding: spacing.md,
-            marginBottom: spacing.lg,
-          }}
-        >
-          <Text style={{ fontSize: typography.caption.fontSize, fontWeight: "600", color: colors.accent, marginBottom: 2 }}>
+      {/* 2. ONE dominant daily check-in state/action. */}
+      {checkInState.status === "incomplete" ? (
+        <QuietSurface>
+          <Text style={{ fontSize: typography.sectionTitle.fontSize, fontWeight: typography.sectionTitle.fontWeight, letterSpacing: typography.sectionTitle.letterSpacing, textTransform: typography.sectionTitle.textTransform, color: colors.brandPrimary, marginBottom: spacing.xxs }}>
             {t("today.checkInSectionTitle")}
           </Text>
-          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, marginBottom: spacing.xs }}>
+          <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.xs }}>
             {t("today.checkInPrompt")}
           </Text>
-          {/* Previous context only, never presented as today's value (Redesign Spec §9). */}
-          {yesterdayCheckIn ? (
-            <Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary, marginBottom: spacing.sm }}>
-              {t("today.checkInYesterdayContext", { pain: yesterdayCheckIn.pain })}
+          {checkInState.yesterdayPain !== null ? (
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.sm }}>
+              {t("today.checkInYesterdayContext", { pain: checkInState.yesterdayPain })}
             </Text>
           ) : null}
           <Button label={t("today.checkInCta")} onPress={() => router.push("/check-in")} />
-          {/* Product 2.1 Phase Y (brief §1): visually secondary — a plain
-              text link, same restrained treatment as `viewOrEditCheckIn`
-              below, never a second filled button competing with the
-              primary CTA above it. Opens the same Check-in 2.0 flow
-              (brief §3), just with the High-Symptom Day toggle defaulted
-              on and still fully visible/changeable (brief §2). */}
           <AccessibleTouchable
             onPress={() => router.push(`/check-in?highSymptomDay=1`)}
             accessibilityRole="button"
@@ -139,45 +122,30 @@ function TodayContent() {
               {t("today.highSymptomDayCta")}
             </Text>
           </AccessibleTouchable>
-        </View>
+        </QuietSurface>
       ) : (
-        <View style={{ marginBottom: spacing.lg }}>
-          <Text style={{ fontSize: typography.caption.fontSize, fontWeight: "600", color: colors.accent, marginBottom: spacing.xs }}>
+        <View style={{ marginBottom: spacing.xl }}>
+          <Text style={{ fontSize: typography.sectionTitle.fontSize, fontWeight: typography.sectionTitle.fontWeight, letterSpacing: typography.sectionTitle.letterSpacing, textTransform: typography.sectionTitle.textTransform, color: colors.textSecondary, marginBottom: spacing.sm }}>
             {t("today.checkInSectionTitle")}
           </Text>
-          <View style={{ flexDirection: "row", gap: spacing.xs, marginBottom: spacing.xs }}>
-            <MetricCard compact label={t("today.metricPain")} value={String(todaysCheckIn.pain)} unit="/10" />
-            <MetricCard
-              compact
-              label={t("checkIn.stiffnessLabel")}
-              value={t(`checkIn.stiffnessCompact.${todaysCheckIn.morningStiffnessBucket}`)}
-            />
-            <MetricCard compact label={t("today.metricFatigue")} value={String(todaysCheckIn.fatigue)} unit="/10" />
+          <View style={{ gap: spacing.md }}>
+            <MetricLine label={t("today.metricPain")} value={String(checkInState.pain)} unit="/10" />
+            <MetricLine label={t("today.metricFatigue")} value={String(checkInState.fatigue)} unit="/10" />
+            <MetricLine label={t("checkIn.stiffnessLabel")} value={t(`checkIn.stiffnessCompact.${checkInState.morningStiffnessBucket}`)} />
           </View>
-          {/* Phase O: compact body-area line, only when real — never a placeholder row (Product 2.0 spec §17/§18). */}
-          {todaysBodyAreas.length > 0 ? (
-            <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.xxs }}>
-              {todaysBodyAreas.map((area) => t(`checkIn.bodyArea.${area}`)).join(" · ")}
-            </Text>
-          ) : null}
-          {/* Product 2.1 Phase Y (brief §7): a compact factual marker only —
-              no interpretation, no severity styling, a subtle accent is
-              enough (brief §6). Existing metrics above stay unchanged. */}
-          {todaysCheckIn.isHighSymptomDay ? (
-            <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent, marginBottom: spacing.xxs }}>
+          {/* A factual secondary marker only — never an alert/severity
+              treatment (Product 2.1 Phase Y semantics, unchanged; brief §4). */}
+          {checkInState.isHighSymptomDay ? (
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.brandPrimary, marginTop: spacing.sm }}>
               {t("today.highSymptomDayRecorded")}
             </Text>
           ) : null}
           <AccessibleTouchable onPress={() => router.push("/check-in")} accessibilityRole="button" accessibilityLabel={t("today.viewOrEditCheckIn")}>
-            <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent, marginTop: spacing.xxs }}>
+            <Text style={{ fontSize: typography.caption.fontSize, color: colors.brandPrimary, marginTop: spacing.md }}>
               {t("today.viewOrEditCheckIn")}
             </Text>
           </AccessibleTouchable>
-          {/* Phase R brief §21: the symptom-tracking goal's one real Today
-              effect beyond the check-in card's already-fixed first position
-              — a subtle shortcut once today's entry is done, kept as a
-              plain text row rather than a second card. */}
-          {personalization.showSymptomHistoryShortcut ? (
+          {showSymptomHistoryShortcut ? (
             <AccessibleTouchable onPress={() => router.push("/symptoms")} accessibilityRole="button" accessibilityLabel={t("today.viewSymptomHistory")}>
               <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.xxs }}>
                 {t("today.viewSymptomHistory")}
@@ -200,142 +168,94 @@ function TodayContent() {
               accessibilityLabel={t(emptyStateAction.labelKey)}
               style={{ marginTop: spacing.sm }}
             >
-              <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent }}>{t(emptyStateAction.labelKey)}</Text>
+              <Text style={{ fontSize: typography.caption.fontSize, color: colors.brandPrimary }}>{t(emptyStateAction.labelKey)}</Text>
             </AccessibleTouchable>
           ) : null}
         </View>
       ) : (
         <>
-          {dueToday.length > 0 ? (
-            <GroupedList title={t("today.dueToday")}>
-              {dueToday.map((row) => (
+          {/* 3. Today's treatment — medications and injections combined
+              into one compact, hairline-separated list (brief §5): label
+              / row / status / action, no per-medication card, no
+              decorative icon circles. */}
+          {hasTreatmentRows ? (
+            <Section title={t("today.treatmentTitle")}>
+              {dueToday.length > 0
+                ? dueToday.map((row) => (
+                    <ListRow
+                      key={row.administrationId}
+                      leading={<Ionicons name={DOMAIN_ICONS.medication.outline} size={18} color={colors.textSecondary} />}
+                      label={row.medicationName}
+                      caption={`${row.medicationDose} · ${row.scheduledFor.split("T")[1] ?? ""}`}
+                      trailing={
+                        row.status === "taken" ? (
+                          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                            <Ionicons name="checkmark-circle" size={16} color={colors.brandPrimary} />
+                            <Text style={{ fontSize: typography.caption.fontSize, color: colors.brandPrimary }}>
+                              {t("today.markTakenShort")}
+                            </Text>
+                          </View>
+                        ) : (
+                          <Button label={t("today.markTakenShort")} onPress={() => markTaken(row.administrationId)} variant="secondary" />
+                        )
+                      }
+                    />
+                  ))
+                : nextMedication
+                  ? [
+                      <ListRow
+                        key="next-medication"
+                        leading={<Ionicons name={DOMAIN_ICONS.medication.outline} size={18} color={colors.textSecondary} />}
+                        label={nextMedication.medicationName}
+                        caption={nextMedication.medicationDose}
+                        onPress={() => router.push("/medications")}
+                        chevron
+                      />,
+                    ]
+                  : []}
+              {nextInjection ? (
                 <ListRow
-                  key={row.administrationId}
-                  label={row.medicationName}
-                  caption={`${row.medicationDose} · ${row.scheduledFor.split("T")[1] ?? ""}`}
-                  trailing={
-                    row.status === "taken" ? (
-                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                        <Ionicons name="checkmark-circle" size={16} color={colors.accent} />
-                        <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent }}>
-                          {t("today.markTakenShort")}
-                        </Text>
-                      </View>
-                    ) : (
-                      <Button label={t("today.markTakenShort")} onPress={() => markTaken(row.administrationId)} variant="secondary" />
-                    )
-                  }
+                  leading={<Ionicons name={DOMAIN_ICONS.injection.outline} size={18} color={colors.textSecondary} />}
+                  label={nextInjection.treatmentName}
+                  caption={injectionCaption}
+                  onPress={() => router.push(`/injections/${nextInjection.treatmentId}`)}
+                  chevron
                 />
-              ))}
-            </GroupedList>
-          ) : nextMedication ? (
-            <GroupedList title={t("today.nextMedication")}>
-              <ListRow
-                label={nextMedication.medicationName}
-                caption={`${nextMedication.medicationDose} · ${formatShortDate(new Date(nextMedication.scheduledFor.slice(0, 10)), locale)} ${nextMedication.scheduledFor.slice(11, 16)}`}
-                onPress={() => router.push("/medications")}
-                chevron
-              />
-            </GroupedList>
+              ) : null}
+            </Section>
           ) : null}
 
-          {(() => {
-            // Phase R (brief §8): tier2 = every section that isn't the
-            // due/urgent medication row above (which never moves —
-            // urgency beats preference). Reordered per
-            // `getTodayPriorityOrder`; a section absent for this user
-            // (e.g. no injection) simply contributes nothing, in either
-            // order. The "Senin için" cue (used sparingly, brief §22)
-            // renders at most once, only on the section personalization
-            // actually promoted.
-            const tier2Nodes: Partial<Record<TodayTier2SectionId, ReactNode>> = {};
+          {/* 4. The one next meaningful appointment, if any — a single
+              concise row, not the Appointments screen re-created here. */}
+          {upcomingAppointment && appointmentDateBlock ? (
+            <Section title={t("today.upcomingAppointment")}>
+              <ListRow
+                leading={<DateBlock day={appointmentDateBlock.day} month={appointmentDateBlock.month} emphasis="strong" />}
+                label={upcomingAppointment.doctorOrInstitution || t(`appointments.type.${upcomingAppointment.type}`)}
+                caption={
+                  upcomingAppointment.doctorOrInstitution
+                    ? `${t(`appointments.type.${upcomingAppointment.type}`)}${upcomingAppointment.time ? ` · ${upcomingAppointment.time}` : ""}`
+                    : (upcomingAppointment.time ?? undefined)
+                }
+                onPress={() => router.push(`/appointments/${upcomingAppointment.id}`)}
+                chevron
+              />
+              {emphasizeAppointmentPrep ? (
+                <AccessibleTouchable
+                  onPress={() => router.push(`/appointments/${upcomingAppointment.id}/prepare`)}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("today.prepareAppointment")}
+                >
+                  <Text style={{ fontSize: typography.caption.fontSize, color: colors.brandPrimary, marginTop: spacing.xxs }}>
+                    {t("today.prepareAppointment")}
+                  </Text>
+                </AccessibleTouchable>
+              ) : null}
+            </Section>
+          ) : null}
 
-            if (nextInjection) {
-              tier2Nodes.nextInjection = (
-                <GroupedList title={t("today.nextInjection")}>
-                  <ListRow
-                    leading={<Ionicons name="medical-outline" size={20} color={colors.textSecondary} />}
-                    label={nextInjection.treatmentName}
-                    caption={injectionCaption}
-                    onPress={() => router.push(`/injections/${nextInjection.treatmentId}`)}
-                    chevron
-                  />
-                </GroupedList>
-              );
-            }
-
-            if (upcomingAppointment && appointmentDateBlock) {
-              tier2Nodes.upcomingAppointment = (
-                <GroupedList title={t("today.upcomingAppointment")}>
-                  <ListRow
-                    leading={<DateBlock day={appointmentDateBlock.day} month={appointmentDateBlock.month} emphasis="strong" />}
-                    label={upcomingAppointment.doctorOrInstitution || t(`appointments.type.${upcomingAppointment.type}`)}
-                    caption={
-                      upcomingAppointment.doctorOrInstitution
-                        ? `${t(`appointments.type.${upcomingAppointment.type}`)}${upcomingAppointment.time ? ` · ${upcomingAppointment.time}` : ""}`
-                        : upcomingAppointment.time ?? undefined
-                    }
-                    onPress={() => router.push(`/appointments/${upcomingAppointment.id}`)}
-                    chevron
-                  />
-                  {/* Phase R brief §19: makes "Randevuya hazırlan" more
-                      discoverable directly on Today when the
-                      appointment-prep goal is selected — one extra text
-                      link, not a duplicate CTA (the appointment detail
-                      screen keeps its own Prepare button unchanged). */}
-                  {personalization.emphasizeAppointmentPrep ? (
-                    <AccessibleTouchable
-                      onPress={() => router.push(`/appointments/${upcomingAppointment.id}/prepare`)}
-                      accessibilityRole="button"
-                      accessibilityLabel={t("today.prepareAppointment")}
-                    >
-                      <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent, marginTop: spacing.xxs, paddingHorizontal: spacing.md }}>
-                        {t("today.prepareAppointment")}
-                      </Text>
-                    </AccessibleTouchable>
-                  ) : null}
-                </GroupedList>
-              );
-            }
-
-            tier2Nodes.supportiveSlot = <TodaySupportiveSlot />;
-
-            if (recentSummary) {
-              tier2Nodes.recentSummary = (
-                <View style={{ marginBottom: spacing.md }}>
-                  <SectionLabel>{t("today.recentSummaryTitle")}</SectionLabel>
-                  <View style={{ flexDirection: "row", gap: spacing.xs }}>
-                    <MetricCard label={t("today.recentAveragePain")} value={recentSummary.averagePain.toFixed(1)} unit="/10" />
-                    <MetricCard
-                      label={t("today.recentCheckInFrequency")}
-                      value={String(recentSummary.checkInCount)}
-                      unit={t("today.recentFrequencyUnit")}
-                    />
-                  </View>
-                </View>
-              );
-            }
-
-            return personalization.tier2Order.map((id) => {
-              const node = tier2Nodes[id];
-              if (!node) return null;
-              return (
-                <View key={id}>
-                  {personalization.promotedSection === id ? (
-                    <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent, fontWeight: "600", marginBottom: 2 }}>
-                      {t("personalization.forYou")}
-                    </Text>
-                  ) : null}
-                  {node}
-                </View>
-              );
-            });
-          })()}
-
-          <View style={{ flexDirection: "row", gap: spacing.sm, marginTop: spacing.sm, flexWrap: "wrap" }}>
-            <Button label={t("medications.listTitle")} onPress={() => router.push("/medications")} variant="secondary" />
-            <Button label={t("injections.listTitle")} onPress={() => router.push("/injections")} variant="secondary" />
-          </View>
+          {/* 5. At most one subordinate support item. */}
+          <TodaySupportiveSlot />
         </>
       )}
 
