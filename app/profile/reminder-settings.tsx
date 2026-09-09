@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text } from "react-native";
 
-import { GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { getNotificationPermissionStatusAsync, type PermissionStatus } from "@/notifications";
 
@@ -42,11 +42,11 @@ export default function ReminderSettingsScreen() {
         {t("profile.reminderDefaults.note")}
       </Text>
 
-      <GroupedList title={t("profile.group.reminders")}>
+      <Section title={t("profile.group.reminders")}>
         {rows.map((row) => (
           <ListRow key={row.label} label={row.label} caption={row.value} />
         ))}
-      </GroupedList>
+      </Section>
 
       {permissionStatus ? (
         <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.sm }}>

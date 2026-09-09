@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from "react-native";
 
-import { GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { SUPPORTED_LOCALES, useTranslation } from "@/localization";
 import { useProfile } from "@/features/profile/useProfile";
 
@@ -10,14 +10,14 @@ export default function LanguageScreen() {
   const { colors, typography, spacing } = useTheme();
   const { languageOverride, setLanguageOverride } = useProfile();
 
-  const check = <Ionicons name="checkmark" size={20} color={colors.accent} />;
+  const check = <Ionicons name="checkmark" size={20} color={colors.brandPrimary} />;
 
   return (
     <ScreenContainer>
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("profile.language")}
       </Text>
-      <GroupedList>
+      <Section>
         <ListRow
           label={t("profile.languageSystem")}
           trailing={languageOverride === null ? check : undefined}
@@ -41,7 +41,7 @@ export default function LanguageScreen() {
             }
           />
         ))}
-      </GroupedList>
+      </Section>
     </ScreenContainer>
   );
 }

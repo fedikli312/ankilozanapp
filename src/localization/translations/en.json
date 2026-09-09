@@ -1,6 +1,5 @@
 {
   "common": {
-    "appName": "Ankilozanapp",
     "cancel": "Cancel",
     "save": "Save",
     "retry": "Retry",
@@ -26,7 +25,7 @@
     "migrationError": "Couldn't prepare your data. Please restart the app."
   },
   "notifications": {
-    "defaultTitle": "Ankilozanapp",
+    "defaultTitle": "Ilium",
     "defaultBody": "You have a health reminder.",
     "remindersOff": "Reminders are off — enable them in Settings to get notified."
   },
@@ -101,9 +100,7 @@
   },
   "tabs": {
     "today": "Today",
-    "track": "Track",
     "appointments": "Appointments",
-    "insights": "Insights",
     "healthRecord": "Health Record"
   },
   "medications": {
@@ -455,8 +452,8 @@
     "localFirstTrust": "Your health records are stored on this device.",
     "group": {
       "reminders": "Reminders",
-      "preferences": "App",
-      "privacyData": "Privacy & data",
+      "preferences": "Preferences",
+      "support": "Support",
       "about": "About"
     },
     "reminderSettings": "Reminder settings",
@@ -485,11 +482,8 @@
       "appointmentValue": "One day before"
     },
     "dataGroupTitle": "Your data",
-    "dataManagementTitle": "Data management",
-    "privacyBody": "Ankilozanapp stores your health information — symptoms, medications, injections, appointments, and lab results — on this device only. Nothing is sent to a server.",
+    "privacyBody": "Ilium stores your health information — symptoms, medications, injections, appointments, and lab results — on this device only. Nothing is sent to a server.",
     "privacyBackup": "Your device's own backup (like iCloud) may include this data, the same way it backs up any other app.",
-    "exportData": "Export your data",
-    "exportDataComingLater": "Coming later",
     "deleteAllData": "Delete all local data",
     "deleteDataQuestion": "Delete all local data?",
     "deleteDataExplanation": "This permanently removes everything you've recorded on this device — symptoms, medications, injections, appointments, and lab results. This cannot be undone.",
@@ -497,7 +491,7 @@
     "deleteDataCancel": "Cancel",
     "deleteDataConfirm": "Delete data",
     "deleteDataInProgress": "Deleting…",
-    "disclaimerBody": "Ankilozanapp helps you record and organize information about your symptoms, treatments, and appointments. It does not diagnose, predict, or interpret medical conditions, and it does not recommend treatment. It is not a substitute for professional medical advice — always consult your doctor about your care.",
+    "disclaimerBody": "Ilium helps you record and organize information about your symptoms, treatments, and appointments. It does not diagnose, predict, or interpret medical conditions, and it does not recommend treatment. It is not a substitute for professional medical advice — always consult your doctor about your care.",
     "version": "Version %{version}",
     "tagline": "Remembers what happens between your rheumatology appointments."
   },

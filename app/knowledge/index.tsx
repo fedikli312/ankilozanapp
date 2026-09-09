@@ -1,8 +1,7 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 
-import { GroupedList, ListRow, ScreenContainer, SectionLabel, useTheme } from "@/design-system";
+import { ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { KNOWLEDGE_CATEGORIES } from "@/features/knowledge/categories";
 import { useKnowledgeArticles } from "@/features/knowledge/useKnowledgeContent";
@@ -11,14 +10,16 @@ import { useKnowledgeArticles } from "@/features/knowledge/useKnowledgeContent";
 const FEATURED_ARTICLE_ID = "what-is-as";
 
 /**
- * Knowledge Hub landing (Product 2.0 Phase P, spec §7). Static, bundled
- * content — no CMS, no remote fetch, no read/completion state. One
- * featured article, then compact category groups — deliberately not a flat
- * list of 12 titles.
+ * Knowledge Hub landing — Design-H (brief §6). A small reference library,
+ * not a content app: an editorial article index — category headings,
+ * restrained rows, no icon-in-a-colored-box treatment anywhere, no card
+ * grid. Same 5 categories, same 12 articles, same sources, same
+ * non-diagnostic framing — presentation only, nothing rewritten in the
+ * corpus itself.
  */
 export default function KnowledgeHomeScreen() {
   const { t } = useTranslation();
-  const { colors, typography, spacing, radius } = useTheme();
+  const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const articles = useKnowledgeArticles();
   const featured = articles.find((article) => article.id === FEATURED_ARTICLE_ID);
@@ -28,34 +29,19 @@ export default function KnowledgeHomeScreen() {
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: 2 }}>
         {t("knowledge.title")}
       </Text>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.lg }}>
         {t("knowledge.subtitle")}
       </Text>
 
       {featured ? (
-        <View style={{ marginBottom: spacing.lg }}>
-          <SectionLabel>{t("knowledge.featuredLabel")}</SectionLabel>
+        <Section title={t("knowledge.featuredLabel")}>
           <ListRow
-            leading={
-              <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: radius.small,
-                  backgroundColor: colors.surfaceHighlight,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Ionicons name={featured.icon} size={20} color={colors.accent} />
-              </View>
-            }
             label={featured.title}
             caption={`${featured.summary} · ${featured.readTime}`}
             onPress={() => router.push(`/knowledge/${featured.id}`)}
             chevron
           />
-        </View>
+        </Section>
       ) : null}
 
       {KNOWLEDGE_CATEGORIES.map((category) => {
@@ -63,11 +49,10 @@ export default function KnowledgeHomeScreen() {
         if (categoryArticles.length === 0) return null;
 
         return (
-          <GroupedList key={category.id} title={t(category.labelKey)}>
+          <Section key={category.id} title={t(category.labelKey)}>
             {categoryArticles.map((article) => (
               <ListRow
                 key={article.id}
-                leading={<Ionicons name={article.icon} size={20} color={colors.textSecondary} />}
                 label={article.title}
                 caption={article.summary}
                 trailing={<Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary }}>{article.readTime}</Text>}
@@ -75,7 +60,7 @@ export default function KnowledgeHomeScreen() {
                 chevron
               />
             ))}
-          </GroupedList>
+          </Section>
         );
       })}
 

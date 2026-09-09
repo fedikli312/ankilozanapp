@@ -1,7 +1,7 @@
 import Constants from "expo-constants";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 
-import { ScreenContainer, useTheme } from "@/design-system";
+import { ScreenContainer, Wordmark, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 
 export default function AboutScreen() {
@@ -11,9 +11,9 @@ export default function AboutScreen() {
 
   return (
     <ScreenContainer>
-      <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
-        {t("common.appName")}
-      </Text>
+      <View style={{ marginBottom: spacing.md }}>
+        <Wordmark size="large" />
+      </View>
       <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary, marginBottom: spacing.sm }}>
         {t("profile.version", { version })}
       </Text>

@@ -1,6 +1,5 @@
 {
   "common": {
-    "appName": "Ankilozanapp",
     "cancel": "İptal",
     "save": "Kaydet",
     "retry": "Tekrar Dene",
@@ -26,7 +25,7 @@
     "migrationError": "Verilerin hazırlanamadı. Lütfen uygulamayı yeniden başlat."
   },
   "notifications": {
-    "defaultTitle": "Ankilozanapp",
+    "defaultTitle": "Ilium",
     "defaultBody": "Bir sağlık hatırlatman var.",
     "remindersOff": "Hatırlatıcılar kapalı — bildirim almak için Ayarlar'dan etkinleştir."
   },
@@ -101,9 +100,7 @@
   },
   "tabs": {
     "today": "Bugün",
-    "track": "Takip",
     "appointments": "Randevular",
-    "insights": "Analiz",
     "healthRecord": "Sağlık Kaydım"
   },
   "medications": {
@@ -455,8 +452,8 @@
     "localFirstTrust": "Sağlık kayıtların bu cihazda saklanır.",
     "group": {
       "reminders": "Hatırlatıcılar",
-      "preferences": "Uygulama",
-      "privacyData": "Gizlilik ve veriler",
+      "preferences": "Tercihler",
+      "support": "Destek",
       "about": "Hakkında"
     },
     "reminderSettings": "Hatırlatıcı ayarları",
@@ -485,11 +482,8 @@
       "appointmentValue": "Bir gün önce"
     },
     "dataGroupTitle": "Verilerin",
-    "dataManagementTitle": "Veri yönetimi",
-    "privacyBody": "Ankilozanapp; belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları gibi sağlık bilgilerini yalnızca bu cihazda saklar. Hiçbir şey bir sunucuya gönderilmez.",
+    "privacyBody": "Ilium; belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları gibi sağlık bilgilerini yalnızca bu cihazda saklar. Hiçbir şey bir sunucuya gönderilmez.",
     "privacyBackup": "Cihazının kendi yedeklemesi (iCloud gibi), diğer uygulamaları yedeklediği gibi bu verileri de içerebilir.",
-    "exportData": "Verilerini dışa aktar",
-    "exportDataComingLater": "Yakında",
     "deleteAllData": "Tüm yerel verileri sil",
     "deleteDataQuestion": "Tüm yerel veriler silinsin mi?",
     "deleteDataExplanation": "Bu işlem, bu cihazda kaydettiğin her şeyi — belirtiler, ilaçlar, iğneler, randevular ve laboratuvar sonuçları — kalıcı olarak siler. Bu işlem geri alınamaz.",
@@ -497,7 +491,7 @@
     "deleteDataCancel": "Vazgeç",
     "deleteDataConfirm": "Verileri sil",
     "deleteDataInProgress": "Siliniyor…",
-    "disclaimerBody": "Ankilozanapp; belirtilerin, tedavilerin ve randevularınla ilgili bilgileri kaydetmene ve düzenlemene yardımcı olur. Tıbbi durumları teşhis etmez, öngörmez veya yorumlamaz ve tedavi önermez. Profesyonel tıbbi tavsiyenin yerini tutmaz — bakımınla ilgili her zaman doktoruna danış.",
+    "disclaimerBody": "Ilium; belirtilerin, tedavilerin ve randevularınla ilgili bilgileri kaydetmene ve düzenlemene yardımcı olur. Tıbbi durumları teşhis etmez, öngörmez veya yorumlamaz ve tedavi önermez. Profesyonel tıbbi tavsiyenin yerini tutmaz — bakımınla ilgili her zaman doktoruna danış.",
     "version": "Sürüm %{version}",
     "tagline": "Romatoloji randevuların arasında olanları hatırlar."
   },
