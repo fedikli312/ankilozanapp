@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Text, View } from "react-native";
 
-import { AccessibleTouchable, Button, ScreenContainer, useTheme } from "@/design-system";
+import { AccessibleTouchable, Button, Hairline, ListRow, MetricLine, QuietSurface, ScreenContainer, Wordmark, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { GOAL_ICONS } from "@/features/onboarding/personalizationIcons";
 import { APPLE_EULA_URL } from "@/purchases/config";
@@ -13,15 +13,19 @@ import { usePaywallValuePillars } from "@/purchases/usePaywallValuePillars";
 import type { PackageIdentifier, PurchasePackageInfo } from "@/purchases/types";
 
 /**
- * The hard paywall (Product 2.0 Phase Q, spec §9-18). Reached only via the
- * root route gate (`app/_layout.tsx`) — no screen navigates here directly
- * except Value Reveal's own CTA. No close/X, no skip, no swipe-to-dismiss
+ * The hard paywall (Design-C brief §12-20, on the unchanged Phase Q
+ * entitlement architecture). Reached only via the root route gate
+ * (`app/_layout.tsx`) — no screen navigates here directly except Value
+ * Reveal's own CTA. No close/X, no skip, no swipe-to-dismiss
  * (`gestureEnabled: false` on this route, set in `_layout.tsx`). On a
  * successful purchase or restore, this screen does not navigate anywhere
  * itself — `useEntitlement()`'s status flips to `"entitled"`, the route
- * gate re-renders and redirects to Today on its own. That is the whole
- * point of having one authoritative gate (spec §8): this screen only ever
- * asks "am I entitled yet," never decides where to go.
+ * gate re-renders and redirects to Today on its own.
+ *
+ * Hierarchy (brief §15): concise value statement → one real product
+ * preview → 2-3 concrete benefits → plan selection → CTA → Restore/Terms/
+ * Privacy. Plans are pushed below the preview and benefits rather than
+ * dominating the first viewport.
  */
 export default function PaywallScreen() {
   const { t } = useTranslation();
@@ -34,8 +38,8 @@ export default function PaywallScreen() {
   const { status, offerings, purchaseStatus, purchaseErrorMessage, lastAction, purchase, restore, retryResolution } = entitlement;
 
   // Opens Apple's own Standard EULA — this app has not configured a Custom
-  // EULA, so that's the real, correct Terms destination (Phase Q
-  // monetization-safety pass, item 3), not an in-app placeholder route.
+  // EULA, so that's the real, correct Terms destination, not an in-app
+  // placeholder route.
   const openTerms = () => Linking.openURL(APPLE_EULA_URL);
   const openPrivacy = () => router.push("/paywall-privacy");
 
@@ -92,8 +96,7 @@ export default function PaywallScreen() {
   return (
     <ScreenContainer scroll>
       <View style={{ alignItems: "center", marginBottom: spacing.lg }}>
-        <Ionicons name="leaf-outline" size={22} color={colors.accent} style={{ marginBottom: spacing.xxs }} />
-        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("paywall.brand")}</Text>
+        <Wordmark size="medium" />
       </View>
 
       <Text
@@ -111,10 +114,30 @@ export default function PaywallScreen() {
         {t("paywall.subheadline")}
       </Text>
 
-      <View style={{ gap: spacing.xs, marginBottom: spacing.lg }}>
+      {/* One real product preview (brief §16) — the same Appointment
+          Summary visual language (MetricLine tabular values, "Recorded
+          doses" language, hairline-separated rows) as the real screen,
+          with representative example values, clearly labeled as an
+          example — never presented as the user's own data, since nothing
+          is recorded yet at this point in the flow. */}
+      <QuietSurface>
+        <Text style={{ fontSize: typography.metadata.fontSize, color: colors.textTertiary, marginBottom: spacing.sm }}>
+          {t("paywall.previewLabel")}
+        </Text>
+        <View style={{ flexDirection: "row", gap: spacing.lg, marginBottom: spacing.sm }}>
+          <MetricLine label={t("today.metricPain")} value="3.2" unit="/10" />
+          <MetricLine label={t("today.metricFatigue")} value="2.8" unit="/10" />
+        </View>
+        <Hairline />
+        <View style={{ marginTop: spacing.sm }}>
+          <ListRow label={t("paywall.previewMedicationName")} caption={t("paywall.previewMedicationDoses")} />
+        </View>
+      </QuietSurface>
+
+      <View style={{ gap: spacing.xs, marginTop: spacing.lg, marginBottom: spacing.lg }}>
         {pillars.map((goal) => (
           <View key={goal} style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
-            <Ionicons name={GOAL_ICONS[goal]} size={18} color={colors.accent} accessibilityElementsHidden />
+            <Ionicons name={GOAL_ICONS[goal]} size={18} color={colors.brandPrimary} accessibilityElementsHidden />
             <Text style={{ flex: 1, fontSize: typography.body.fontSize, color: colors.textPrimary }}>{t(`paywall.pillar.${goal}`)}</Text>
           </View>
         ))}
@@ -201,17 +224,17 @@ function PlanCard({ info, label, priceLabel, recommended, selected, onPress }: P
         paddingHorizontal: spacing.md,
         borderRadius: radius.standard,
         borderWidth: selected ? 1.5 : 1,
-        borderColor: selected ? colors.accent : colors.borderHairline,
-        backgroundColor: selected ? colors.surfaceHighlight : colors.surface,
+        borderColor: selected ? colors.brandPrimary : colors.hairline,
+        backgroundColor: selected ? colors.selected : colors.surfaceElevated,
       }}
     >
       <View style={{ flex: 1 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xs }}>
-          <Text style={{ fontSize: typography.body.fontSize, fontWeight: "600", color: selected ? colors.accent : colors.textPrimary }}>
+          <Text style={{ fontSize: typography.body.fontSize, fontWeight: "600", color: selected ? colors.brandPrimary : colors.textPrimary }}>
             {label}
           </Text>
           {recommended ? (
-            <View style={{ backgroundColor: colors.accent, borderRadius: 4, paddingHorizontal: 6, paddingVertical: 1 }}>
+            <View style={{ backgroundColor: colors.brandPrimary, borderRadius: 4, paddingHorizontal: 6, paddingVertical: 1 }}>
               <Text style={{ fontSize: typography.micro.fontSize, color: colors.accentForeground, fontWeight: "600" }}>
                 {t("paywall.recommendedBadge")}
               </Text>
@@ -220,12 +243,12 @@ function PlanCard({ info, label, priceLabel, recommended, selected, onPress }: P
         </View>
         <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: 2 }}>{priceLabel}</Text>
         {showTrialCopy ? (
-          <Text style={{ fontSize: typography.micro.fontSize, color: colors.accent, marginTop: 2 }}>
+          <Text style={{ fontSize: typography.micro.fontSize, color: colors.brandPrimary, marginTop: 2 }}>
             {t("paywall.trialBadge", { days: info.trialDays })}
           </Text>
         ) : null}
       </View>
-      {selected ? <Ionicons name="checkmark-circle" size={20} color={colors.accent} accessibilityElementsHidden /> : null}
+      {selected ? <Ionicons name="checkmark-circle" size={20} color={colors.brandPrimary} accessibilityElementsHidden /> : null}
     </AccessibleTouchable>
   );
 }
@@ -246,15 +269,15 @@ function RestoreTermsPrivacyRow({ restoring, onRestore, onTerms, onPrivacy, rest
     <View style={{ marginTop: spacing.lg, alignItems: "center" }}>
       <View style={{ flexDirection: "row", gap: spacing.md, marginBottom: spacing.xs }}>
         <AccessibleTouchable onPress={onRestore} accessibilityRole="button" accessibilityLabel={t("paywall.restore")} disabled={restoring}>
-          <Text style={{ fontSize: typography.caption.fontSize, color: colors.accent }}>
+          <Text style={{ fontSize: typography.caption.fontSize, color: colors.brandPrimary }}>
             {restoring ? t("paywall.restoring") : t("paywall.restore")}
           </Text>
         </AccessibleTouchable>
-        <Text style={{ color: colors.borderHairline }}>·</Text>
+        <Text style={{ color: colors.hairline }}>·</Text>
         <AccessibleTouchable onPress={onTerms} accessibilityRole="button" accessibilityLabel={t("paywall.terms")}>
           <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("paywall.terms")}</Text>
         </AccessibleTouchable>
-        <Text style={{ color: colors.borderHairline }}>·</Text>
+        <Text style={{ color: colors.hairline }}>·</Text>
         <AccessibleTouchable onPress={onPrivacy} accessibilityRole="button" accessibilityLabel={t("paywall.privacy")}>
           <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("paywall.privacy")}</Text>
         </AccessibleTouchable>

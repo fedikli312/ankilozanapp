@@ -1,4 +1,3 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text } from "react-native";
@@ -9,6 +8,7 @@ import { InjectionForm } from "@/features/injections/InjectionForm";
 import { useInjections, type CreateInjectionFormInput } from "@/features/injections/useInjections";
 import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
 
+/** Design-C, felt chapter 5 — same progress dot as Add Medication/Reminders. */
 export default function OnboardingAddInjectionScreen() {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
@@ -38,8 +38,7 @@ export default function OnboardingAddInjectionScreen() {
 
   return (
     <ScreenContainer scroll>
-      <OnboardingProgress step={7} />
-      <Ionicons name="medical-outline" size={22} color={colors.accent} style={{ marginBottom: spacing.xs }} />
+      <OnboardingProgress step={5} />
       <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("onboarding.addInjection.title")}
       </Text>

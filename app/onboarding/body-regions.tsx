@@ -48,7 +48,7 @@ export default function BodyRegionsScreen() {
 
   return (
     <ScreenContainer>
-      <OnboardingProgress step={5} />
+      <OnboardingProgress step={3} />
       <View style={{ flex: 1 }}>
         <Text
           style={{

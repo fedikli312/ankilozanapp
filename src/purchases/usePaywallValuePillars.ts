@@ -5,15 +5,17 @@ import { db } from "../db";
 import { getOnboardingState } from "../repositories";
 import type { OnboardingGoal } from "../features/onboarding/onboardingDraft";
 
-const MAX_PILLARS = 4;
+const MAX_PILLARS = 3;
 
 /**
- * Personalized paywall value-pillar ordering (Phase Q brief §12) — reads
- * the user's real, already-persisted onboarding goals (not the transient
- * in-memory onboarding draft, which may be gone by the time the paywall is
- * reached after an app restart) and surfaces the pillars matching selected
- * goals first, then fills any remaining slots from the fixed canonical
- * list, capped at 4. Deterministic, no inference from health-record values
+ * Personalized paywall value-pillar ordering (Phase Q brief §12; capped at
+ * 3 per Design-C brief §15/§17 — "2-3 concrete benefits," never a
+ * checkmark wall) — reads the user's real, already-persisted onboarding
+ * goals (not the transient in-memory onboarding draft, which may be gone
+ * by the time the paywall is reached after an app restart) and surfaces
+ * the pillars matching selected goals first, then fills any remaining
+ * slots from the fixed canonical list. Deterministic, no inference from
+ * health-record values
  * (pain/stiffness/fatigue never touch this) — exactly the "deterministic
  * ordering from the selected goals" the brief asks for when true dynamic
  * personalization would add unnecessary complexity.

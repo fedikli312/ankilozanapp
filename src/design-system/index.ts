@@ -28,3 +28,4 @@ export { MarginMark } from "./components/MarginMark";
 export { Wordmark } from "./components/Wordmark";
 export { SegmentedControl } from "./components/SegmentedControl";
 export type { SegmentedControlOption } from "./components/SegmentedControl";
+export { OptionRow } from "./components/OptionRow";

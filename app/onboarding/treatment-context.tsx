@@ -2,21 +2,20 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, ScreenContainer, SelectableCard, useTheme } from "@/design-system";
+import { Button, ScreenContainer, Section, OptionRow, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
 import { setOnboardingPersonalization } from "@/features/onboarding/onboardingDraft";
-import { TREATMENT_CONTEXT_ICONS } from "@/features/onboarding/personalizationIcons";
 import type { TreatmentContext } from "@/repositories/onboardingStateRepository";
 
 const OPTIONS: TreatmentContext[] = ["medication", "injection", "both", "none"];
 
 /**
- * Product 2.0 Phase N, step 6 — replaces the old binary "Add treatment"
- * choice screen with a single-select context question (spec §9), whose
- * answer then decides which of the existing, unchanged add-medication/
- * add-injection forms (or both, chained) appear next. Non-judgmental
- * copy throughout — no "is your treatment working" framing.
+ * Design-C, felt chapter 4 — single-select context question, whose answer
+ * decides which of the existing, unchanged add-medication/add-injection
+ * forms (or both, chained) appear next as part of chapter 5. Non-judgmental
+ * copy throughout — no "is your treatment working" framing. `OptionRow`
+ * replaces `SelectableCard` here (brief §4: retire the icon+card template).
  */
 export default function TreatmentContextScreen() {
   const { t } = useTranslation();
@@ -38,7 +37,7 @@ export default function TreatmentContextScreen() {
 
   return (
     <ScreenContainer>
-      <OnboardingProgress step={6} />
+      <OnboardingProgress step={4} />
       <View style={{ flex: 1 }}>
         <Text
           style={{
@@ -50,17 +49,16 @@ export default function TreatmentContextScreen() {
         >
           {t("onboarding.treatmentContext.title")}
         </Text>
-        <View style={{ gap: spacing.xs }}>
+        <Section>
           {OPTIONS.map((option) => (
-            <SelectableCard
+            <OptionRow
               key={option}
-              icon={TREATMENT_CONTEXT_ICONS[option]}
               label={t(`onboarding.treatmentContext.${option}`)}
               selected={selected === option}
               onPress={() => setSelected(option)}
             />
           ))}
-        </View>
+        </Section>
       </View>
       <Button label={t("common.continue")} onPress={handleContinue} disabled={!selected} />
     </ScreenContainer>

@@ -1,4 +1,3 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text } from "react-native";
@@ -10,6 +9,11 @@ import { useMedications, type CreateMedicationFormInput } from "@/features/medic
 import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
 import { getOnboardingPersonalization } from "@/features/onboarding/onboardingDraft";
 
+/**
+ * Design-C, felt chapter 5 (brief §8) — shares its progress dot with
+ * Add Injection/Reminders (never advances between them): one "treatment
+ * setup" chapter, optional and skippable throughout.
+ */
 export default function OnboardingAddMedicationScreen() {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
@@ -18,10 +22,8 @@ export default function OnboardingAddMedicationScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [saveError, setSaveError] = useState(false);
 
-  // Product 2.0 Phase N: reached only via /onboarding/treatment-context.
-  // "both" chains on to Add Injection next; every other path (medication
-  // only, or reached after injection in some future reordering) continues
-  // straight to Reminders — same fixed-next-step rule the flow already used.
+  // Reached only via /onboarding/treatment-context. "both" chains on to Add
+  // Injection next; every other path continues straight to Reminders.
   const proceed = () => {
     const { treatmentContext } = getOnboardingPersonalization();
     router.push(treatmentContext === "both" ? "/onboarding/add-injection" : "/onboarding/reminders");
@@ -44,8 +46,7 @@ export default function OnboardingAddMedicationScreen() {
 
   return (
     <ScreenContainer scroll>
-      <OnboardingProgress step={7} />
-      <Ionicons name="medical-outline" size={22} color={colors.accent} style={{ marginBottom: spacing.xs }} />
+      <OnboardingProgress step={5} />
       <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("onboarding.addMedication.title")}
       </Text>

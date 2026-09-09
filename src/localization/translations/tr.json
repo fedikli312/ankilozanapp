@@ -35,23 +35,14 @@
       "label": "Adım %{step}/%{total}"
     },
     "welcome": {
-      "eyebrow": "Ankilozan spondilit için günlük takip",
-      "title": "Ankilozanla geçen günlerini daha net gör.",
-      "supporting": "Belirtilerini, tedavilerini ve randevularını sana uygun bir düzende takip et.",
+      "title": "Romatoloji randevuların arasındaki süreci tek bir yerde tut.",
+      "supporting": "Günlük kontroller, tedaviler ve tahlil sonuçları — bir sonraki randevuna hazır olacak şekilde bir arada.",
+      "privacyLine": "Sağlık bilgilerin cihazında kalır — reklam yok, veri analitiği yok, istediğin zaman silebilirsin.",
+      "privacyMoreLink": "Gizlilik hakkında daha fazla",
       "cta": "Başlayalım"
     },
-    "privacy": {
-      "title": "Sağlık bilgilerin sana ait.",
-      "body": "Bu sürümde sağlık kayıtların cihazında saklanır.",
-      "reassurance": {
-        "onDevice": "Sağlık verilerin cihazında saklanır",
-        "noAdsOrAnalytics": "Reklam veya sağlık verisi analitiği kullanılmaz",
-        "deletableAnytime": "Verilerini istediğin zaman silebilirsin"
-      },
-      "moreLink": "Gizlilik hakkında daha fazla"
-    },
     "goals": {
-      "title": "Sana en çok ne konuda yardımcı olalım?",
+      "title": "Ilium'un sana en çok hangi konuda yardımcı olmasını istersin?",
       "supporting": "En fazla üç tane seçebilirsin.",
       "symptoms": "Belirtilerimi takip etmek",
       "treatment": "İlaçlarımı / tedavimi unutmamak",
@@ -60,8 +51,7 @@
       "knowledge": "Ankilozan hakkında daha fazla bilgi edinmek"
     },
     "prioritySymptoms": {
-      "title": "En çok neleri takip etmek istiyorsun?",
-      "supporting": "Günlük kontrolünü buna göre düzenleyelim.",
+      "supporting": "Günlük hayatında en çok hangi belirtiler önemli?",
       "pain": "Ağrı",
       "stiffness": "Sabah tutukluğu",
       "fatigue": "Yorgunluk",
@@ -69,7 +59,7 @@
     },
     "bodyRegions": {
       "title": "En sık hangi bölgelerde rahatsızlık hissediyorsun?",
-      "supporting": "İstersen atlayabilirsin — bu bir teşhis değil, sadece takibini kişiselleştirir."
+      "supporting": "İsteğe bağlı — takibini kişiselleştirir, teşhis değildir."
     },
     "treatmentContext": {
       "title": "Tedavini nasıl takip ediyorsun?",
@@ -92,27 +82,18 @@
       "appointments": "Randevu hatırlatıcıları",
       "enableCta": "Devam et"
     },
-    "addAppointment": {
-      "title": "Yaklaşan bir randevun var mı?",
-      "supporting": "Eklediğinde Bugün ekranında ve randevu hazırlığında görebilirsin.",
-      "cta": "Randevu ekle"
-    },
-    "personalizedSummary": {
-      "title": "Sana göre ayarladık.",
-      "prioritiesHeading": "ÖNCELİKLERİN",
-      "setupHeading": "TAKİP DÜZENİN",
-      "checkInReady": "Günlük check-in",
-      "treatmentReminders": "Tedavi hatırlatıcıları",
-      "appointmentPrep": "Randevu hazırlığı",
-      "cta": "Devam et"
-    },
     "valueReveal": {
-      "title": "Takibin hazır.",
+      "title": "İşte Ilium'un takip etmene yardımcı olacağı şeyler.",
       "outcome": {
-        "checkIn": "Sana göre günlük takip",
-        "treatment": "Tedavilerini tek yerde hatırla",
-        "trends": "Zaman içindeki değişimleri gör",
-        "appointment": "Randevuna hazırlan"
+        "symptomsGeneric": "Ağrı, tutukluk ve yorgunluğu tek yerde takip et",
+        "symptomsOne": "Her gün takip et: %{symptom}",
+        "symptomsTwo": "Birlikte takip et: %{symptomA} ve %{symptomB}",
+        "symptomsMany": "Seçtiğin %{count} belirtiyi birlikte takip et",
+        "treatmentMedication": "Her ilacını tek kayıtta tut",
+        "treatmentInjection": "Her iğneni tek kayıtta tut",
+        "treatmentBoth": "İğnelerini ve ilaçlarını tek kayıtta tut",
+        "treatmentGeneric": "Tedavilerini tek kayıtta tut",
+        "appointmentPrep": "Randevundan önce son 30 veya 90 günü gözden geçir"
       },
       "cta": "Devam et"
     },
@@ -609,14 +590,16 @@
     "forYou": "Senin için"
   },
   "paywall": {
-    "brand": "Ankilozanapp",
-    "headline": "AS takibini tam senin istediğin gibi kurduk.",
-    "subheadline": "Kişiselleştirilmiş takibine devam etmek için aboneliğini başlat.",
+    "headline": "Belirtilerini, tedavilerini ve randevu kayıtlarını bir arada tut.",
+    "subheadline": "Az önce kurduğun takibe devam et.",
+    "previewLabel": "Örnek",
+    "previewMedicationName": "Sulfasalazine",
+    "previewMedicationDoses": "9 alındı, 1 kaçırıldı",
     "pillar": {
-      "symptoms": "Günlük belirtilerini hızlıca takip et",
-      "treatment": "Tedavi ve enjeksiyon düzenini hatırla",
+      "symptoms": "Ağrı, tutukluk ve yorgunluğu tek yerde takip et",
+      "treatment": "Her ilacını ve iğneni tek kayıtta tut",
       "trends": "Zaman içindeki değişimleri gör",
-      "appointments": "Romatoloji randevularına hazırlan",
+      "appointments": "Randevundan önce son 30 veya 90 günü gözden geçir",
       "knowledge": "Ankilozan hakkında güvenilir içeriklere ulaş"
     },
     "planAnnual": "Yıllık",

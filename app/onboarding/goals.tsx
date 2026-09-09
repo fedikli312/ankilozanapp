@@ -2,69 +2,87 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, ScreenContainer, SelectableCard, useTheme } from "@/design-system";
+import { Button, ScreenContainer, Section, OptionRow, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { OnboardingProgress } from "@/features/onboarding/OnboardingProgress";
-import { setOnboardingPersonalization, type OnboardingGoal } from "@/features/onboarding/onboardingDraft";
-import { GOAL_ICONS } from "@/features/onboarding/personalizationIcons";
+import { setOnboardingPersonalization, type OnboardingGoal, type PrioritySymptom } from "@/features/onboarding/onboardingDraft";
 
 const GOALS: OnboardingGoal[] = ["symptoms", "treatment", "trends", "appointments", "knowledge"];
-const MAX_SELECTIONS = 3;
+const SYMPTOMS: PrioritySymptom[] = ["pain", "stiffness", "fatigue", "wellbeing"];
+const MAX_GOAL_SELECTIONS = 3;
 
 /**
- * Product 2.0 Phase N, step 3 — "What should we help you with most?"
- * (spec §6/§8). Optional, 1-3 selections, none preselected — same
- * optionality precedent as the V1 "what to remember" step it replaces.
- * Feeds the Personalized Summary/Value Reveal screens' copy — never
- * decorative (spec §9, Design Principle 3).
+ * Design-C, felt chapter 2 (brief §6) — Goals and Priority Symptoms merged
+ * into one coherent chapter under a single question, but stored as the
+ * exact two separate, unchanged fields they always were
+ * (`OnboardingPersonalization.goals`/`.prioritySymptoms`) — never merged
+ * data models. Two `Section`s (no card-per-option, `OptionRow`'s boxless
+ * large-text pattern throughout) under one continue action.
  */
 export default function GoalsScreen() {
   const { t } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
-  const [selected, setSelected] = useState<OnboardingGoal[]>([]);
+  const [goals, setGoals] = useState<OnboardingGoal[]>([]);
+  const [symptoms, setSymptoms] = useState<PrioritySymptom[]>([]);
 
-  const toggle = (goal: OnboardingGoal) => {
-    setSelected((prev) => {
+  const toggleGoal = (goal: OnboardingGoal) => {
+    setGoals((prev) => {
       if (prev.includes(goal)) return prev.filter((g) => g !== goal);
-      if (prev.length >= MAX_SELECTIONS) return prev;
+      if (prev.length >= MAX_GOAL_SELECTIONS) return prev;
       return [...prev, goal];
     });
   };
 
+  const toggleSymptom = (symptom: PrioritySymptom) => {
+    setSymptoms((prev) => (prev.includes(symptom) ? prev.filter((s) => s !== symptom) : [...prev, symptom]));
+  };
+
   const handleContinue = () => {
-    setOnboardingPersonalization({ goals: selected });
-    router.push("/onboarding/priority-symptoms");
+    setOnboardingPersonalization({ goals, prioritySymptoms: symptoms });
+    router.push("/onboarding/body-regions");
   };
 
   return (
     <ScreenContainer scroll>
-      <OnboardingProgress step={3} />
+      <OnboardingProgress step={2} />
       <Text
         style={{
           fontSize: typography.title.fontSize,
           fontWeight: typography.title.fontWeight,
           color: colors.textPrimary,
-          marginBottom: spacing.xs,
+          marginBottom: spacing.lg,
         }}
       >
         {t("onboarding.goals.title")}
       </Text>
-      <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary, marginBottom: spacing.lg }}>
-        {t("onboarding.goals.supporting")}
-      </Text>
-      <View style={{ gap: spacing.xs, marginBottom: spacing.lg }}>
+
+      <View style={{ marginBottom: spacing.sm }}>
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("onboarding.goals.supporting")}</Text>
+      </View>
+      <Section>
         {GOALS.map((goal) => (
-          <SelectableCard
-            key={goal}
-            icon={GOAL_ICONS[goal]}
-            label={t(`onboarding.goals.${goal}`)}
-            selected={selected.includes(goal)}
-            onPress={() => toggle(goal)}
+          <OptionRow key={goal} label={t(`onboarding.goals.${goal}`)} selected={goals.includes(goal)} onPress={() => toggleGoal(goal)} />
+        ))}
+      </Section>
+
+      <View style={{ marginTop: spacing.lg, marginBottom: spacing.sm }}>
+        <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("onboarding.prioritySymptoms.supporting")}</Text>
+      </View>
+      <Section>
+        {SYMPTOMS.map((symptom) => (
+          <OptionRow
+            key={symptom}
+            label={t(`onboarding.prioritySymptoms.${symptom}`)}
+            selected={symptoms.includes(symptom)}
+            onPress={() => toggleSymptom(symptom)}
           />
         ))}
+      </Section>
+
+      <View style={{ marginTop: spacing.lg }}>
+        <Button label={t("common.continue")} onPress={handleContinue} />
       </View>
-      <Button label={t("common.continue")} onPress={handleContinue} />
     </ScreenContainer>
   );
 }

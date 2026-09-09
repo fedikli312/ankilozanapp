@@ -9,16 +9,17 @@ import { getOnboardingPersonalization, setOnboardingPersonalization } from "@/fe
 import { requestNotificationPermissionAsync } from "@/notifications";
 
 /**
- * Product 2.0 Phase N, step 8 — visual per-category reminder intent (spec
- * §11), replacing the single generic "Enable" button. No permission request
- * on load (unchanged rule) — the one, explicit, user-initiated request
- * fires from Continue, and only if at least one toggle is on. A denial
- * still proceeds; the app stays fully usable either way. Medication/
- * injection toggles only show when relevant to the treatment context just
- * chosen — never an empty-feeling row for a treatment the user doesn't
- * have. These toggles are intent only: they don't change the medication/
- * injection forms' own existing "Remind me" default (unchanged, out of
- * scope for Phase N).
+ * Design-C, felt chapter 5 (same dot as Add Medication/Injection) — visual
+ * per-category reminder intent, replacing a single generic "Enable"
+ * button. No permission request on load (brief §9) — the one, explicit,
+ * user-initiated request fires from Continue, and only if at least one
+ * toggle is on, after this screen's own title/supporting text has already
+ * explained what the reminders are for. A denial still proceeds; the app
+ * stays fully usable either way. Medication/injection toggles only show
+ * when relevant to the treatment context just chosen — never an
+ * empty-feeling row for a treatment the user doesn't have. These toggles
+ * are intent only: they don't change the medication/injection forms' own
+ * existing "Remind me" default.
  */
 export default function RemindersScreen() {
   const { t } = useTranslation();
@@ -33,7 +34,10 @@ export default function RemindersScreen() {
   const [injections, setInjections] = useState(true);
   const [appointments, setAppointments] = useState(true);
 
-  const proceed = () => router.push("/onboarding/add-appointment");
+  // Design-C brief §10: appointment setup is removed from onboarding's
+  // primary progression (deferred to Appointments/Today) — Reminders
+  // continues straight to the merged Value Reveal chapter.
+  const proceed = () => router.push("/onboarding/value-reveal");
 
   const handleContinue = async () => {
     const reminderIntent = { medications: showMedication && medications, injections: showInjection && injections, appointments };
@@ -50,7 +54,7 @@ export default function RemindersScreen() {
 
   return (
     <ScreenContainer>
-      <OnboardingProgress step={8} />
+      <OnboardingProgress step={5} />
       <View style={{ flex: 1, justifyContent: "center" }}>
         <Text
           style={{

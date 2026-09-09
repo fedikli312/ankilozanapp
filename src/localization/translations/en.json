@@ -35,23 +35,14 @@
       "label": "Step %{step} of %{total}"
     },
     "welcome": {
-      "eyebrow": "Daily tracking for ankylosing spondylitis",
-      "title": "See your days with ankylosing spondylitis more clearly.",
-      "supporting": "Track your symptoms, treatments, and appointments in a way that's built around you.",
+      "title": "Keep the time between rheumatology visits in one place.",
+      "supporting": "Daily check-ins, treatments, and lab results — organized so you're ready for your next appointment.",
+      "privacyLine": "Your health information stays on your device — no ads, no data analytics, delete anytime.",
+      "privacyMoreLink": "More about privacy",
       "cta": "Let's get started"
     },
-    "privacy": {
-      "title": "Your health information is yours.",
-      "body": "In this version, your health records are stored on your device.",
-      "reassurance": {
-        "onDevice": "Your health data stays on your device",
-        "noAdsOrAnalytics": "No ads or health-data analytics are used",
-        "deletableAnytime": "You can delete your data anytime"
-      },
-      "moreLink": "More about privacy"
-    },
     "goals": {
-      "title": "What should we help you with most?",
+      "title": "What do you want Ilium to help you keep track of?",
       "supporting": "Choose up to three.",
       "symptoms": "Track my symptoms",
       "treatment": "Stay on top of my medication or treatment",
@@ -60,8 +51,7 @@
       "knowledge": "Learn more about ankylosing spondylitis"
     },
     "prioritySymptoms": {
-      "title": "What matters most to track?",
-      "supporting": "We'll shape your daily check-in around this.",
+      "supporting": "Which symptoms matter most day to day?",
       "pain": "Pain",
       "stiffness": "Morning stiffness",
       "fatigue": "Fatigue",
@@ -69,7 +59,7 @@
     },
     "bodyRegions": {
       "title": "Where do you usually feel it most?",
-      "supporting": "Skip this if you'd like — it's not a diagnosis, it just personalizes your tracking."
+      "supporting": "Optional — helps personalize your check-in, not a diagnosis."
     },
     "treatmentContext": {
       "title": "How are you managing treatment right now?",
@@ -92,27 +82,18 @@
       "appointments": "Appointment reminders",
       "enableCta": "Continue"
     },
-    "addAppointment": {
-      "title": "Add an upcoming appointment",
-      "supporting": "You'll see it on Today and in appointment preparation.",
-      "cta": "Add appointment"
-    },
-    "personalizedSummary": {
-      "title": "We've set this up for you.",
-      "prioritiesHeading": "YOUR PRIORITIES",
-      "setupHeading": "YOUR SETUP",
-      "checkInReady": "Daily check-in",
-      "treatmentReminders": "Treatment reminders",
-      "appointmentPrep": "Appointment preparation",
-      "cta": "Continue"
-    },
     "valueReveal": {
-      "title": "Your tracking is ready.",
+      "title": "Here's what Ilium will help you keep track of.",
       "outcome": {
-        "checkIn": "Daily tracking, built around you",
-        "treatment": "Keep every treatment in one place",
-        "trends": "See how things change over time",
-        "appointment": "Walk into appointments prepared"
+        "symptomsGeneric": "Track pain, stiffness, and fatigue in one place",
+        "symptomsOne": "Track %{symptom} every day",
+        "symptomsTwo": "Track %{symptomA} and %{symptomB} together",
+        "symptomsMany": "Track the %{count} symptoms you chose, together",
+        "treatmentMedication": "Keep every medication in one record",
+        "treatmentInjection": "Keep every injection in one record",
+        "treatmentBoth": "Keep injections and medications in one record",
+        "treatmentGeneric": "Keep your treatments in one record",
+        "appointmentPrep": "Review the last 30 or 90 days before your next appointment"
       },
       "cta": "Continue"
     },
@@ -609,14 +590,16 @@
     "forYou": "For you"
   },
   "paywall": {
-    "brand": "Ankilozanapp",
-    "headline": "We've set up your AS tracking exactly the way you want it.",
-    "subheadline": "Start your subscription to continue with your personalized tracking.",
+    "headline": "Keep symptoms, treatments and visit records together.",
+    "subheadline": "Continue with the tracking you set up.",
+    "previewLabel": "Example",
+    "previewMedicationName": "Sulfasalazine",
+    "previewMedicationDoses": "9 taken, 1 missed",
     "pillar": {
-      "symptoms": "Track your daily symptoms quickly",
-      "treatment": "Keep your treatment and injection schedule in order",
+      "symptoms": "Track pain, stiffness, and fatigue in one place",
+      "treatment": "Keep every medication and injection in one record",
       "trends": "See how things change over time",
-      "appointments": "Prepare for your rheumatology appointments",
+      "appointments": "Review 30 or 90 days before your next appointment",
       "knowledge": "Access trustworthy information about AS"
     },
     "planAnnual": "Annual",
