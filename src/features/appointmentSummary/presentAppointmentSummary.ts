@@ -28,6 +28,8 @@ export type Translate = (key: string, options?: Record<string, unknown>) => stri
 
 export type MetricLine = {
   averageLine: string;
+  /** The average, formatted to one decimal (e.g. "4.2") — for tabular-numeral display (Design-F brief §16), kept alongside `averageLine`'s full sentence rather than replacing it, since existing callers of `averageLine` are unaffected. */
+  value: string;
   sampleCountLine: string;
 };
 
@@ -38,6 +40,9 @@ export type TreatmentLine = { id: string; name: string; line: string };
 export type InjectionLine = { id: string; name: string; countsLine: string; lastRecordedLine: string | null };
 
 export type LabLine = { marker: string; label: string; latestLine: string; previousLine: string | null };
+
+/** Structurally identical to the design-system `TrendChart`'s own `TrendChartPoint` — redeclared here rather than imported, so this module stays free of any React Native/component import (see the file-level doc comment on why that matters for tests). */
+export type LabChartPoint = { label: string; value: number };
 
 export type AppointmentSummaryPresentation = {
   rangeLabel: string;
@@ -61,6 +66,16 @@ export type AppointmentSummaryPresentation = {
     injections: InjectionLine[];
   };
   labs: LabLine[];
+  /**
+   * At most one marker's trend, brief §20's hard cap ("Design-A2 allowed
+   * exactly one meaningful chart: labs only"). `null` when no marker in
+   * range has `sufficientData` (the same existing domain threshold
+   * `computeLabHistory`/Insights already use for "enough for a trend" —
+   * not a new judgment call invented here). Whichever qualifying marker
+   * comes first in `summary.labs.markers`' own existing order wins; if
+   * both CRP and ESR qualify, only the first is charted, never both.
+   */
+  labChart: { marker: string; label: string; points: LabChartPoint[] } | null;
   thingsToReview: string[];
 };
 
@@ -82,6 +97,7 @@ function presentSymptomLine(
   return {
     // toFixed(1) is formatting, not computation — the average itself is `trend.average`, already computed by `computePainHistory`/`computeFatigueHistory`.
     averageLine: t(averageKey, { average: trend.average.toFixed(1) }),
+    value: trend.average.toFixed(1),
     sampleCountLine: t("appointmentSummary.sampleCount", { count: trend.dataPoints }),
   };
 }
@@ -174,6 +190,34 @@ function presentLabs(
 }
 
 /**
+ * Brief §20 — the one restrained lab trend, gated strictly on the existing
+ * `LabHistory.sufficientData` flag (the app's own already-approved "enough
+ * points for a trend" threshold, `INSIGHTS_THRESHOLDS.minLabValuesForTrend`
+ * — not a new number invented for this screen). Picks the first qualifying
+ * marker in `labs.markers`' own existing order; never both, even if both
+ * qualify. Real recorded points only — `entry.history.values` is already
+ * sorted ascending, used verbatim, no interpolation/smoothing/fabricated
+ * points.
+ */
+function presentLabChart(
+  labs: HealthSummary["labs"],
+  t: Translate,
+  locale: SupportedLocale,
+): AppointmentSummaryPresentation["labChart"] {
+  const chartable = labs.markers.find((entry) => entry.history.sufficientData);
+  if (!chartable) return null;
+
+  return {
+    marker: chartable.marker,
+    label: t(`labs.marker.${chartable.marker}`),
+    points: chartable.history.values.map((v) => ({
+      label: formatDateLine(v.recordedDate, locale),
+      value: v.value,
+    })),
+  };
+}
+
+/**
  * Brief §16: deterministic, factual prompts only, capped and bounded so
  * this never grows into a data dump — never a treatment recommendation,
  * never causal language. Each line is a template over an already-computed
@@ -240,6 +284,7 @@ export function presentAppointmentSummary(
       countLine: t("appointmentSummary.highSymptomDaysCount", { count: summary.highSymptomDays.count }),
       dateLines: summary.highSymptomDays.days.slice(0, MAX_HIGH_SYMPTOM_DAY_DATES_SHOWN).map((d) => formatDateLine(d.date, locale)),
     },
+    labChart: presentLabChart(summary.labs, t, locale),
     treatment: presentTreatment(summary.treatment, t, locale),
     labs: presentLabs(summary.labs, unitsByMarker, t, locale),
     thingsToReview: buildThingsToReview(summary, t, locale),

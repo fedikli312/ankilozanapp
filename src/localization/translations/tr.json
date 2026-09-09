@@ -209,6 +209,8 @@
     "addAction": "Randevu ekle",
     "upcoming": "Yaklaşan",
     "past": "Geçmiş",
+    "noUpcoming": "Yaklaşan randevu yok.",
+    "daysUntil": "%{count} gün sonra",
     "type": {
       "rheumatology": "Romatoloji",
       "laboratory": "Laboratuvar",
@@ -237,14 +239,11 @@
       "edit": "Düzenle",
       "cancel": "Randevuyu iptal et",
       "prepare": "Randevuya hazırlan",
-      "detailsTitle": "Detaylar",
-      "settingsTitle": "Ayarlar",
       "time": "Saat"
     }
   },
   "appointmentPreparation": {
     "title": "Randevuya hazırlan",
-    "headerSubtitle": "%{who} — %{date}",
     "summaryLine": "%{checkIns} günlük kayıt · %{treatments} tedavi · %{labs} tahlil sonucu",
     "disclaimer": "Kaydettiklerinin bir özeti — doktorunla birlikte incelemen için.",
     "symptoms": "Belirtiler",
@@ -286,14 +285,15 @@
     "noLabsRecorded": "Bu dönemde tahlil sonucu yok.",
     "labLatest": "%{value} %{unit} · %{date}",
     "labPrevious": "Önceki: %{list}",
-    "appointmentContextTitle": "Bu randevu",
+    "labChartAccessibilityLabel": "%{marker} eğilimi, %{count} kayıtlı değer",
     "thingsToReviewTitle": "Gözden geçirilebilecekler",
     "thingsToReview": {
       "highSymptomDays": "Bu dönemde %{count} yoğun belirti günü kaydettin.",
       "bodyArea": "%{region} bölgesini %{count} kontrolde kaydettin.",
       "latestLab": "En son kaydettiğin %{marker} sonucu %{date} tarihinden."
     },
-    "viewTimeline": "Zaman çizelgesini görüntüle"
+    "viewTimeline": "Zaman çizelgesini görüntüle",
+    "rangeControlLabel": "Kayıt aralığı"
   },
   "checkIn": {
     "title": "Günlük Kayıt",

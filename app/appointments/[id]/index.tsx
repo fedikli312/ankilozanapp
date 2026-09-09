@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, DateBlock, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { Button, DateBlock, InlineAction, ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { formatDate, formatDateBlock, useTranslation } from "@/localization";
 import { addDays, diffInDays, parseDateOnly } from "@/domain/dateUtils";
 import { todayDateOnly } from "@/shared/today";
@@ -90,7 +90,10 @@ export default function AppointmentDetailScreen() {
         </View>
       </View>
 
-      <GroupedList title={t("appointments.detail.detailsTitle")}>
+      {/* Design-F: hierarchy rather than boxes (brief §7) — a boxless
+          `Section` (hairline-separated rows), not a "Details" GroupedList
+          sitting on top of the identity block above it. */}
+      <Section>
         <ListRow label={t("appointments.form.date")} caption={formatDate(parseDateOnly(appointment.date), locale)} />
         {appointment.time ? <ListRow label={t("appointments.detail.time")} caption={appointment.time} /> : null}
         {appointment.doctorOrInstitution ? (
@@ -99,10 +102,10 @@ export default function AppointmentDetailScreen() {
         {/* Phase S fix: the user's own free-text note was rendered as a
             bare, unlabeled paragraph — easy to mistake for an app-generated
             instruction rather than something they wrote themselves. Same
-            ListRow treatment as every other detail here, with the existing
+            row treatment as every other detail here, with the existing
             "Notes"/"Notlar" label. */}
         {appointment.notes ? <ListRow label={t("appointments.form.notes")} caption={appointment.notes} /> : null}
-      </GroupedList>
+      </Section>
 
       {appointment.type === "rheumatology" ? (
         <View style={{ marginBottom: spacing.md }}>
@@ -112,12 +115,13 @@ export default function AppointmentDetailScreen() {
 
       {isFuture ? (
         <>
-          <GroupedList title={t("appointments.detail.settingsTitle")}>
-            <ListRow label={t("appointments.detail.edit")} onPress={() => setEditing(true)} chevron />
-          </GroupedList>
-          <View style={{ marginTop: spacing.md }}>
-            <Button label={t("appointments.detail.cancel")} onPress={cancel} variant="destructive" />
+          {/* A single "Edit" action doesn't need its own boxed "Settings"
+              section (brief §7's "avoid field/field/field/button/button
+              CRUD-detail composition") — a plain inline action is enough. */}
+          <View style={{ marginBottom: spacing.md }}>
+            <InlineAction label={t("appointments.detail.edit")} onPress={() => setEditing(true)} tone="quiet" />
           </View>
+          <Button label={t("appointments.detail.cancel")} onPress={cancel} variant="destructive" />
         </>
       ) : null}
     </ScreenContainer>

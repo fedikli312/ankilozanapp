@@ -209,6 +209,8 @@
     "addAction": "Add appointment",
     "upcoming": "Upcoming",
     "past": "Past",
+    "noUpcoming": "No upcoming appointment.",
+    "daysUntil": "In %{count} days",
     "type": {
       "rheumatology": "Rheumatology",
       "laboratory": "Laboratory",
@@ -237,14 +239,11 @@
       "edit": "Edit",
       "cancel": "Cancel appointment",
       "prepare": "Prepare for this appointment",
-      "detailsTitle": "Details",
-      "settingsTitle": "Settings",
       "time": "Time"
     }
   },
   "appointmentPreparation": {
     "title": "Prepare for appointment",
-    "headerSubtitle": "%{who} — %{date}",
     "summaryLine": "%{checkIns}-day record · %{treatments} treatments · %{labs} lab results",
     "disclaimer": "A summary of what you've recorded — for you to review with your doctor.",
     "symptoms": "Symptoms",
@@ -286,14 +285,15 @@
     "noLabsRecorded": "No lab results recorded in this period.",
     "labLatest": "%{value} %{unit} · %{date}",
     "labPrevious": "Previous: %{list}",
-    "appointmentContextTitle": "This appointment",
+    "labChartAccessibilityLabel": "%{marker} trend, %{count} recorded values",
     "thingsToReviewTitle": "Things to review",
     "thingsToReview": {
       "highSymptomDays": "You recorded %{count} high-symptom days in this period.",
       "bodyArea": "You recorded %{region} on %{count} check-ins.",
       "latestLab": "Your latest recorded %{marker} result is from %{date}."
     },
-    "viewTimeline": "View timeline"
+    "viewTimeline": "View timeline",
+    "rangeControlLabel": "Recording window"
   },
   "checkIn": {
     "title": "Daily Log",

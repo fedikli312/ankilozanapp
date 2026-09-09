@@ -100,10 +100,12 @@ describe("presentAppointmentSummary — pain/fatigue summary (real averages only
     const result = presentAppointmentSummary(summary, 30, t, "en", {});
     expect(result.symptoms.pain).toEqual({
       averageLine: 'appointmentSummary.painAverage({"average":"4.2"})',
+      value: "4.2",
       sampleCountLine: 'appointmentSummary.sampleCount({"count":12})',
     });
     expect(result.symptoms.fatigue).toEqual({
       averageLine: 'appointmentSummary.fatigueAverage({"average":"3.5"})',
+      value: "3.5",
       sampleCountLine: 'appointmentSummary.sampleCount({"count":12})',
     });
   });
@@ -294,6 +296,89 @@ describe("presentAppointmentSummary — labs", () => {
     expect(result.labs[0].latestLine).toContain('"value":15');
     expect(result.labs[0].previousLine).toContain("28 mm/hr");
     expect(result.labs[0].previousLine).toContain("22 mm/hr");
+  });
+});
+
+describe("presentAppointmentSummary — lab chart (brief §20, one chart maximum)", () => {
+  it("no markers at all: labChart is null", () => {
+    const summary = buildSummary();
+    const result = presentAppointmentSummary(summary, 30, t, "en", {});
+    expect(result.labChart).toBeNull();
+  });
+
+  it("a marker with values but sufficientData false (below the domain's own trend threshold): labChart stays null — never a fabricated trend from too few points", () => {
+    const summary = buildSummary({
+      labs: {
+        markers: [
+          {
+            marker: "CRP",
+            history: {
+              values: [{ marker: "CRP", value: 6.8, recordedDate: "2026-08-25" }],
+              min: 6.8,
+              max: 6.8,
+              mostRecent: { marker: "CRP", value: 6.8, recordedDate: "2026-08-25" },
+              sufficientData: false,
+            },
+          },
+        ],
+      },
+    });
+    const result = presentAppointmentSummary(summary, 30, t, "en", { CRP: "mg/L" });
+    expect(result.labChart).toBeNull();
+  });
+
+  it("a marker with sufficientData true: labChart carries its real recorded points verbatim, oldest first, no fabricated/interpolated point", () => {
+    const summary = buildSummary({
+      labs: {
+        markers: [
+          {
+            marker: "ESR",
+            history: {
+              values: [
+                { marker: "ESR", value: 28, recordedDate: "2026-06-06" },
+                { marker: "ESR", value: 22, recordedDate: "2026-07-06" },
+                { marker: "ESR", value: 15, recordedDate: "2026-08-25" },
+              ],
+              min: 15,
+              max: 28,
+              mostRecent: { marker: "ESR", value: 15, recordedDate: "2026-08-25" },
+              sufficientData: true,
+            },
+          },
+        ],
+      },
+    });
+    const result = presentAppointmentSummary(summary, 30, t, "en", { ESR: "mm/hr" });
+    expect(result.labChart).not.toBeNull();
+    expect(result.labChart?.marker).toBe("ESR");
+    expect(result.labChart?.points).toEqual([
+      { label: "June 6", value: 28 },
+      { label: "July 6", value: 22 },
+      { label: "August 25", value: 15 },
+    ]);
+  });
+
+  it("both CRP and ESR sufficient: only the first marker in the existing order is charted, never both", () => {
+    const sufficientHistory = (marker: string, value: number) => ({
+      values: [
+        { marker, value, recordedDate: "2026-08-01" },
+        { marker, value, recordedDate: "2026-08-10" },
+      ],
+      min: value,
+      max: value,
+      mostRecent: { marker, value, recordedDate: "2026-08-10" },
+      sufficientData: true,
+    });
+    const summary = buildSummary({
+      labs: {
+        markers: [
+          { marker: "CRP", history: sufficientHistory("CRP", 6.8) },
+          { marker: "ESR", history: sufficientHistory("ESR", 15) },
+        ],
+      },
+    });
+    const result = presentAppointmentSummary(summary, 30, t, "en", { CRP: "mg/L", ESR: "mm/hr" });
+    expect(result.labChart?.marker).toBe("CRP");
   });
 });
 
