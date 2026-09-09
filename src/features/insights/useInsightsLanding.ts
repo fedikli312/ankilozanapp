@@ -44,5 +44,11 @@ export function useInsightsLanding() {
   const crp = computeLabHistory(allLabResults, "CRP", range);
   const esr = computeLabHistory(allLabResults, "ESR", range);
 
-  return { pain, stiffness, fatigue, medicationAdherence, injectionHistory, crp, esr };
+  // A plain count of already-fetched rows within the display window (not
+  // the extra comparison week) — presentation-layer arithmetic, not a new
+  // domain calculation, for the landing's factual "recording window" line
+  // (Design-G brief §4).
+  const checkInCount = checkIns.filter((c) => c.date >= range.rangeStart && c.date < range.rangeEnd).length;
+
+  return { range, checkInCount, pain, stiffness, fatigue, medicationAdherence, injectionHistory, crp, esr };
 }

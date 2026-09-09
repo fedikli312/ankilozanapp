@@ -2,27 +2,29 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 
-import { Chip, GroupedList, ListRow, ScreenContainer, TrendChart, useTheme } from "@/design-system";
+import { ListRow, Section, ScreenContainer, SegmentedControl, TrendChart, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { INSIGHTS_RANGE_PRESETS, type InsightsRangePreset } from "@/domain/insights";
 import { useInsightDetail } from "@/features/insights/useInsightDetail";
 import { LAB_MARKER_DEFAULT_UNIT } from "@/features/labs/useLabResults";
 import type { InsightMetricKey } from "@/features/insights/types";
 
-function RangeControl({
-  preset,
-  onChange,
-}: {
-  preset: InsightsRangePreset;
-  onChange: (preset: InsightsRangePreset) => void;
-}) {
+/**
+ * Design-G brief §15: the Design-F `SegmentedControl` replaces the old
+ * `Chip` row for this single mutually-exclusive range choice — one
+ * control language across the app instead of two.
+ */
+function RangeControl({ preset, onChange }: { preset: InsightsRangePreset; onChange: (preset: InsightsRangePreset) => void }) {
   const { t } = useTranslation();
   const { spacing } = useTheme();
   return (
-    <View style={{ flexDirection: "row", gap: spacing.xs, marginVertical: spacing.md }}>
-      {INSIGHTS_RANGE_PRESETS.map((option) => (
-        <Chip key={option} label={t(`insights.range.${option}`)} selected={preset === option} onPress={() => onChange(option)} />
-      ))}
+    <View style={{ marginVertical: spacing.md }}>
+      <SegmentedControl
+        options={INSIGHTS_RANGE_PRESETS.map((option) => ({ value: option, label: t(`insights.range.${option}`) }))}
+        value={preset}
+        onChange={onChange}
+        accessibilityLabel={t("insights.rangeControlLabel")}
+      />
     </View>
   );
 }
@@ -48,6 +50,14 @@ function NumericEmptyState({ dataPoints }: { dataPoints: number }) {
   );
 }
 
+/**
+ * Insights metric detail — Design-G. A consistent document family across
+ * every metric kind (brief §6): a tabular headline value where one
+ * exists, the shared `SegmentedControl` range picker, a restrained
+ * `TrendChart` only when there are genuinely enough points, and a plain
+ * factual summary line underneath — never an interpretive one. Boxless
+ * `Section`s (not `GroupedList`) for the categorical/list-shaped kinds.
+ */
 export default function InsightDetailScreen() {
   const { metric } = useLocalSearchParams<{ metric: InsightMetricKey }>();
   const { t } = useTranslation();
@@ -71,6 +81,7 @@ export default function InsightDetailScreen() {
                   fontSize: typography.metricLarge.fontSize,
                   lineHeight: typography.metricLarge.lineHeight,
                   fontWeight: typography.metricLarge.fontWeight,
+                  fontVariant: ["tabular-nums"],
                   color: colors.textPrimary,
                 }}
               >
@@ -107,11 +118,11 @@ export default function InsightDetailScreen() {
           ) : null}
           <RangeControl preset={preset} onChange={setPreset} />
           {data.stiffness.sufficientData ? (
-            <GroupedList>
+            <Section>
               {(Object.entries(data.stiffness.bucketCounts) as [string, number][]).map(([bucket, count]) => (
-                <ListRow key={bucket} label={t(`checkIn.stiffness.${bucket}`)} trailing={<Text style={{ color: colors.textPrimary }}>{count}</Text>} />
+                <ListRow key={bucket} label={t(`checkIn.stiffness.${bucket}`)} trailing={<Text style={{ color: colors.textPrimary, fontVariant: ["tabular-nums"] }}>{count}</Text>} />
               ))}
-            </GroupedList>
+            </Section>
           ) : (
             <NumericEmptyState dataPoints={data.stiffness.dataPoints} />
           )}
@@ -127,6 +138,7 @@ export default function InsightDetailScreen() {
                   fontSize: typography.metricLarge.fontSize,
                   lineHeight: typography.metricLarge.lineHeight,
                   fontWeight: typography.metricLarge.fontWeight,
+                  fontVariant: ["tabular-nums"],
                   color: colors.textPrimary,
                 }}
               >
@@ -154,7 +166,7 @@ export default function InsightDetailScreen() {
       {data.kind === "medicationAdherence" ? (
         <>
           <RangeControl preset={preset} onChange={setPreset} />
-          <GroupedList>
+          <Section>
             {data.entries.length === 0 ? (
               <ListRow label={t("insights.notEnoughDataGeneric")} />
             ) : (
@@ -162,22 +174,18 @@ export default function InsightDetailScreen() {
                 <ListRow
                   key={entry.name}
                   label={entry.name}
-                  caption={
-                    entry.adherence.sufficientData && entry.adherence.adherencePercentage !== null
-                      ? t("appointmentPreparation.medicationAdherence", { name: entry.name, percentage: Math.round(entry.adherence.adherencePercentage) })
-                      : t("appointmentPreparation.medicationCounts", { name: entry.name, taken: entry.adherence.takenCount, missed: entry.adherence.missedCount })
-                  }
+                  caption={t("appointmentPreparation.medicationCounts", { name: entry.name, taken: entry.adherence.takenCount, missed: entry.adherence.missedCount })}
                 />
               ))
             )}
-          </GroupedList>
+          </Section>
         </>
       ) : null}
 
       {data.kind === "injectionHistory" ? (
         <>
           <RangeControl preset={preset} onChange={setPreset} />
-          <GroupedList>
+          <Section>
             {data.entries.length === 0 ? (
               <ListRow label={t("insights.notEnoughDataGeneric")} />
             ) : (
@@ -189,7 +197,7 @@ export default function InsightDetailScreen() {
                 />
               ))
             )}
-          </GroupedList>
+          </Section>
         </>
       ) : null}
     </ScreenContainer>

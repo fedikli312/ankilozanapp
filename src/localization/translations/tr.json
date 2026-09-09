@@ -232,7 +232,6 @@
     "stiffnessSummary": "Bu dönemde en sık \"%{bucket}\"",
     "fatigueSummary": "Bu dönemde ortalama 10 üzerinden %{average}",
     "treatments": "Tedaviler",
-    "medicationAdherence": "%{name} — planlanan dozların %%{percentage}'i alındı",
     "medicationCounts": "%{name} — %{taken} alındı, %{missed} kaçırıldı",
     "injectionCounts": "%{name} — %{completed} yapıldı, %{missed} kaçırıldı",
     "labs": "Tahliller",
@@ -374,7 +373,8 @@
   },
   "insights": {
     "title": "Analiz",
-    "subtitle": "Kayıtlarındaki değişimleri zaman içinde gör.",
+    "subtitle": "Sağlık Kaydı'na kaydettiklerinden çıkan eğilimler.",
+    "recordingWindow": "Son 7 gün · %{count} kontrol kaydedildi",
     "disclaimer": "Bu eğilimler kaydettiklerini yansıtır. Bir tanı değildir.",
     "notEnoughData": "Belirtilerinin zaman içinde nasıl değiştiğini görmek için kontrol kaydetmeye devam et.",
     "notEnoughDataGeneric": "Bir eğilim göstermek için henüz yeterli veri yok.",
@@ -385,17 +385,22 @@
     "averageOnly": "Bu dönemde ortalama %{average}",
     "averageComparison": "Ortalama %{average} · Önceki dönem %{previous}",
     "stiffnessSummary": "En sık \"%{bucket}\" — %{total} kayıttan %{count} tanesi",
-    "adherenceSummary": "Planlanan dozların %%{percentage}'i alındı",
     "adherenceCounts": "%{taken} alındı, %{missed} kaçırıldı",
     "injectionSummary": "%{completed} yapıldı, %{missed} kaçırıldı",
     "labSummary": "Son değer: %{date} tarihinde %{value}",
     "detailNumericSummary": "%{count} kontrol arasında ortalama %{average}",
+    "rangeControlLabel": "Zaman aralığı",
+    "group": {
+      "symptoms": "Belirtiler",
+      "treatment": "Tedavi",
+      "labs": "Tahliller"
+    },
     "metric": {
       "pain": "Ağrı",
       "stiffness": "Sabah tutukluğu",
       "fatigue": "Yorgunluk",
-      "medicationAdherence": "İlaç uyumu",
-      "injectionHistory": "İğne geçmişi",
+      "medicationAdherence": "İlaç kayıtları",
+      "injectionHistory": "İğne kayıtları",
       "crp": "CRP",
       "esr": "Sedimentasyon"
     },
@@ -403,7 +408,7 @@
       "4w": "4 hafta",
       "3m": "3 ay",
       "6m": "6 ay",
-      "all": "Tüm zamanlar"
+      "all": "Tümü"
     }
   },
   "track": {

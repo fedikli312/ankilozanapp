@@ -232,7 +232,6 @@
     "stiffnessSummary": "Most often \"%{bucket}\" during this period",
     "fatigueSummary": "Average %{average} out of 10 over this period",
     "treatments": "Treatments",
-    "medicationAdherence": "%{name} — taken %{percentage}% of scheduled doses",
     "medicationCounts": "%{name} — %{taken} taken, %{missed} missed",
     "injectionCounts": "%{name} — %{completed} completed, %{missed} missed",
     "labs": "Labs",
@@ -374,7 +373,8 @@
   },
   "insights": {
     "title": "Insights",
-    "subtitle": "See how your recorded values change over time.",
+    "subtitle": "Trends from what you've recorded in Health Record.",
+    "recordingWindow": "Last 7 days · %{count} check-ins recorded",
     "disclaimer": "These trends reflect what you've recorded. They're not a diagnosis.",
     "notEnoughData": "Keep checking in to see how your symptoms change over time.",
     "notEnoughDataGeneric": "Not enough data yet to show a trend.",
@@ -385,17 +385,22 @@
     "averageOnly": "Averaging %{average} this period",
     "averageComparison": "Average %{average} · Previous period %{previous}",
     "stiffnessSummary": "Most often \"%{bucket}\" — %{count} of %{total} entries",
-    "adherenceSummary": "%{percentage}% of scheduled doses taken",
     "adherenceCounts": "%{taken} taken, %{missed} missed",
     "injectionSummary": "%{completed} completed, %{missed} missed",
     "labSummary": "Most recent: %{value} on %{date}",
     "detailNumericSummary": "Averaging %{average} across %{count} check-ins",
+    "rangeControlLabel": "Time range",
+    "group": {
+      "symptoms": "Symptoms",
+      "treatment": "Treatment",
+      "labs": "Labs"
+    },
     "metric": {
       "pain": "Pain",
       "stiffness": "Morning stiffness",
       "fatigue": "Fatigue",
-      "medicationAdherence": "Medication adherence",
-      "injectionHistory": "Injection history",
+      "medicationAdherence": "Medication records",
+      "injectionHistory": "Injection records",
       "crp": "CRP",
       "esr": "ESR"
     },
@@ -403,7 +408,7 @@
       "4w": "4 weeks",
       "3m": "3 months",
       "6m": "6 months",
-      "all": "All time"
+      "all": "All"
     }
   },
   "track": {
