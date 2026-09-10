@@ -2,8 +2,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Linking, Text, View } from "react-native";
+import Svg from "react-native-svg";
 
-import { AccessibleTouchable, Button, Hairline, ListRow, MetricLine, QuietSurface, ScreenContainer, Wordmark, useTheme } from "@/design-system";
+import { AccessibleTouchable, AnchorDot, Button, ContourLine, Hairline, HeroBloom, QuietSurface, ScreenContainer, Wordmark, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { GOAL_ICONS } from "@/features/onboarding/personalizationIcons";
 import { APPLE_EULA_URL } from "@/purchases/config";
@@ -11,6 +12,18 @@ import { useEntitlement } from "@/purchases/EntitlementProvider";
 import { shouldShowTrialCopy } from "@/purchases/trialEligibility";
 import { usePaywallValuePillars } from "@/purchases/usePaywallValuePillars";
 import type { PackageIdentifier, PurchasePackageInfo } from "@/purchases/types";
+
+/**
+ * Ambient hero atmosphere geometry (Craft 3.1 review §4). `HERO_HEIGHT`
+ * is the drawn band; `HERO_LIFT` pulls it up so its content sits in the
+ * negative space ABOVE the wordmark — only the empty upper part of the
+ * `dawn` composition grazes the wordmark, and the headline below is left
+ * completely clear (art never crosses the headline). No box / fill /
+ * border — it bleeds to the screen edges so wordmark + headline + art
+ * read as one lockup, not a banner over two text blocks.
+ */
+const HERO_HEIGHT = 104;
+const HERO_LIFT = 62;
 
 /**
  * The hard paywall (Design-C brief §12-20, on the unchanged Phase Q
@@ -29,11 +42,13 @@ import type { PackageIdentifier, PurchasePackageInfo } from "@/purchases/types";
  */
 export default function PaywallScreen() {
   const { t } = useTranslation();
-  const { colors, typography, spacing } = useTheme();
+  const { colors, typography, spacing, layout } = useTheme();
   const router = useRouter();
   const entitlement = useEntitlement();
   const pillars = usePaywallValuePillars();
   const [selected, setSelected] = useState<PackageIdentifier>("annual");
+  const [heroWidth, setHeroWidth] = useState(0);
+  const [previewWidth, setPreviewWidth] = useState(0);
 
   const { status, offerings, purchaseStatus, purchaseErrorMessage, lastAction, purchase, restore, retryResolution } = entitlement;
 
@@ -95,42 +110,93 @@ export default function PaywallScreen() {
 
   return (
     <ScreenContainer scroll>
-      <View style={{ alignItems: "center", marginBottom: spacing.lg }}>
-        <Wordmark size="medium" />
-      </View>
+      {/* One hero composition — the atmosphere sits in the negative space
+          around the wordmark and headline (bleeding to the screen edges,
+          no box / fill / border), so this reads as a single lockup rather
+          than an art banner pasted above two text blocks (Craft 3.1
+          review §4). Decorative only, hidden from the accessibility tree;
+          the wordmark + headline carry all meaning. No commercial element
+          is affected — plans, pricing, trial eligibility, CTA, and
+          Restore/Terms/Privacy are untouched. */}
+      <View style={{ position: "relative", alignItems: "center", marginTop: spacing.sm, marginBottom: spacing.lg }}>
+        <View
+          onLayout={(e) => setHeroWidth(e.nativeEvent.layout.width)}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          pointerEvents="none"
+          style={{ position: "absolute", top: -HERO_LIFT, left: -layout.pageMargin, right: -layout.pageMargin, height: HERO_HEIGHT }}
+        >
+          {heroWidth > 0 ? <HeroBloom width={heroWidth} height={HERO_HEIGHT} variant="dawn" /> : null}
+        </View>
 
-      <Text
-        style={{
-          fontSize: typography.title.fontSize,
-          fontWeight: typography.title.fontWeight,
-          color: colors.textPrimary,
-          textAlign: "center",
-          marginBottom: spacing.xs,
-        }}
-      >
-        {t("paywall.headline")}
-      </Text>
+        <View style={{ marginBottom: spacing.sm }}>
+          <Wordmark size="medium" />
+        </View>
+        <Text
+          style={{
+            fontSize: typography.title.fontSize,
+            lineHeight: typography.title.lineHeight,
+            fontWeight: typography.title.fontWeight,
+            color: colors.textPrimary,
+            textAlign: "center",
+          }}
+        >
+          {t("paywall.headline")}
+        </Text>
+      </View>
       <Text style={{ fontSize: typography.body.fontSize, color: colors.textSecondary, textAlign: "center", marginBottom: spacing.lg }}>
         {t("paywall.subheadline")}
       </Text>
 
-      {/* One real product preview (brief §16) — the same Appointment
-          Summary visual language (MetricLine tabular values, "Recorded
-          doses" language, hairline-separated rows) as the real screen,
-          with representative example values, clearly labeled as an
-          example — never presented as the user's own data, since nothing
-          is recorded yet at this point in the flow. */}
+      {/* One real product preview (brief §16), recomposed for visual craft
+          (`docs/VISUAL_CRAFT_PASS_3_1.md` §5/§9): the same record content
+          and the same "clearly an example, not your data" framing, now
+          given reference-grade number confidence — hero-scale tabular
+          values with a whispered unit, a fine record thread, hairline
+          structure. Still the screen's focal moment; the atmosphere strip
+          above was shrunk so it stays subordinate to this. */}
       <QuietSurface>
-        <Text style={{ fontSize: typography.metadata.fontSize, color: colors.textTertiary, marginBottom: spacing.sm }}>
+        <Text
+          style={{
+            fontSize: typography.sectionTitle.fontSize,
+            lineHeight: typography.sectionTitle.lineHeight,
+            fontWeight: typography.sectionTitle.fontWeight,
+            letterSpacing: typography.sectionTitle.letterSpacing,
+            textTransform: typography.sectionTitle.textTransform,
+            color: colors.textTertiary,
+            marginBottom: spacing.sm,
+          }}
+        >
           {t("paywall.previewLabel")}
         </Text>
-        <View style={{ flexDirection: "row", gap: spacing.lg, marginBottom: spacing.sm }}>
-          <MetricLine label={t("today.metricPain")} value="3.2" unit="/10" />
-          <MetricLine label={t("today.metricFatigue")} value="2.8" unit="/10" />
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <PreviewMetric label={t("today.metricPain")} value="3.2" />
+          <PreviewMetric label={t("today.metricFatigue")} value="2.8" />
+        </View>
+        <View onLayout={(e) => setPreviewWidth(e.nativeEvent.layout.width)} style={{ height: 18, marginTop: spacing.sm }}>
+          {previewWidth > 0 ? (
+            <Svg width={previewWidth} height={18} pointerEvents="none">
+              <ContourLine
+                points={[
+                  { x: 0, y: 13 },
+                  { x: previewWidth * 0.3, y: 7 },
+                  { x: previewWidth * 0.62, y: 11 },
+                  { x: previewWidth, y: 4 },
+                ]}
+                stroke={colors.dataPrimary}
+                width={1.75}
+                opacity={0.55}
+              />
+              <AnchorDot cx={previewWidth - 2} cy={4} r={2.5} fill={colors.dataPrimary} />
+            </Svg>
+          ) : null}
         </View>
         <Hairline />
-        <View style={{ marginTop: spacing.sm }}>
-          <ListRow label={t("paywall.previewMedicationName")} caption={t("paywall.previewMedicationDoses")} />
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: spacing.sm }}>
+          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary }}>{t("paywall.previewMedicationName")}</Text>
+          <Text style={{ fontSize: typography.caption.fontSize, fontVariant: ["tabular-nums"], color: colors.textSecondary }}>
+            {t("paywall.previewMedicationDoses")}
+          </Text>
         </View>
       </QuietSurface>
 
@@ -193,6 +259,30 @@ export default function PaywallScreen() {
         restoreMessage={restoreMessage}
       />
     </ScreenContainer>
+  );
+}
+
+/** One example value in the record preview — label quiet, number hero-scale and tabular, unit whispered on the baseline. */
+function PreviewMetric({ label, value }: { label: string; value: string }) {
+  const { colors, typography, spacing } = useTheme();
+  return (
+    <View>
+      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: 2 }}>{label}</Text>
+      <View style={{ flexDirection: "row", alignItems: "baseline" }}>
+        <Text
+          style={{
+            fontSize: typography.metricLarge.fontSize,
+            lineHeight: typography.metricLarge.lineHeight,
+            fontWeight: typography.metricLarge.fontWeight,
+            fontVariant: ["tabular-nums"],
+            color: colors.textPrimary,
+          }}
+        >
+          {value}
+        </Text>
+        <Text style={{ fontSize: typography.micro.fontSize, color: colors.textTertiary, marginLeft: spacing.xxs }}>/10</Text>
+      </View>
+    </View>
   );
 }
 

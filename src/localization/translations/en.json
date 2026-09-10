@@ -83,6 +83,9 @@
     },
     "valueReveal": {
       "title": "Here's what Ilium will help you keep track of.",
+      "recordLabel": "Your record, taking shape",
+      "factTreatments": "Treatments added: %{count}",
+      "factAppointments": "Upcoming appointments: %{count}",
       "outcome": {
         "symptomsGeneric": "Track pain, stiffness, and fatigue in one place",
         "symptomsOne": "Track %{symptom} every day",

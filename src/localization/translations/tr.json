@@ -83,6 +83,9 @@
     },
     "valueReveal": {
       "title": "İşte Ilium'un takip etmene yardımcı olacağı şeyler.",
+      "recordLabel": "Kaydın şekilleniyor",
+      "factTreatments": "Eklenen tedaviler: %{count}",
+      "factAppointments": "Yaklaşan randevular: %{count}",
       "outcome": {
         "symptomsGeneric": "Ağrı, tutukluk ve yorgunluğu tek yerde takip et",
         "symptomsOne": "Her gün takip et: %{symptom}",
