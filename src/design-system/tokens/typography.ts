@@ -72,6 +72,16 @@ export const typography = {
   micro: { fontSize: 12, lineHeight: 16, fontWeight: "400" },
   button: { fontSize: 17, lineHeight: 22, fontWeight: "600" },
   tabLabel: { fontSize: 10, lineHeight: 13, fontWeight: "600" },
+  /**
+   * MetricDisplay — the hero-numeral tier, one confident step above
+   * `metricLarge`. Added in the Visual Craft Pass 3.1 (`docs/VISUAL_CRAFT_PASS_3_1.md`
+   * §15) for the one place a screen leads with a value the way a
+   * consumer-health reference does: the paywall's example-record preview,
+   * and available to Labs/Value-Reveal if a future pass wants it. The
+   * companion unit (e.g. "/10") stays deliberately small — the number
+   * carries the confidence, the unit whispers.
+   */
+  metricDisplay: { fontSize: 46, lineHeight: 50, fontWeight: "700", tabular: true },
   metricLarge: { fontSize: 32, lineHeight: 38, fontWeight: "700", tabular: true },
   metricMedium: { fontSize: 24, lineHeight: 29, fontWeight: "700", tabular: true },
   metricSmall: { fontSize: 17, lineHeight: 22, fontWeight: "600", tabular: true },

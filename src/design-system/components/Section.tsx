@@ -30,12 +30,13 @@ export type SectionProps = {
  * calls for. No box, no fill, no border — a label, then rows separated by
  * hairlines, then whitespace before the next section.
  *
- * `GroupedList` is not removed or broken (`docs/DESIGN_REDESIGN_PLAN_2_0.md`
- * §26 — legacy screens keep rendering exactly as before); this is the
- * primitive NEW code should reach for. A genuine card/boxed treatment is
- * still available (`GroupedList` itself, or a dedicated `QuietSurface`)
- * for the rare moment content actually needs that prominence — never as
- * the default.
+ * `GroupedList` was kept alongside this component through the phased
+ * Design-B→I rollout so legacy screens kept rendering unchanged
+ * (`docs/DESIGN_REDESIGN_PLAN_2_0.md` §26), then deleted in Design-I's
+ * final pass once every screen had migrated to `Section` and it had zero
+ * remaining consumers. A genuine card/boxed treatment is still available
+ * via a dedicated `QuietSurface` for the rare moment content actually
+ * needs that prominence — never as the default.
  */
 export function Section({ title, children, tone = "default" }: SectionProps) {
   const { spacing } = useTheme();

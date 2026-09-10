@@ -33,7 +33,7 @@ const STROKE_WIDTH = 3;
  * comment. No visual/behavioral change otherwise.
  */
 export function TrendChart({ points, accessibilityLabel }: TrendChartProps) {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, typography } = useTheme();
   const [width, setWidth] = useState(0);
 
   if (points.length === 0) return null;
@@ -60,17 +60,40 @@ export function TrendChart({ points, accessibilityLabel }: TrendChartProps) {
         {width > 0
           ? coords.map((point, index) => {
               const next = coords[index + 1];
+              // Art Direction 3.0 data-viz refinement (PROPAGATION doc §6):
+              // the most recent reading gets one quiet focal point — a
+              // slightly larger dot inside a faint ring — so "where the
+              // thread is now" reads at a glance. Not a severity signal:
+              // the emphasis is positional (latest), never value-based,
+              // and uses the same single `dataPrimary` ink as the line.
+              const isLatest = index === coords.length - 1;
+              const dotRadius = isLatest ? STROKE_WIDTH + 1 : STROKE_WIDTH;
               return (
                 <View key={index}>
                   {next ? <ThreadSegment from={point} to={next} color={colors.dataPrimary} /> : null}
+                  {isLatest ? (
+                    <View
+                      style={{
+                        position: "absolute",
+                        left: point.x - (dotRadius + 4),
+                        top: point.y - (dotRadius + 4),
+                        width: (dotRadius + 4) * 2,
+                        height: (dotRadius + 4) * 2,
+                        borderRadius: dotRadius + 4,
+                        borderWidth: 1,
+                        borderColor: colors.dataPrimary,
+                        opacity: 0.28,
+                      }}
+                    />
+                  ) : null}
                   <View
                     style={{
                       position: "absolute",
-                      left: point.x - STROKE_WIDTH,
-                      top: point.y - STROKE_WIDTH,
-                      width: STROKE_WIDTH * 2,
-                      height: STROKE_WIDTH * 2,
-                      borderRadius: STROKE_WIDTH,
+                      left: point.x - dotRadius,
+                      top: point.y - dotRadius,
+                      width: dotRadius * 2,
+                      height: dotRadius * 2,
+                      borderRadius: dotRadius,
                       backgroundColor: colors.dataPrimary,
                     }}
                   />
@@ -79,9 +102,9 @@ export function TrendChart({ points, accessibilityLabel }: TrendChartProps) {
             })
           : null}
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
-        <Text style={{ fontSize: 11, color: colors.textSecondary }}>{shown[0]?.label}</Text>
-        <Text style={{ fontSize: 11, color: colors.textSecondary }}>{shown[shown.length - 1]?.label}</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: spacing.xxs }}>
+        <Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary }}>{shown[0]?.label}</Text>
+        <Text style={{ fontSize: typography.micro.fontSize, color: colors.textPrimary, fontWeight: "600" }}>{shown[shown.length - 1]?.label}</Text>
       </View>
     </View>
   );

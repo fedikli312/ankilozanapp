@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Text } from "react-native";
 
-import { GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { formatShortDate, useTranslation } from "@/localization";
 import { useLabResults } from "@/features/labs/useLabResults";
 
@@ -26,7 +26,7 @@ export default function LabsLandingScreen() {
         {t("labs.subtitle")}
       </Text>
 
-      <GroupedList title={t("labs.latestResultsTitle")}>
+      <Section title={t("labs.latestResultsTitle")}>
         <ListRow
           label={t("labs.marker.CRP")}
           caption={caption(crp.latest, "CRP")}
@@ -39,7 +39,7 @@ export default function LabsLandingScreen() {
           onPress={() => router.push("/labs/ESR")}
           chevron
         />
-      </GroupedList>
+      </Section>
     </ScreenContainer>
   );
 }

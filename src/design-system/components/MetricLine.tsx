@@ -14,11 +14,11 @@ export type MetricLineProps = {
 /**
  * Design System 2.0's default health-metric presentation (Phase Design-B
  * §11) — LABEL / large tabular VALUE / optional unit / optional short
- * context, inline, no card. Replaces `MetricCard` as the default for new
- * screens; `MetricCard`'s bordered-tile treatment remains available for
- * the rare case a metric genuinely needs card-level prominence (e.g. one
- * hero figure — see `HeroMetric` for that specific case), never as the
- * default for an ordinary recorded value.
+ * context, inline, no card. Replaced the old bordered-tile `MetricCard`
+ * as the default for every ordinary recorded value (`MetricCard` itself
+ * was deleted in Design-I once its last consumer migrated — zero runtime
+ * use remained); `HeroMetric` covers the rare case a metric genuinely
+ * needs card-level prominence (e.g. one hero figure).
  */
 export function MetricLine({ label, value, unit, context }: MetricLineProps) {
   const { colors, typography, spacing } = useTheme();

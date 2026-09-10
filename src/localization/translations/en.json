@@ -590,6 +590,8 @@
     "openSource": "%{organization} — %{title}, external link",
     "notFound": "Content not found.",
     "disclaimer": "This content is for general information only and is not a substitute for personal medical advice.",
+    "illustrationCaption": "A simplified illustration, not a diagnostic image.",
+    "spineIllustrationLabel": "A simplified illustration showing the spine and sacroiliac joint area.",
     "category": {
       "basics": "Basics",
       "symptoms": "Understanding symptoms",

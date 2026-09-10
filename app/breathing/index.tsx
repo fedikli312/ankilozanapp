@@ -1,7 +1,6 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 
-import { ScreenContainer, useTheme } from "@/design-system";
+import { ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 
 type Practice = { title: string; duration: string; body: string };
@@ -10,10 +9,16 @@ type Practice = { title: string; duration: string; body: string };
  * Read-only supportive content (Redesign Spec §J): no completion state, no
  * checkbox, no timer, no save button, no persistence. The user opens this
  * screen, reads, and leaves — nothing here is tracked.
+ *
+ * Design-I: the old per-practice bordered/filled card (with a repeated,
+ * purely decorative `leaf-outline` icon on every card) was replaced with
+ * the same boxless `Section`/`ListRow` vocabulary Nutrition already uses —
+ * a supportive surface should read as a subordinate part of the same
+ * Ilium document language, not its own separately-styled mini-app.
  */
 export default function BreathingScreen() {
   const { t } = useTranslation();
-  const { colors, radius, spacing, typography } = useTheme();
+  const { colors, spacing, typography } = useTheme();
 
   const practices: Practice[] = [
     {
@@ -35,35 +40,25 @@ export default function BreathingScreen() {
 
   return (
     <ScreenContainer scroll>
-      <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: 2 }}>
+      {/* Visual Craft Pass 3.1 §9: decorative HeroBloom strip removed —
+          it was filler. Editorial header instead. */}
+      <Text style={{ fontSize: typography.title.fontSize, lineHeight: typography.title.lineHeight, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.xs }}>
         {t("breathing.title")}
       </Text>
-      <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginBottom: spacing.md }}>
+      <Text style={{ fontSize: typography.body.fontSize, lineHeight: typography.body.lineHeight, color: colors.textSecondary, marginBottom: spacing.xl }}>
         {t("breathing.subtitle")}
       </Text>
 
-      {practices.map((practice) => (
-        <View
-          key={practice.title}
-          style={{
-            backgroundColor: colors.surface,
-            borderWidth: 1,
-            borderColor: colors.borderHairline,
-            borderRadius: radius.standard,
-            padding: spacing.md,
-            marginBottom: spacing.sm,
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xs, marginBottom: spacing.xs }}>
-            <Ionicons name="leaf-outline" size={18} color={colors.textSecondary} />
-            <Text style={{ fontSize: typography.headline.fontSize, fontWeight: typography.headline.fontWeight, color: colors.textPrimary, flex: 1 }}>
-              {practice.title}
-            </Text>
-            <Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary }}>{practice.duration}</Text>
-          </View>
-          <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary, lineHeight: 22 }}>{practice.body}</Text>
-        </View>
-      ))}
+      <Section>
+        {practices.map((practice) => (
+          <ListRow
+            key={practice.title}
+            label={practice.title}
+            caption={practice.body}
+            trailing={<Text style={{ fontSize: typography.micro.fontSize, color: colors.textSecondary }}>{practice.duration}</Text>}
+          />
+        ))}
+      </Section>
 
       <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary, marginTop: spacing.sm, fontStyle: "italic" }}>
         {t("breathing.safetyNote")}

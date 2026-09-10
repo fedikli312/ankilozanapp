@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
-import { Button, GroupedList, ListRow, ScreenContainer, SectionLabel, TrendChart, useTheme } from "@/design-system";
+import { Button, ListRow, Section, ScreenContainer, SectionLabel, TrendChart, useTheme } from "@/design-system";
 import { formatDate, formatNumber, useTranslation } from "@/localization";
 import { useLabResults, type LabMarker } from "@/features/labs/useLabResults";
 
@@ -60,6 +60,7 @@ export default function LabMarkerHistoryScreen() {
                 fontSize: typography.metricLarge.fontSize,
                 lineHeight: typography.metricLarge.lineHeight,
                 fontWeight: typography.metricLarge.fontWeight,
+                fontVariant: ["tabular-nums"],
                 color: colors.textPrimary,
               }}
             >
@@ -77,7 +78,7 @@ export default function LabMarkerHistoryScreen() {
               <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>
                 {t("labs.detail.previousChangeLabel")}
               </Text>
-              <Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary }}>
+              <Text style={{ fontSize: typography.body.fontSize, fontVariant: ["tabular-nums"], color: colors.textPrimary }}>
                 {deltaSign}
                 {formatNumber(delta, locale)} {latest.unit}
               </Text>
@@ -95,16 +96,18 @@ export default function LabMarkerHistoryScreen() {
         </Text>
       )}
 
-      <GroupedList title={t("labs.detail.historyTitle")}>
+      <Section title={t("labs.detail.historyTitle")}>
         {results.map((item) => (
           <ListRow
             key={item.id}
             label={formatDate(new Date(item.recordedDate), locale)}
-            trailing={<Text style={{ fontSize: typography.body.fontSize, color: colors.textPrimary }}>{`${item.value} ${item.unit}`}</Text>}
+            trailing={
+              <Text style={{ fontSize: typography.body.fontSize, fontVariant: ["tabular-nums"], color: colors.textPrimary }}>{`${item.value} ${item.unit}`}</Text>
+            }
             onPress={() => router.push(`/labs/${marker}/add?id=${item.id}`)}
           />
         ))}
-      </GroupedList>
+      </Section>
 
       <View style={{ marginTop: spacing.md }}>
         <Button label={t("labs.addAction")} onPress={() => router.push(`/labs/${marker}/add`)} variant="secondary" />

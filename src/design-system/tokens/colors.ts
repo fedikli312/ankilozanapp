@@ -16,17 +16,18 @@
  *   NOTE — `surface` is deliberately NOT reused as a new-role name here.
  *   Under the committed pre-Design-B palette, `surface` meant "true/near-
  *   white elevated container" (`#FFFFFF` light) — exactly what this system
- *   now calls `surfaceElevated`. Several existing screens/components
- *   (`BodyRegionMap`, `StiffnessSelector`, `PainScale`, `paywall`,
- *   `SelectableCard`, `breathing/index`, `MetricCard`) still read
- *   `colors.surface` directly and were not touched by this pass; reusing
- *   the bare key for the different "secondary fill" role (as an earlier
- *   draft of this file did) would have silently swapped their background
- *   to the wrong color with no type error. `surface` is kept below as a
- *   LEGACY alias pointing at the same value as `surfaceElevated`, so those
- *   untouched consumers keep rendering exactly as before. This mirrors the
- *   `accent`/`accentRare` precedent below — never repoint a bare existing
- *   key to a new meaning; give the new role its own name instead.
+ *   now calls `surfaceElevated`. Reusing the bare key for the different
+ *   "secondary fill" role (as an earlier draft of this file did) would
+ *   have silently swapped consumers' background to the wrong color with
+ *   no type error — hence the new role got its own name instead, mirroring
+ *   the `accent`/`accentRare` precedent below. As of Design-I's final
+ *   cleanup pass, every original consumer (`BodyRegionMap`,
+ *   `StiffnessSelector`, `PainScale`, `paywall`, `SelectableCard`,
+ *   `breathing/index`, `MetricCard`) has migrated, been redesigned, or
+ *   been deleted, so the `surface` alias itself (along with `accent`,
+ *   `backgroundWarm`, `surfaceHighlight`, `borderHairline` — confirmed
+ *   zero remaining consumers the same way) was removed rather than kept
+ *   as dead vocabulary.
  *   textPrimary/Secondary/Tertiary — three-tier text hierarchy; tertiary
  *                       is for metadata (dates, counts) and is real,
  *                       WCAG-AA-verified body text, not decoration.
@@ -41,12 +42,11 @@
  *   accentRare       — the rare dusty-gold milestone accent (Design
  *                       Direction §5) — genuine-milestone moments only,
  *                       never routine UI. (Named `accentRare`, not
- *                       `accent`, specifically so the legacy `accent`
- *                       alias below — which ~70 existing screens already
- *                       use for the one-reserved-action-color role — can
- *                       keep meaning what it always meant, now pointing
- *                       at `brandPrimary`, without colliding with this
- *                       new, much rarer gold token.)
+ *                       `accent`, specifically so it never collided with
+ *                       the now-removed legacy `accent` alias, which
+ *                       ~70 screens used for the one-reserved-action-color
+ *                       role during the Design-B→I rollout, before every
+ *                       one of them migrated to `brandPrimary`.)
  *   positive/attention/critical — status roles, reserved for their named
  *                       purpose only. `critical` is reserved for real
  *                       safety alerts (a missed-dose reminder, an overdue
@@ -62,16 +62,18 @@
  *                       WITH a shape/icon/text signal — never color alone
  *                       (`ToggleRow`'s native Switch, `Chip`'s checkmark).
  *
- * LEGACY aliases (`accent`, `backgroundWarm`, `surfaceSecondary`,
- * `surfaceHighlight`, `borderHairline`, `statusSuccess/Warning/Danger/
- * Neutral`) are kept, mapped onto the new values, so the ~70 existing
- * screens consuming the old names keep rendering correctly during the
- * phased Design-B→I rollout (`docs/DESIGN_REDESIGN_PLAN_2_0.md` §26,
- * "temporary legacy compatibility... do not contort the new system to
- * preserve the old look, but do preserve functionality"). New code should
- * use the new names; the aliases exist for migration safety, not as the
- * system's real vocabulary, and should be removed once every screen has
- * migrated (tracked in `docs/DESIGN_SYSTEM_2_0_IMPLEMENTATION.md`).
+ * LEGACY aliases (`statusSuccess/Warning/Danger/Neutral`) are kept, mapped
+ * onto the new values, for the screens still consuming the old names
+ * (`docs/DESIGN_REDESIGN_PLAN_2_0.md` §26, "temporary legacy
+ * compatibility... do not contort the new system to preserve the old
+ * look, but do preserve functionality") — real, active consumers as of
+ * Design-I's final pass (form validation errors, reminder-off notices),
+ * not dead weight, so they were kept rather than migrated wholesale just
+ * for naming's sake. `accent`, `backgroundWarm`, `surface`,
+ * `surfaceHighlight`, and `borderHairline` were the same kind of alias but
+ * had reached zero remaining consumers, so they were removed instead
+ * (tracked in `docs/DESIGN_SYSTEM_2_0_IMPLEMENTATION.md`). New code should
+ * always use the new semantic names.
  *
  * Every text/background pairing below is WCAG AA-verified (4.5:1 normal
  * text, 3:1 large text/non-text UI boundaries) — see that same
@@ -112,11 +114,6 @@ export type ColorTokens = {
   accentForeground: string;
 
   // Legacy aliases — see file-level doc comment. Do not add new consumers.
-  accent: string;
-  backgroundWarm: string;
-  surface: string;
-  surfaceHighlight: string;
-  borderHairline: string;
   statusSuccess: string;
   statusWarning: string;
   statusDanger: string;
@@ -147,11 +144,6 @@ export const lightColors: ColorTokens = {
   accentForeground: "#FFFFFF",
 
   // Legacy aliases
-  accent: "#AD5335",
-  backgroundWarm: "#FAF7F2",
-  surface: "#FFFFFF",
-  surfaceHighlight: "#F3E4DC",
-  borderHairline: "#E8E2D8",
   statusSuccess: "#557259",
   statusWarning: "#8F6222",
   statusDanger: "#C0392B",
@@ -182,11 +174,6 @@ export const darkColors: ColorTokens = {
   accentForeground: "#1A1714",
 
   // Legacy aliases
-  accent: "#D97B5C",
-  backgroundWarm: "#1A1714",
-  surface: "#28231E",
-  surfaceHighlight: "#3D2A22",
-  borderHairline: "#332D26",
   statusSuccess: "#7FA382",
   statusWarning: "#C99A4A",
   statusDanger: "#D9695C",

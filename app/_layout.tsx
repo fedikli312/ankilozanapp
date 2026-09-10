@@ -68,9 +68,9 @@ function RouteGate({ children }: PropsWithChildren) {
 function ResolvingScreen() {
   const { colors } = useTheme();
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.backgroundWarm, gap: 16 }}>
-      <Ionicons name="leaf-outline" size={28} color={colors.accent} />
-      <ActivityIndicator color={colors.accent} />
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.background, gap: 16 }}>
+      <Ionicons name="leaf-outline" size={28} color={colors.brandPrimary} />
+      <ActivityIndicator color={colors.brandPrimary} />
     </View>
   );
 }

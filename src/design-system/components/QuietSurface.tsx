@@ -12,9 +12,9 @@ export type QuietSurfaceProps = {
  * Phase Design-B) — a warm-tinted surface with no border, no shadow,
  * reserved for the single most important moment on a screen (e.g.
  * Today's not-yet-done check-in module). Callers are responsible for
- * using this at most once per screen, same discipline `MetricCard`'s
- * existing `emphasis="highlight"` already documented — `QuietSurface` is
- * the standalone version of that same rule for non-metric content.
+ * using this at most once per screen — the same "one highlighted moment"
+ * discipline the now-deleted `MetricCard`'s `emphasis="highlight"` used
+ * to document, carried forward here for non-metric content.
  */
 export function QuietSurface({ children }: QuietSurfaceProps) {
   const { colors, radius, spacing } = useTheme();

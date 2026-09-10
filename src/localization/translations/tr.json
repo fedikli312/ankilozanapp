@@ -590,6 +590,8 @@
     "openSource": "%{organization} — %{title}, harici bağlantı",
     "notFound": "İçerik bulunamadı.",
     "disclaimer": "Bu içerikler genel bilgilendirme amaçlıdır ve kişisel tıbbi öneri yerine geçmez.",
+    "illustrationCaption": "Basitleştirilmiş gösterim, tıbbi teşhis görseli değildir.",
+    "spineIllustrationLabel": "Omurga ve sakroiliak eklem bölgesini gösteren basitleştirilmiş bir çizim.",
     "category": {
       "basics": "Temeller",
       "symptoms": "Belirtileri anlamak",

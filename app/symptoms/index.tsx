@@ -1,8 +1,7 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
-import { Button, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { Button, ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { formatShortDate, useTranslation } from "@/localization";
 import { useSymptomsHistory } from "@/features/checkIn/useSymptomsHistory";
 
@@ -30,7 +29,7 @@ export default function SymptomsHistoryScreen() {
       <Text style={{ fontSize: typography.title.fontSize, fontWeight: typography.title.fontWeight, color: colors.textPrimary, marginBottom: spacing.md }}>
         {t("symptoms.title")}
       </Text>
-      <GroupedList>
+      <Section>
         {checkIns.map((item) => {
           const baseCaption =
             item.date === today
@@ -43,7 +42,6 @@ export default function SymptomsHistoryScreen() {
           return (
             <ListRow
               key={item.id}
-              leading={<Ionicons name="pulse-outline" size={20} color={colors.textSecondary} />}
               label={t("symptoms.rowLabel", { pain: item.pain, fatigue: item.fatigue })}
               caption={bodyAreasText ? `${baseCaption} · ${bodyAreasText}` : baseCaption}
               onPress={item.date === today ? () => router.push("/check-in") : undefined}
@@ -51,7 +49,7 @@ export default function SymptomsHistoryScreen() {
             />
           );
         })}
-      </GroupedList>
+      </Section>
     </ScreenContainer>
   );
 }
