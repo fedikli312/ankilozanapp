@@ -8,5 +8,7 @@ export { radius, sheetTopRadius, pillRadius } from "./radius";
 export type { RadiusTokens } from "./radius";
 export { motion } from "./motion";
 export type { MotionTokens } from "./motion";
+export { elevation } from "./elevation";
+export type { ElevationTokens } from "./elevation";
 export { layout } from "./layout";
 export type { LayoutTokens } from "./layout";

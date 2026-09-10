@@ -30,6 +30,26 @@ export const motion = {
   standardTransition: { minMs: 180, maxMs: 320 },
   /** Timeline content settling into view, a completed-check-in state appearing — same range as `tier3Moment`. Never a celebratory/bouncy moment (Design-A2 §10) — a quiet settle, not a burst. */
   contentReveal: { minMs: 300, maxMs: 600 },
+
+  /**
+   * Art Direction 3.0 (`docs/VISUAL_ART_DIRECTION_3_0.md` §14) — five
+   * semantic roles for the evolved visual system's own motion vocabulary.
+   * These sit alongside, not instead of, the tiers above: `micro` and
+   * `selection` are narrower slices of `tier1Feedback`'s existing range
+   * (a press response needs to feel instant, not just "quick"),
+   * `contentEnter` is a narrower slice of `tier2Transition` (an editorial
+   * paragraph fading in wants less lag than a full section reveal), and
+   * `surfaceTransition`/`heroEnter` reuse `tier2Transition`/`tier3Moment`
+   * directly under names that read clearly at their call sites (a hero
+   * illustration "entering" vs. generic "content reveal"). No new
+   * duration philosophy — same quick/functional/never-celebratory rule,
+   * same Reduce-Motion collapse-to-instant handling.
+   */
+  micro: { minMs: 100, maxMs: 140 },
+  selection: { minMs: 140, maxMs: 200 },
+  contentEnter: { minMs: 220, maxMs: 320 },
+  surfaceTransition: { minMs: 180, maxMs: 320 },
+  heroEnter: { minMs: 300, maxMs: 600 },
 } as const;
 
 export type MotionTokens = typeof motion;

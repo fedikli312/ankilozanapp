@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-import { Button, Chip, Section, TextField, ToggleRow, useTheme } from "../../design-system";
+import { Button, Chip, Hairline, Section, TextField, ToggleRow, useTheme } from "../../design-system";
 import { useTranslation } from "../../localization";
 import { CHECK_IN_NOTE_MAX_LENGTH } from "../../domain/constants";
 import type { BodyAreaRegion } from "../../repositories";
@@ -57,11 +57,15 @@ const DEFAULT_VALUE: CheckInFormValue = {
  * per member) rather than four independently-boxed modules, so the whole
  * primary sequence reads as one interaction family: label, choice, next.
  * Pain/Stiffness/Fatigue keep their exact stored semantics (0–10 int /
- * 5-value enum / 0–10 int) — this is a visual/interaction upgrade of the
- * existing hierarchy, not a restructure of it. Optional fields
- * (Wellbeing/Body Map/Note) stay behind the single "More" disclosure,
- * unchanged in content and semantics — the Body Map itself is intentionally
- * NOT redesigned this phase (brief §17); its own doc comment records why.
+ * 5-value enum / 0–10 int) — Pain/Fatigue are now a shared discrete stepped
+ * slider and Stiffness a compact hairline list (both Furkan-requested
+ * follow-up redesigns of `NumericScale`/`StiffnessSelector`), but this
+ * file's own composition into one primary `Section` is unchanged. Optional
+ * fields (Wellbeing/Body Map/Note) stay behind the single "More"
+ * disclosure, unchanged in content and semantics — but Wellbeing and Body
+ * Regions are now deliberately separated by a `Hairline` and their own
+ * spacing rather than sharing one long block: two different cognitive
+ * tasks (see `BodyRegionMap`'s own doc comment for that redesign).
  *
  * Product 2.1 Phase Y — High-Symptom Day: a user-declared-only marker
  * ("Symptoms feel more intense than usual today"). It is never inferred
@@ -152,37 +156,57 @@ export function CheckInForm({ initialValue, onSave, onChangeDraft, defaultHighSy
         <Button label={t("checkIn.addMore")} onPress={() => setShowMore(true)} variant="secondary" />
       ) : (
         <View style={{ marginBottom: spacing.lg }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xs }}>
-            <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.wellbeingLabel")}</Text>
-            {personalization.wellbeingEmphasized ? (
-              <Text style={{ fontSize: typography.micro.fontSize, color: colors.brandPrimary }}>· {t("checkIn.priorityIndicator")}</Text>
-            ) : null}
-          </View>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs, marginBottom: spacing.md }}>
-            {WELLBEING_LEVELS.map((level) => (
-              <Chip
-                key={level}
-                label={t(`checkIn.wellbeing.${level}`)}
-                selected={value.wellbeing === level}
-                onPress={() => setValue((prev) => ({ ...prev, wellbeing: level }))}
-              />
-            ))}
+          {/* Wellbeing — its own focused block, deliberately not visually
+              blended with Body Regions below (Furkan-requested Check-in
+              restructuring): two different cognitive tasks, so they read
+              as two distinct moments in the scroll, not one long shared
+              section. */}
+          <View style={{ marginBottom: spacing.lg }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.xxs, marginBottom: spacing.xs }}>
+              <Text style={{ fontSize: typography.caption.fontSize, color: colors.textSecondary }}>{t("checkIn.wellbeingLabel")}</Text>
+              {personalization.wellbeingEmphasized ? (
+                <Text style={{ fontSize: typography.micro.fontSize, color: colors.brandPrimary }}>· {t("checkIn.priorityIndicator")}</Text>
+              ) : null}
+            </View>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: spacing.xs }}>
+              {WELLBEING_LEVELS.map((level) => (
+                <Chip
+                  key={level}
+                  label={t(`checkIn.wellbeing.${level}`)}
+                  selected={value.wellbeing === level}
+                  onPress={() => setValue((prev) => ({ ...prev, wellbeing: level }))}
+                />
+              ))}
+            </View>
           </View>
 
-          <View style={{ marginBottom: spacing.md }}>
+          <Hairline />
+
+          {/* Body Regions — its own dedicated block: the enlarged map is
+              the primary interaction, given real room rather than sharing
+              a section with Wellbeing. */}
+          <View style={{ marginTop: spacing.lg, marginBottom: spacing.lg }}>
             <BodyRegionMap value={value.bodyAreas} onToggle={toggleBodyArea} priorityAreas={personalization.priorityBodyAreas} />
           </View>
 
-          <TextField
-            label={t("checkIn.noteLabel")}
-            placeholder={t("checkIn.notePrompt")}
-            value={value.notes}
-            onChangeText={(notes) => setValue((prev) => ({ ...prev, notes }))}
-            multiline
-            maxLength={CHECK_IN_NOTE_MAX_LENGTH}
-            helperText={t("checkIn.noteCounter", { count: value.notes.length, max: CHECK_IN_NOTE_MAX_LENGTH })}
-            accessibilityHint={t("checkIn.noteCounter", { count: value.notes.length, max: CHECK_IN_NOTE_MAX_LENGTH })}
-          />
+          <Hairline />
+
+          {/* Note — its own block again, same hairline+spacing break as
+              the Wellbeing→Body Regions transition above, so Body Regions
+              doesn't just blend into the next form field (Furkan-requested
+              visual refinement pass, item 5). */}
+          <View style={{ marginTop: spacing.lg }}>
+            <TextField
+              label={t("checkIn.noteLabel")}
+              placeholder={t("checkIn.notePrompt")}
+              value={value.notes}
+              onChangeText={(notes) => setValue((prev) => ({ ...prev, notes }))}
+              multiline
+              maxLength={CHECK_IN_NOTE_MAX_LENGTH}
+              helperText={t("checkIn.noteCounter", { count: value.notes.length, max: CHECK_IN_NOTE_MAX_LENGTH })}
+              accessibilityHint={t("checkIn.noteCounter", { count: value.notes.length, max: CHECK_IN_NOTE_MAX_LENGTH })}
+            />
+          </View>
         </View>
       )}
 

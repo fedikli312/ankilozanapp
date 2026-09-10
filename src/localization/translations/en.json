@@ -314,9 +314,13 @@
       "5": "Very good"
     },
     "bodyAreaLabel": "Areas you'd like to track",
+    "bodyMapInstruction": "Tap the areas where you feel pain",
     "bodyMapEmptyHint": "You can select the areas where you feel pain today.",
     "bodyRegionSelectedLabel": "%{region} selected.",
     "bodyRegionUnselectedLabel": "%{region} not selected.",
+    "bodyRegionRemoveHint": "Double tap to remove.",
+    "bodyAreaSelectedListLabel": "Selected",
+    "otherAreasLabel": "Other areas",
     "bodyArea": {
       "neck": "Neck",
       "upper_back": "Upper back",
