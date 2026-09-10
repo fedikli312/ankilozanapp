@@ -135,11 +135,16 @@
       "archive": "Archive",
       "archived": "Archived",
       "planTitle": "Plan",
-      "settingsTitle": "Settings",
       "schedule": "Schedule",
       "startDate": "Start date",
       "reminderOn": "On",
-      "reminderOff": "Off"
+      "reminderOff": "Off",
+      "currentDoseTitle": "Next dose",
+      "noCurrentDose": "No dose currently due.",
+      "needsAttentionTitle": "Needs attention",
+      "recentHistoryTitle": "Recent records",
+      "noHistory": "No recorded doses yet.",
+      "viewFullHistory": "View full history"
     },
     "status": {
       "pending": "Due",
@@ -172,7 +177,11 @@
       "archived": "Archived",
       "everyDays": "Every %{count} days",
       "rescheduleEarlier": "1 day earlier",
-      "rescheduleLater": "1 day later"
+      "rescheduleLater": "1 day later",
+      "noCurrentInjection": "No injection currently scheduled.",
+      "recentHistoryTitle": "Recent records",
+      "noHistory": "No recorded injections yet.",
+      "viewFullHistory": "View full history"
     },
     "status": {
       "pending": "Due",

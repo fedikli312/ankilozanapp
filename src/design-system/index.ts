@@ -29,3 +29,5 @@ export { Wordmark } from "./components/Wordmark";
 export { SegmentedControl } from "./components/SegmentedControl";
 export type { SegmentedControlOption } from "./components/SegmentedControl";
 export { OptionRow } from "./components/OptionRow";
+export { ActionSheet } from "./components/ActionSheet";
+export type { ActionSheetAction } from "./components/ActionSheet";

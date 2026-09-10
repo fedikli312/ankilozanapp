@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
-import { Button, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
+import { Button, ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
 import { useTranslation } from "@/localization";
 import { useMedications, type MedicationListRow } from "@/features/medications/useMedications";
 
@@ -43,7 +43,7 @@ export default function MedicationsListScreen() {
       </Text>
 
       {medications.length > 0 ? (
-        <GroupedList title={t("medications.sectionActive")}>
+        <Section title={t("medications.sectionActive")}>
           {medications.map((row) => (
             <ListRow
               key={row.id}
@@ -53,11 +53,11 @@ export default function MedicationsListScreen() {
               chevron
             />
           ))}
-        </GroupedList>
+        </Section>
       ) : null}
 
       {archivedMedications.length > 0 ? (
-        <GroupedList title={t("medications.sectionArchived")} emphasis="subordinate">
+        <Section title={t("medications.sectionArchived")}>
           {archivedMedications.map((row) => (
             <ListRow
               key={row.id}
@@ -67,7 +67,7 @@ export default function MedicationsListScreen() {
               chevron
             />
           ))}
-        </GroupedList>
+        </Section>
       ) : null}
 
       <View style={{ marginTop: spacing.md }}>

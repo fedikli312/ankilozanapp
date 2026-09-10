@@ -135,11 +135,16 @@
       "archive": "Arşivle",
       "archived": "Arşivlendi",
       "planTitle": "Plan",
-      "settingsTitle": "Ayarlar",
       "schedule": "Program",
       "startDate": "Başlangıç tarihi",
       "reminderOn": "Açık",
-      "reminderOff": "Kapalı"
+      "reminderOff": "Kapalı",
+      "currentDoseTitle": "Sıradaki doz",
+      "noCurrentDose": "Şu an bekleyen bir doz yok.",
+      "needsAttentionTitle": "Dikkat gerekiyor",
+      "recentHistoryTitle": "Son kayıtlar",
+      "noHistory": "Henüz kayıtlı bir doz yok.",
+      "viewFullHistory": "Tüm geçmişi gör"
     },
     "status": {
       "pending": "Bekliyor",
@@ -172,7 +177,11 @@
       "archived": "Arşivlendi",
       "everyDays": "%{count} günde bir",
       "rescheduleEarlier": "1 gün erkene al",
-      "rescheduleLater": "1 gün ertele"
+      "rescheduleLater": "1 gün ertele",
+      "noCurrentInjection": "Şu an planlanmış bir iğne yok.",
+      "recentHistoryTitle": "Son kayıtlar",
+      "noHistory": "Henüz kayıtlı bir iğne yok.",
+      "viewFullHistory": "Tüm geçmişi gör"
     },
     "status": {
       "pending": "Bekliyor",

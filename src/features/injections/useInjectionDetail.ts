@@ -114,6 +114,27 @@ export function useInjectionDetail(injectionTreatmentId: string) {
     refresh();
   }, [injectionTreatmentId, refresh]);
 
+  /**
+   * Corrects an already-resolved historical row (Furkan-requested Medication
+   * + Injection Detail restructuring, §8) — a thin wrapper around the same
+   * `logInjectionAdministration` repository call `logCompleted`/`logMissed`
+   * already use, just parameterized by an explicit id instead of always
+   * targeting the single current `pending` row. Deliberately does NOT
+   * create a new pending row or touch `nextInjectionDate`/reminders the way
+   * `logCompleted`/`logMissed` do — those side effects only make sense when
+   * resolving the actual current dose, never when editing old history. No
+   * new domain/repository behavior: `logInjectionAdministration` already
+   * allows changing any administration's status by id (Tech Arch §F
+   * invariant 1 only protects `scheduledFor`, not `status`).
+   */
+  const correctAdministration = useCallback(
+    (administrationId: string, status: "completed" | "missed") => {
+      logInjectionAdministration(db, administrationId, status, status === "completed" ? todayDateOnly() : null);
+      refresh();
+    },
+    [refresh],
+  );
+
   return {
     treatment,
     schedule,
@@ -123,5 +144,6 @@ export function useInjectionDetail(injectionTreatmentId: string) {
     logMissed,
     rescheduleBy,
     archive,
+    correctAdministration,
   };
 }

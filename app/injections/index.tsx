@@ -1,13 +1,12 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
-import { Button, GroupedList, ListRow, ScreenContainer, useTheme } from "@/design-system";
-import { useTranslation } from "@/localization";
+import { Button, ListRow, Section, ScreenContainer, useTheme } from "@/design-system";
+import { formatShortDate, useTranslation } from "@/localization";
 import { useInjections, type InjectionListRow } from "@/features/injections/useInjections";
 
 export default function InjectionsListScreen() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
   const { treatments, archivedTreatments } = useInjections();
@@ -18,7 +17,11 @@ export default function InjectionsListScreen() {
       row.nextInjectionDaysLeft <= 0
         ? t("today.injectionDueToday")
         : t("today.injectionDaysLeft", { count: row.nextInjectionDaysLeft });
-    return `${row.dose} · ${relative} · ${row.nextInjectionDate}`;
+    // Design-I cross-screen rhythm fix: this previously concatenated the
+    // raw `YYYY-MM-DD` storage string straight into the caption — the only
+    // place left in the app showing an unformatted date instead of the
+    // locale-aware `formatShortDate` every other screen uses.
+    return `${row.dose} · ${relative} · ${formatShortDate(new Date(row.nextInjectionDate), locale)}`;
   };
 
   if (treatments.length === 0 && archivedTreatments.length === 0) {
@@ -34,8 +37,6 @@ export default function InjectionsListScreen() {
     );
   }
 
-  const icon = <Ionicons name="medical-outline" size={20} color={colors.textSecondary} />;
-
   return (
     <ScreenContainer scroll>
       <Text
@@ -50,22 +51,21 @@ export default function InjectionsListScreen() {
       </Text>
 
       {treatments.length > 0 ? (
-        <GroupedList title={t("medications.sectionActive")}>
+        <Section title={t("medications.sectionActive")}>
           {treatments.map((row) => (
             <ListRow
               key={row.id}
-              leading={icon}
               label={row.name}
               caption={caption(row)}
               onPress={() => router.push(`/injections/${row.id}`)}
               chevron
             />
           ))}
-        </GroupedList>
+        </Section>
       ) : null}
 
       {archivedTreatments.length > 0 ? (
-        <GroupedList title={t("medications.sectionArchived")} emphasis="subordinate">
+        <Section title={t("medications.sectionArchived")}>
           {archivedTreatments.map((row) => (
             <ListRow
               key={row.id}
@@ -75,7 +75,7 @@ export default function InjectionsListScreen() {
               chevron
             />
           ))}
-        </GroupedList>
+        </Section>
       ) : null}
 
       <View style={{ marginTop: spacing.md }}>
